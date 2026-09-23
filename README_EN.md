@@ -80,28 +80,28 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Runtime | [12. Distributed Agent Communication](<./03-run/第 12 章 Agent 分布式通信.md>) | Protocol choices and message governance across capability, collaboration, internal, and human-agent interactions. |
 | Governance | [13. Agent Observability](<./04-governance/第 13 章　Agent 的可观测性.md>) | Metrics, logs, traces, events, cost attribution, and audit. |
 | Governance | [14. Agent Security](<./04-governance/第 14 章　Agent 安全.md>) | Prompt injection, identity, per-action validation, high-risk authorization, and data-egress controls. |
-| Governance | [15. Discovery and Management of AI Assets](<./04-governance/第 15 章　AI 资产的发现与管理 .md>) | Registration, versioning, discovery, dependencies, and releases for prompts, skills, MCP, and agents. |
+| Governance | [15. Discovery and Management of AI Assets](<./04-governance/第 15 章　AI 资产的发现与管理.md>) | Registration, versioning, discovery, dependencies, and releases for prompts, skills, MCP, and agents. |
 | Governance | [16. Agent Behavior Generation and Quality Validation](<./04-governance/第 16 章　Agent 行为生成与质量验证.md>) | User and environment simulation, scenarios, and pre-release validation. |
 | Optimization | [17. Model Tuning](<./05-optimization/第 17 章　模型调优.md>) | Root-cause criteria, SFT, agentic RL, distillation, and production acceptance. |
 | Optimization | [18. Overview of Agent Optimization](<./05-optimization/第 18 章　Agent 调优总览.md>) | Optimization targets, method boundaries, and the data flywheel. |
 | Optimization | [19. Agent Trajectory Data](<./05-optimization/第 19 章　Agent 轨迹数据.md>) | Turning traces into reusable behavioral and decision evidence. |
 | Optimization | [20. Processing Agent Runtime Data](<./05-optimization/第 20 章　Agent 运行时数据处理.md>) | Collection, cleaning, processing, and declarative data pipelines. |
 | Optimization | [21. Golden Datasets for Agents](<./05-optimization/第 21 章　Agent 黄金数据集.md>) | Evaluation assets with inputs, trajectories, outcomes, and judging criteria. |
-| Optimization | [22. Improving Agents Through Bad Cases](<./05-optimization/第 22 章　Agent 优化：Badcase .md>) | Failure discovery, attribution, fixes, regression checks, and experiments. |
+| Optimization | [22. Improving Agents Through Bad Cases](<./05-optimization/第 22 章　Agent 优化：Badcase.md>) | Failure discovery, attribution, fixes, regression checks, and experiments. |
 | Optimization | [23. Controlled Self-Evolution](<./05-optimization/第 23 章　受控自进化.md>) | Turning validated experience into memory, skills, tools, and runtime improvements. |
 | Optimization | [24. Edge Runtime and Global Optimization](<./05-optimization/第 24 章　Agent 边缘运行时与全球优化.md>) | Edge runtime, evaluation, performance, cost, delivery, security, and simulation. |
 | Practice | [25. Software Engineering Productivity](<./06-case-study/第25章 研发效能/>) | Code review, defect detection, patch delivery, and end-to-end engineering. |
 | Practice | [26. Design Engineering](<./06-case-study/第26章 设计工程/>) | Vibe Designing and GenUI. |
 | Practice | [27. Operations, Security, and Enterprise IT](<./06-case-study/第27章 运维、安全与企业IT/>) | Production operations in automotive, retail, and enterprise software. |
 | Practice | [28. Customer, Sales, and Operations](<./06-case-study/第28章 客户、销售与运营/>) | Long-term memory, content insights, office productivity, and data agents. |
-| Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-case-study/第 29 章  GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | Open-source competition projects and agent-infrastructure exploration. |
+| Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | Open-source competition projects and agent-infrastructure exploration. |
 | Conclusion and Outlook | [30. From Agentic Application to Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | From individual applications toward collaborative, governable, evolving systems. |
 
 ### Case-study guide
 
 | Chapter | Case study |
 | --- | --- |
-| 25. Software engineering | [ABACI: Targeted Testing and Defect Detection for Kernel Patches](<./06-case-study/第25章 研发效能/ABACI 内核补丁定向测试与缺陷检测智能体 .md>) |
+| 25. Software engineering | [ABACI: Targeted Testing and Defect Detection for Kernel Patches](<./06-case-study/第25章 研发效能/ABACI 内核补丁定向测试与缺陷检测智能体.md>) |
 | 25. Software engineering | [Kitta: A Domain-Specific Code Review Agent](<./06-case-study/第25章 研发效能/Kitta：领域专用 Code Review Agent.md>) |
 | 25. Software engineering | [PatchPilot Agents: Orchestrated, Verifiable Kernel Patch Delivery](<./06-case-study/第25章 研发效能/PatchPilot Agents：让内核补丁交付成为可编排、可验证的工程闭环.md>) |
 | 25. Software engineering | [From Alerts to Automatic Repair: PolarDB-X Loop Engineering](<./06-case-study/第25章 研发效能/从报警到自动修复，PolarDB-X 的 Loop 工程实践.md>) |

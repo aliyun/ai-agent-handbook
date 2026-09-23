@@ -81,28 +81,28 @@
 | 运行篇 | [第 12 章　Agent 分布式通信](<./03-run/第 12 章 Agent 分布式通信.md>) | 能力面、协作面、内构面和人机面的通信协议与消息治理。 |
 | 治理篇 | [第 13 章　Agent 的可观测性](<./04-governance/第 13 章　Agent 的可观测性.md>) | 指标、日志、Trace、事件、成本归因与审计。 |
 | 治理篇 | [第 14 章　Agent 安全](<./04-governance/第 14 章　Agent 安全.md>) | Prompt Injection、身份鉴权、逐次校验、高危授权与数据出域防护。 |
-| 治理篇 | [第 15 章　AI 资产的发现与管理](<./04-governance/第 15 章　AI 资产的发现与管理 .md>) | Prompt、Skill、MCP 与 Agent 的注册、版本、发现、依赖和发布管理。 |
+| 治理篇 | [第 15 章　AI 资产的发现与管理](<./04-governance/第 15 章　AI 资产的发现与管理.md>) | Prompt、Skill、MCP 与 Agent 的注册、版本、发现、依赖和发布管理。 |
 | 治理篇 | [第 16 章　Agent 行为生成与质量验证](<./04-governance/第 16 章　Agent 行为生成与质量验证.md>) | 用户模拟、环境模拟、场景配置与上线前的 Agent Simulation。 |
 | 调优篇 | [第 17 章　模型调优](<./05-optimization/第 17 章　模型调优.md>) | 模型问题的归因判据、SFT、Agentic RL、模型蒸馏与上线验收。 |
 | 调优篇 | [第 18 章　Agent 调优总览](<./05-optimization/第 18 章　Agent 调优总览.md>) | Agent 调优对象、方法边界与数据飞轮全景。 |
 | 调优篇 | [第 19 章　Agent 轨迹数据](<./05-optimization/第 19 章　Agent 轨迹数据.md>) | 从 Trace 到 Trajectory，组织可复用的行为与决策证据。 |
 | 调优篇 | [第 20 章　Agent 运行时数据处理](<./05-optimization/第 20 章　Agent 运行时数据处理.md>) | 运行数据采集、清洗、加工与声明式数据 Pipeline。 |
 | 调优篇 | [第 21 章　Agent 黄金数据集](<./05-optimization/第 21 章　Agent 黄金数据集.md>) | 构建带输入、轨迹、结果与判据的高质量评估数据资产。 |
-| 调优篇 | [第 22 章　Agent 优化：Badcase](<./05-optimization/第 22 章　Agent 优化：Badcase .md>) | Badcase 发现、归因、修复、回归与实验验证。 |
+| 调优篇 | [第 22 章　Agent 优化：Badcase](<./05-optimization/第 22 章　Agent 优化：Badcase.md>) | Badcase 发现、归因、修复、回归与实验验证。 |
 | 调优篇 | [第 23 章　受控自进化](<./05-optimization/第 23 章　受控自进化.md>) | 把有效经验转化为 Memory、Skill、工具和运行机制，并控制自进化风险。 |
 | 调优篇 | [第 24 章　Agent 边缘运行时与全球优化](<./05-optimization/第 24 章　Agent 边缘运行时与全球优化.md>) | 边缘运行时、边缘评估、性能成本、内容分发、安全与仿真。 |
 | 实践篇 | [第 25 章　研发效能](<./06-case-study/第25章 研发效能/>) | 代码审查、缺陷检测、补丁交付、研发协作与端到端交付实践。 |
 | 实践篇 | [第 26 章　设计工程](<./06-case-study/第26章 设计工程/>) | Vibe Designing 与 GenUI 的设计范式和工程实践。 |
 | 实践篇 | [第 27 章　运维、安全与企业 IT](<./06-case-study/第27章 运维、安全与企业IT/>) | 汽车、连锁零售和企业软件的大规模智能运维实践。 |
 | 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和 Data Agent 实践。 |
-| 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章  GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
+| 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
 | 总结与展望篇 | [第 30 章　从 Agentic Application 到 Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | 从单个应用走向可协作、可治理、可持续演进的智能系统。 |
 
 ### 实践案例导航
 
 | 章节 | 案例 |
 | --- | --- |
-| 第 25 章　研发效能 | [ABACI 内核补丁定向测试与缺陷检测智能体](<./06-case-study/第25章 研发效能/ABACI 内核补丁定向测试与缺陷检测智能体 .md>) |
+| 第 25 章　研发效能 | [ABACI 内核补丁定向测试与缺陷检测智能体](<./06-case-study/第25章 研发效能/ABACI 内核补丁定向测试与缺陷检测智能体.md>) |
 | 第 25 章　研发效能 | [Kitta：领域专用 Code Review Agent](<./06-case-study/第25章 研发效能/Kitta：领域专用 Code Review Agent.md>) |
 | 第 25 章　研发效能 | [PatchPilot Agents：让内核补丁交付成为可编排、可验证的工程闭环](<./06-case-study/第25章 研发效能/PatchPilot Agents：让内核补丁交付成为可编排、可验证的工程闭环.md>) |
 | 第 25 章　研发效能 | [从报警到自动修复，PolarDB-X 的 Loop 工程实践](<./06-case-study/第25章 研发效能/从报警到自动修复，PolarDB-X 的 Loop 工程实践.md>) |
