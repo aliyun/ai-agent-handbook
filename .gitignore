@@ -5,3 +5,4 @@
 .cursor
 .codex
 *.impl
+node_modules/

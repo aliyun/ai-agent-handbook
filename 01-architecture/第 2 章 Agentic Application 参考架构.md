@@ -1,4 +1,4 @@
-# 第 2 章　Agentic Application 参考架构
+# 第 2 章 Agentic Application 参考架构
 
 在上一章中，我们将 Agentic Application 定义为 Agent 在应用形态层的完整表达，并将 Agent 拆解为 Model 与 Harness 两个部分。模型是认知核心，但可靠性不能寄托于模型本身；Agent 需要获得一定的任务自主权，同时必须由确定性系统来约束其能力、环境和影响范围。这一判断直接改变了架构对象：企业需要设计的不再仅是一次模型调用，而是一个跨越认知、状态、执行、控制和持续改进的完整系统。
 
