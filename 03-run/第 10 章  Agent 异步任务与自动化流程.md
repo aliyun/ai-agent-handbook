@@ -105,15 +105,15 @@ Agent 的工具调用耗时不同，还可能等待人工审批、外部回调�
 
 | 状态 | 含义 | 允许的后续状态 |
 | --- | --- | --- |
-| waiting | task初始化，等待依赖满足（调度时间、工作流依赖）就入队 | queued、hold、skipped、mark\_successed |
-| queued | 等待分配执行资源 | running、killed、skipped、mark\_successed |
+| waiting | task初始化，等待依赖满足（调度时间、工作流依赖）就入队 | queued、hold、skipped、mark\_succeeded |
+| queued | 等待分配执行资源 | running、killed、skipped、mark\_succeeded |
 | running | task分发给执行器执行，任务进入运行中 | succeeded、failed、killed |
-| hold | 等待审批、输入或外部条件 | waiting、skipped、mark\_successed |
+| hold | 等待审批、输入或外部条件 | waiting、skipped、mark\_succeeded |
 | succeeded | 任务执行成功 | queued（用户手动重跑） |
-| failed | 任务执行失败 | queued（用户手动重跑）、mark\_successed |
-| killed | 用户手动终止 | queued（用户手动重跑）、mark\_successed |
-| skipped | 用户执行跳过 | waiting（用户取消跳过）、mark\_successed |
-| mark\_successed | 用户手动标记成功 | 终态 |
+| failed | 任务执行失败 | queued（用户手动重跑）、mark\_succeeded |
+| killed | 用户手动终止 | queued（用户手动重跑）、mark\_succeeded |
+| skipped | 用户执行跳过 | waiting（用户取消跳过）、mark\_succeeded |
+| mark\_succeeded | 用户手动标记成功 | 终态 |
 
 任务状态机状态切换如下图：
 
@@ -274,7 +274,7 @@ OR Join 的关键是显式取消未选分支，否则它们会继续消耗资源
 
 外部调用可以先保存意图，执行后再保存结果；意图记录、消息发布和状态提交之间的故障窗口，按后端能力使用事务、Outbox、幂等键或对账处理。围栏用于拒绝过期执行者的提交，不能替代跨系统事务。局部重跑应复用版本仍有效的前序结果，并核对失败步骤的副作用；邮件、扣款等已发生操作通常只能确认或补偿，不能由恢复检查点撤销。
 
-可视化运维。生产级工作流应提供可视化执行视图：DAG 拓扑上标注每个节点的实时状态（waiting / queued / running / hold / succeeded / failed / killed / skipped / mark\_successed，见 10.2.3.3）、耗时、重试次数；支持人工介入操作（重跑 → queued、跳过 → skipped、强制标记成功 → mark\\_successed、暂停 → hold、终止 → killed）。"强制标记成功"按 10.1.2 节只改变执行状态并留下审计记录，不直接判定 Outcome。
+可视化运维。生产级工作流应提供可视化执行视图：DAG 拓扑上标注每个节点的实时状态（waiting / queued / running / hold / succeeded / failed / killed / skipped / mark\_succeeded，见 10.2.3.3）、耗时、重试次数；支持人工介入操作（重跑 → queued、跳过 → skipped、强制标记成功 → mark\\_succeeded、暂停 → hold、终止 → killed）。"强制标记成功"按 10.1.2 节只改变执行状态并留下审计记录，不直接判定 Outcome。
 
 可观测数据采集不应是无条件的全量记录。默认按最小必要采集，涉及敏感字段做字段级脱敏或散列，凭证秘密禁止入库，访问受 RBAC 控制，留存有明确期限，审计日志保证完整性(只追加、防篡改)。"查看任意节点的输入输出和 LLM 原始响应"这类能力应按需授权，而不是默认开放——无人值守任务的执行上下文经常携带客户数据、内部凭证、商业敏感信息，默认全量记录会显著扩大攻击面与合规风险。告警方面，节点失败、整体超时、定时工作流未触发等事件应自动推送；配置了自愈策略的节点(自动重试 + 指数退避)无需人工介入。
 

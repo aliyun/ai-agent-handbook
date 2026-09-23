@@ -111,7 +111,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | 26. Design engineering | [GenUI: From Answers to Deliverables](<./06-case-study/第26章 设计工程/GenUI：让 Agent 从给出答案走向交付结果.md>) |
 | 26. Design engineering | [Vibe Designing: An Intent-Driven AI Design Paradigm](<./06-case-study/第26章 设计工程/Vibe Designing：意图驱动的AI设计范式进化.md>) |
 | 27. Operations and IT | [Geely's Intelligent Operations Practice](<./06-case-study/第27章 运维、安全与企业IT/吉利汽车智能运维的落地实践.md>) |
-| 27. Operations and IT | [Tastien's Intelligent Operations Loop Across 10,000 Stores](<./06-case-study/第27章 运维、安全与企业IT/塔斯汀万店连锁的智能运维闭环实.md>) |
+| 27. Operations and IT | [Tastien's Intelligent Operations Loop Across 10,000 Stores](<./06-case-study/第27章 运维、安全与企业IT/塔斯汀万店连锁的智能运维闭环实践.md>) |
 | 27. Operations and IT | [ChangJieTong's Observability and Intelligent Operations](<./06-case-study/第27章 运维、安全与企业IT/畅捷通的可观测与智能运维实践.md>) |
 | 28. Customer and operations | [MiniMax's Long-Horizon Memory Data Foundation](<./06-case-study/第28章 客户、销售与运营/MiniMax 构建海量长周期记忆数据底座的实践.md>) |
 | 28. Customer and operations | [Office Productivity at ShineWing, an Accounting Firm](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
