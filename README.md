@@ -1,8 +1,6 @@
-# README
+# AI Agent HandBook
 
 中文 | [English](./README_EN.md)
-
-# AI Agent HandBook
 
 按照 Agent 的架构、构建、运行、治理和调优应用生命周期，总结了我们在企业级 Agent 落地过程中的实践经验和体会，若白皮书能对个人学习和企业落地 Agent 起到一点点的促进作用，将是我们莫大的荣幸。
 

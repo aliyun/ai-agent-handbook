@@ -1,8 +1,6 @@
-# README
+# AI Agent HandBook
 
 [中文](./README.md) | English
-
-# AI Agent HandBook
 
 Following the agent lifecycle—from architecture and building to operation, governance, and optimization—we share the experience and lessons we have gained from deploying enterprise agents. If this white paper helps individuals learn or organizations put agents into practice, we would be deeply grateful.
 
