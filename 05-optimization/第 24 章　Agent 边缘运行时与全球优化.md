@@ -327,7 +327,7 @@ ESA AI 加速网关的关键调优指标： Token 节省率（HTML→MD 转换 +
 | HTML→Markdown 转换 | ESA 已发布 | 减少 Agent 消费 Web 内容的 Token 消耗 |
 | AI 爬虫管理 | ESA 已发布 | 识别、观察和拦截 AI 爬虫 |
 | AI Bot Auth、AI Crawl Control、Pay Per Crawl | ESA 已发布 | AI 爬虫生命周期管理的后续能力 |
-| Agent 两级运行时 | 本书参考架构与愿景设计 | 非 ESA 产品现状 |
+| Agent 两级运行时 | ESA 已发布 | AI Agent 在边缘的规模部署 |
 | 语义缓存命中策略与缓存键设计 | 企业参考实现 | ESA AI 网关提供基础缓存能力，本章的缓存键、TTL 与回源策略为设计建议 |
 | WebMCP | 实验性技术 | 试验阶段 |
 | 版本管理与灰度发布 | ESA 已发布 | 边缘生产验证 |
