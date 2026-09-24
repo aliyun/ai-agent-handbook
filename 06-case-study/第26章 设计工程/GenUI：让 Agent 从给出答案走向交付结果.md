@@ -84,8 +84,6 @@ After：接入设计资产后的效果
 
 GenUI 不只展示业务结果。当任务需要用户继续参与时，界面可以提供输入、选择、确认和操作入口，并将用户操作回传给 Agent，继续驱动业务执行与界面更新。用户无需离开当前上下文，就能从理解结果自然进入下一步操作，持续推进任务。
 
-[请至钉钉文档查看附件《钉钉录屏\_2026-08-31 181443\_20260831181517.mp4》。](https://alidocs.dingtalk.com/i/nodes/amweZ92PV6DbOdgzUqdEz43G8xEKBD6p?iframeQuery=anchorId%3DX02mth319ezo72x8ssnpmg)
-
 Template示例
 
 ### 输出可校验，问题可追踪

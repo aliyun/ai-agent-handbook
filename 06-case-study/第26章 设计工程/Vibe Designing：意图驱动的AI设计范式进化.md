@@ -98,8 +98,6 @@ AI Coding 正在从开发者的专属能力，变成一种更普遍的创造能�
 
 这里的 UI 不再是一个固定页面，而是 Agent 为了完成当前任务，动态组织出来的过程界面。它把数据、流程、组件和规则临时组合起来，帮助用户更快抵达目标。
 
-[请至钉钉文档查看附件《7月27日(2).mp4》。](https://alidocs.dingtalk.com/i/nodes/NZQYprEoWoxKPoqwCQPo44Q5V1waOeDk?iframeQuery=anchorId%3DX02ms309qege41are5btnu)
-
 所以，GenUI is the New Interface，动态交互真正改变的是界面的存在方式。界面不再只是被设计出来，也可以在意图中被组织出来。
 
 > Taste is the New Engine.
