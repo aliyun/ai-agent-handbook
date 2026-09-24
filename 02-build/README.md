@@ -8,10 +8,10 @@ Coding Agent 为这项工作提供了一个可观察的工程样本。在代码�
 
 | 对应章节 | 主线 | 构建对象或问题 | 主要机制 |
 | --- | --- | --- | --- |
-| 第 3 章 | 范式：Harness 由谁实现 | 定制深度、数据边界、运行责任与交付方式的取舍。 | 四类构建入口：高代码框架、产品化 Harness（Coding Agent CLI / SDK 与工作区助手）、Managed Agents、Agent 云产品；Agent Platform 的规模化交付与多源纳管。 |
-| 第 4 章 | 工程契约：任务 | 任务如何推进、中断如何恢复、完成如何判定。 | Agent Loop 与任务状态机、Planning 与阶段门禁、Subagent 受控委派、异步续行、由证据决定完成。 |
-| 第 5 章 | 工程契约：信息 | 有限模型窗口与持续增长的任务世界之间如何取舍。 | Context 构建管线与 Manifest、压缩与卸载、Session / Task State / Workspace 的区分、Memory 与 Knowledge 的分工、Skill 的渐进式披露。 |
-| 第 6 章 | 工程契约：行动 | 行动意图如何被授权、执行与验证。 | 统一 Action Plane、Function Calling / MCP / A2A 的职责分层、Environment Contract 与 Sandbox、Permission 与 HITL、Trace 与 Evaluation 闭环。 |
+| 第 03 章 | 范式：Harness 由谁实现 | 定制深度、数据边界、运行责任与交付方式的取舍。 | 四类构建入口：高代码框架、产品化 Harness（Coding Agent CLI / SDK 与工作区助手）、Managed Agents、Agent 云产品；Agent Platform 的规模化交付与多源纳管。 |
+| 第 04 章 | 工程契约：任务 | 任务如何推进、中断如何恢复、完成如何判定。 | Agent Loop 与任务状态机、Planning 与阶段门禁、Subagent 受控委派、异步续行、由证据决定完成。 |
+| 第 05 章 | 工程契约：信息 | 有限模型窗口与持续增长的任务世界之间如何取舍。 | Context 构建管线与 Manifest、压缩与卸载、Session / Task State / Workspace 的区分、Memory 与 Knowledge 的分工、Skill 的渐进式披露。 |
+| 第 06 章 | 工程契约：行动 | 行动意图如何被授权、执行与验证。 | 统一 Action Plane、Function Calling / MCP / A2A 的职责分层、Environment Contract 与 Sandbox、Permission 与 HITL、Trace 与 Evaluation 闭环。 |
 
 第一条主线是构建入口的选择。当前存在四类主要起点：高代码框架提供代码级控制；产品化 Harness 以 Coding Agent CLI、SDK 与工作区助手的形式复用成熟能力；Managed Agents 将约定范围内的 Harness 与运行基础服务化；Agent 云产品提供原生创建与共享资源入口。四类入口不构成成熟度阶梯，也不互斥，选择依据是任务结构、定制深度、数据边界、环境影响、团队能力与交付方式。当多团队、多来源 Agent 同时存在时，Agent Platform 负责统一创建、接入、规模化交付、运行、治理、协作、观测与优化，它不是第五类入口。
 
