@@ -237,7 +237,7 @@ Agent 版本发布的准入基线应同时包含 Region 内指标（回答正确
 
 ![image.png](../assets/imgs/chapter-24/image-002.png)
 
-图24-2 Agent 两级运行时架构（本书参考架构与愿景设计）
+图24-2 Agent 两级运行时架构
 
 **Agent 两级运行时：ESA EdgeFunction + RegionFunction。**
 
