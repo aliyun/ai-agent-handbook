@@ -1,6 +1,6 @@
 # README
 
-[中文](./README.md) | English
+[Tiếng Việt](./README.md) | English | [中文](https://github.com/aliyun/ai-agent-handbook)
 
 # AI Agent HandBook
 
@@ -52,71 +52,71 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 
 | Part | Directory | Chapters | Focus |
 | --- | --- | --- | --- |
-| [2026 Agent Developer Survey Report](./2026-agent-survey-report.md) | Repository root | — | Enterprise development, production adoption, architecture choices, toolchains, governance, and evaluation. |
-| [Preface](./00-preface/00-preface.md) | `00-preface/` | — | The white paper's structure and background. |
-| [Architecture](./01-architecture/) | `01-architecture/` | 1–2 | Define the system, select an application form, assess maturity, and establish a reference architecture. |
-| [Building](./02-build/) | `02-build/` | 3–6 | Organize tasks, information, and actions around the harness. |
-| [Runtime](./03-run/) | `03-run/` | 7–12 | From reliable single-agent execution to asynchronous and distributed multi-agent systems. |
-| [Governance](./04-governance/) | `04-governance/` | 13–16 | Make operations visible, behavior bounded, assets manageable, and release behavior testable. |
-| [Optimization](./05-optimization/) | `05-optimization/` | 17–24 | Continuous improvement of both models and agents. |
-| [Practice](./06-case-study/) | `06-case-study/` | 25–29 | Enterprise cases, domain applications, and agent-infrastructure exploration. |
-| [Conclusion and Outlook](./07-conclusion/) | `07-conclusion/` | 30 | From Agentic Application to Agentic OS. |
+| [2026 Agent Developer Survey Report](./2026-bao-cao-khao-sat-agent.md) | Repository root | — | Enterprise development, production adoption, architecture choices, toolchains, governance, and evaluation. |
+| [Preface](./00-loi-noi-dau/00-loi-noi-dau.md) | `00-loi-noi-dau/` | — | The white paper's structure and background. |
+| [Architecture](./01-kien-truc/) | `01-kien-truc/` | 1–2 | Define the system, select an application form, assess maturity, and establish a reference architecture. |
+| [Building](./02-xay-dung/) | `02-xay-dung/` | 3–6 | Organize tasks, information, and actions around the harness. |
+| [Runtime](./03-van-hanh/) | `03-van-hanh/` | 7–12 | From reliable single-agent execution to asynchronous and distributed multi-agent systems. |
+| [Governance](./04-quan-tri/) | `04-quan-tri/` | 13–16 | Make operations visible, behavior bounded, assets manageable, and release behavior testable. |
+| [Optimization](./05-toi-uu/) | `05-toi-uu/` | 17–24 | Continuous improvement of both models and agents. |
+| [Practice](./06-thuc-tien/) | `06-thuc-tien/` | 25–29 | Enterprise cases, domain applications, and agent-infrastructure exploration. |
+| [Conclusion and Outlook](./07-tong-ket/) | `07-tong-ket/` | 30 | From Agentic Application to Agentic OS. |
 
 ### Chapter guide
 
 | Part | Chapter | Main topics |
 | --- | --- | --- |
-| Architecture | [1. A New Stage for AI-Native Applications](<./01-architecture/第 1 章　AI 原生应用的新阶段.md>) | Application evolution, Agentic Application boundaries, and enterprise maturity. |
-| Architecture | [2. Agentic Application Reference Architecture](<./01-architecture/第 2 章　Agentic Application 参考架构.md>) | Component, platform-responsibility, and lifecycle views. |
-| Building | [3. Harness Construction Patterns and Responsibilities](<./02-build/第 3 章 范式：Harness 的主流构建方式和责任边界.md>) | Code-first frameworks, productized harnesses, managed agents, cloud products, and platform boundaries. |
-| Building | [4. Tasks: Orchestration and Long-Horizon Collaboration](<./02-build/第 4 章 任务：编排、长程推进与协作流转.md>) | Agent loops, task state machines, planning, delegation, asynchronous continuation, and completion evidence. |
-| Building | [5. Information: Context, State, and Reusable Assets](<./02-build/第 5 章 信息：上下文、状态与可复用能力资产.md>) | Context builders, compression, sessions, task state, workspaces, memory, knowledge, and skills. |
-| Building | [6. Actions: Controlled Execution and Verification](<./02-build/第 6 章 行动：受控执行、验证反馈与交付准备.md>) | Action planes, Function Calling, MCP, A2A, environment contracts, permissions, and human approval. |
-| Runtime | [7. Agent Runtime and Sandboxes](<./03-run/第 7 章  Agent 运行时与沙箱.md>) | Sandboxes, runtime, workspaces, environment lifecycle, and production execution. |
-| Runtime | [8. Agent State Storage and Semantic Assets](<./03-run/第 8 章 Agent 状态存储与语义资产.md>) | Event logs, checkpoints, snapshots, artifacts, long-term memory, RAG, and business semantics. |
-| Runtime | [9. AI Gateways and Unified Traffic Governance](<./03-run/第 9 章  AI 网关与统一流量治理.md>) | Identity, permissions, budgets, routing, audit, and approval across LLM, MCP, and agent traffic. |
-| Runtime | [10. Asynchronous Agent Tasks and Automation](<./03-run/第 10 章  Agent 异步任务与自动化流程.md>) | Synchronous/asynchronous boundaries, completion semantics, scheduled work, and workflows. |
-| Runtime | [11. Multi-Agent Coordination and Orchestration](<./03-run/第 11章  Multi-Agent 协作与编排.md>) | Heterogeneous agents, team topology, task assignment, result aggregation, and orchestration roles. |
-| Runtime | [12. Distributed Agent Communication](<./03-run/第 12 章 Agent 分布式通信.md>) | Protocol choices and message governance across capability, collaboration, internal, and human-agent interactions. |
-| Governance | [13. Agent Observability](<./04-governance/第 13 章　Agent 的可观测性.md>) | Metrics, logs, traces, events, cost attribution, and audit. |
-| Governance | [14. Agent Security](<./04-governance/第 14 章　Agent 安全.md>) | Prompt injection, identity, per-action validation, high-risk authorization, and data-egress controls. |
-| Governance | [15. Discovery and Management of AI Assets](<./04-governance/第 15 章　AI 资产的发现与管理.md>) | Registration, versioning, discovery, dependencies, and releases for prompts, skills, MCP, and agents. |
-| Governance | [16. Agent Behavior Generation and Quality Validation](<./04-governance/第 16 章　Agent 行为生成与质量验证.md>) | User and environment simulation, scenarios, and pre-release validation. |
-| Optimization | [17. Model Tuning](<./05-optimization/第 17 章　模型调优.md>) | Root-cause criteria, SFT, agentic RL, distillation, and production acceptance. |
-| Optimization | [18. Overview of Agent Optimization](<./05-optimization/第 18 章　Agent 调优总览.md>) | Optimization targets, method boundaries, and the data flywheel. |
-| Optimization | [19. Agent Trajectory Data](<./05-optimization/第 19 章　Agent 轨迹数据.md>) | Turning traces into reusable behavioral and decision evidence. |
-| Optimization | [20. Processing Agent Runtime Data](<./05-optimization/第 20 章　Agent 运行时数据处理.md>) | Collection, cleaning, processing, and declarative data pipelines. |
-| Optimization | [21. Golden Datasets for Agents](<./05-optimization/第 21 章　Agent 黄金数据集.md>) | Evaluation assets with inputs, trajectories, outcomes, and judging criteria. |
-| Optimization | [22. Improving Agents Through Bad Cases](<./05-optimization/第 22 章　Agent 优化：Badcase.md>) | Failure discovery, attribution, fixes, regression checks, and experiments. |
-| Optimization | [23. Controlled Self-Evolution](<./05-optimization/第 23 章　受控自进化.md>) | Turning validated experience into memory, skills, tools, and runtime improvements. |
-| Optimization | [24. Edge Runtime and Global Optimization](<./05-optimization/第 24 章　Agent 边缘运行时与全球优化.md>) | Edge runtime, evaluation, performance, cost, delivery, security, and simulation. |
-| Practice | [25. Software Engineering Productivity](<./06-case-study/第25章 研发效能/>) | Code review, defect detection, patch delivery, and end-to-end engineering. |
-| Practice | [26. Design Engineering](<./06-case-study/第26章 设计工程/>) | Vibe Designing and GenUI. |
-| Practice | [27. Operations, Security, and Enterprise IT](<./06-case-study/第27章 运维、安全与企业IT/>) | Production operations in automotive, retail, and enterprise software. |
-| Practice | [28. Customer, Sales, and Operations](<./06-case-study/第28章 客户、销售与运营/>) | Long-term memory, content insights, office productivity, and data agents. |
-| Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | Open-source competition projects and agent-infrastructure exploration. |
-| Conclusion and Outlook | [30. From Agentic Application to Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | From individual applications toward collaborative, governable, evolving systems. |
+| Architecture | [1. A New Stage for AI-Native Applications](<./01-kien-truc/chuong-01-giai-doan-moi-cua-ung-dung-ai-native.md>) | Application evolution, Agentic Application boundaries, and enterprise maturity. |
+| Architecture | [2. Agentic Application Reference Architecture](<./01-kien-truc/chuong-02-kien-truc-tham-chieu-agentic-application.md>) | Component, platform-responsibility, and lifecycle views. |
+| Building | [3. Harness Construction Patterns and Responsibilities](<./02-xay-dung/chuong-03-paradigm-harness-va-ranh-gioi-trach-nhiem.md>) | Code-first frameworks, productized harnesses, managed agents, cloud products, and platform boundaries. |
+| Building | [4. Tasks: Orchestration and Long-Horizon Collaboration](<./02-xay-dung/chuong-04-task-dieu-phoi-tien-trinh-dai-va-cong-tac.md>) | Agent loops, task state machines, planning, delegation, asynchronous continuation, and completion evidence. |
+| Building | [5. Information: Context, State, and Reusable Assets](<./02-xay-dung/chuong-05-thong-tin-context-state-va-nang-luc-tai-su-dung.md>) | Context builders, compression, sessions, task state, workspaces, memory, knowledge, and skills. |
+| Building | [6. Actions: Controlled Execution and Verification](<./02-xay-dung/chuong-06-hanh-dong-thuc-thi-co-kiem-soat-va-xac-thuc.md>) | Action planes, Function Calling, MCP, A2A, environment contracts, permissions, and human approval. |
+| Runtime | [7. Agent Runtime and Sandboxes](<./03-van-hanh/chuong-07-agent-runtime-va-sandbox.md>) | Sandboxes, runtime, workspaces, environment lifecycle, and production execution. |
+| Runtime | [8. Agent State Storage and Semantic Assets](<./03-van-hanh/chuong-08-luu-tru-trang-thai-va-tai-san-ngu-nghia.md>) | Event logs, checkpoints, snapshots, artifacts, long-term memory, RAG, and business semantics. |
+| Runtime | [9. AI Gateways and Unified Traffic Governance](<./03-van-hanh/chuong-09-ai-gateway-va-quan-tri-traffic-thong-nhat.md>) | Identity, permissions, budgets, routing, audit, and approval across LLM, MCP, and agent traffic. |
+| Runtime | [10. Asynchronous Agent Tasks and Automation](<./03-van-hanh/chuong-10-task-bat-dong-bo-va-quy-trinh-tu-dong-hoa.md>) | Synchronous/asynchronous boundaries, completion semantics, scheduled work, and workflows. |
+| Runtime | [11. Multi-Agent Coordination and Orchestration](<./03-van-hanh/chuong-11-multi-agent-cong-tac-va-orchestration.md>) | Heterogeneous agents, team topology, task assignment, result aggregation, and orchestration roles. |
+| Runtime | [12. Distributed Agent Communication](<./03-van-hanh/chuong-12-agent-giao-tiep-phan-tan.md>) | Protocol choices and message governance across capability, collaboration, internal, and human-agent interactions. |
+| Governance | [13. Agent Observability](<./04-quan-tri/chuong-13-observability-cua-agent.md>) | Metrics, logs, traces, events, cost attribution, and audit. |
+| Governance | [14. Agent Security](<./04-quan-tri/chuong-14-bao-mat-agent.md>) | Prompt injection, identity, per-action validation, high-risk authorization, and data-egress controls. |
+| Governance | [15. Discovery and Management of AI Assets](<./04-quan-tri/chuong-15-kham-pha-va-quan-ly-tai-san-ai.md>) | Registration, versioning, discovery, dependencies, and releases for prompts, skills, MCP, and agents. |
+| Governance | [16. Agent Behavior Generation and Quality Validation](<./04-quan-tri/chuong-16-sinh-hanh-vi-va-kiem-dinh-chat-luong.md>) | User and environment simulation, scenarios, and pre-release validation. |
+| Optimization | [17. Model Tuning](<./05-toi-uu/chuong-17-toi-uu-model.md>) | Root-cause criteria, SFT, agentic RL, distillation, and production acceptance. |
+| Optimization | [18. Overview of Agent Optimization](<./05-toi-uu/chuong-18-tong-quan-toi-uu-agent.md>) | Optimization targets, method boundaries, and the data flywheel. |
+| Optimization | [19. Agent Trajectory Data](<./05-toi-uu/chuong-19-du-lieu-trajectory.md>) | Turning traces into reusable behavioral and decision evidence. |
+| Optimization | [20. Processing Agent Runtime Data](<./05-toi-uu/chuong-20-xu-ly-du-lieu-runtime.md>) | Collection, cleaning, processing, and declarative data pipelines. |
+| Optimization | [21. Golden Datasets for Agents](<./05-toi-uu/chuong-21-golden-dataset.md>) | Evaluation assets with inputs, trajectories, outcomes, and judging criteria. |
+| Optimization | [22. Improving Agents Through Bad Cases](<./05-toi-uu/chuong-22-toi-uu-agent-badcase.md>) | Failure discovery, attribution, fixes, regression checks, and experiments. |
+| Optimization | [23. Controlled Self-Evolution](<./05-toi-uu/chuong-23-tu-tien-hoa-co-kiem-soat.md>) | Turning validated experience into memory, skills, tools, and runtime improvements. |
+| Optimization | [24. Edge Runtime and Global Optimization](<./05-toi-uu/chuong-24-edge-runtime-va-toi-uu-toan-cau.md>) | Edge runtime, evaluation, performance, cost, delivery, security, and simulation. |
+| Practice | [25. Software Engineering Productivity](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/>) | Code review, defect detection, patch delivery, and end-to-end engineering. |
+| Practice | [26. Design Engineering](<./06-thuc-tien/chuong-26-design-engineering/>) | Vibe Designing and GenUI. |
+| Practice | [27. Operations, Security, and Enterprise IT](<./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/>) | Production operations in automotive, retail, and enterprise software. |
+| Practice | [28. Customer, Sales, and Operations](<./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/>) | Long-term memory, content insights, office productivity, and data agents. |
+| Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-thuc-tien/chuong-29-goai-agent-infra.md>) | Open-source competition projects and agent-infrastructure exploration. |
+| Conclusion and Outlook | [30. From Agentic Application to Agentic OS](<./07-tong-ket/chuong-30-tu-agentic-application-den-agentic-os.md>) | From individual applications toward collaborative, governable, evolving systems. |
 
 ### Case-study guide
 
 | Chapter | Case study |
 | --- | --- |
-| 25. Software engineering | [ABACI: Targeted Testing and Defect Detection for Kernel Patches](<./06-case-study/第25章 研发效能/ABACI 内核补丁定向测试与缺陷检测智能体.md>) |
-| 25. Software engineering | [Kitta: A Domain-Specific Code Review Agent](<./06-case-study/第25章 研发效能/Kitta：领域专用 Code Review Agent.md>) |
-| 25. Software engineering | [PatchPilot Agents: Orchestrated, Verifiable Kernel Patch Delivery](<./06-case-study/第25章 研发效能/PatchPilot Agents：让内核补丁交付成为可编排、可验证的工程闭环.md>) |
-| 25. Software engineering | [From Alerts to Automatic Repair: PolarDB-X Loop Engineering](<./06-case-study/第25章 研发效能/从报警到自动修复，PolarDB-X 的 Loop 工程实践.md>) |
-| 25. Software engineering | [From Coding Productivity to End-to-End Delivery: Human-Agent Collaboration in Cloud Communications](<./06-case-study/第25章 研发效能/从编码提效到端到端交付，云通信的人机协作实践.md>) |
-| 25. Software engineering | [Evaluation-Driven Delivery: AI Agent Security Product Development](<./06-case-study/第25章 研发效能/从评测驱动到端到端交付：AI Agent 安全产品研发提效实践.md>) |
-| 25. Software engineering | [A Multi-Agent Engineering Team: From Writing Code to End-to-End Delivery](<./06-case-study/第25章 研发效能/多 Agent 组成研发小队：AI 研发如何从写代码走向端到端交付.md>) |
-| 26. Design engineering | [GenUI: From Answers to Deliverables](<./06-case-study/第26章 设计工程/GenUI：让 Agent 从给出答案走向交付结果.md>) |
-| 26. Design engineering | [Vibe Designing: An Intent-Driven AI Design Paradigm](<./06-case-study/第26章 设计工程/Vibe Designing：意图驱动的AI设计范式进化.md>) |
-| 27. Operations and IT | [Geely's Intelligent Operations Practice](<./06-case-study/第27章 运维、安全与企业IT/吉利汽车智能运维的落地实践.md>) |
-| 27. Operations and IT | [Tastien's Intelligent Operations Loop Across 10,000 Stores](<./06-case-study/第27章 运维、安全与企业IT/塔斯汀万店连锁的智能运维闭环实践.md>) |
-| 27. Operations and IT | [ChangJieTong's Observability and Intelligent Operations](<./06-case-study/第27章 运维、安全与企业IT/畅捷通的可观测与智能运维实践.md>) |
-| 28. Customer and operations | [MiniMax's Long-Horizon Memory Data Foundation](<./06-case-study/第28章 客户、销售与运营/MiniMax 构建海量长周期记忆数据底座的实践.md>) |
-| 28. Customer and operations | [Office Productivity at ShineWing, an Accounting Firm](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
-| 28. Customer and operations | [Bilibili's Cross-Platform Content Insights](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
-| 28. Customer and operations | [Data Agent for Operational Analytics](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
+| 25. Software engineering | [ABACI: Targeted Testing and Defect Detection for Kernel Patches](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/abaci-kiem-thu-patch-kernel-va-phat-hien-loi.md>) |
+| 25. Software engineering | [Kitta: A Domain-Specific Code Review Agent](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/kitta-code-review-agent-chuyen-nganh.md>) |
+| 25. Software engineering | [PatchPilot Agents: Orchestrated, Verifiable Kernel Patch Delivery](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/patchpilot-agents.md>) |
+| 25. Software engineering | [From Alerts to Automatic Repair: PolarDB-X Loop Engineering](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/polardb-x-tu-canh-bao-den-tu-dong-sua-loi.md>) |
+| 25. Software engineering | [From Coding Productivity to End-to-End Delivery: Human-Agent Collaboration in Cloud Communications](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/hop-tac-nguoi-may-tai-cloud-communication.md>) |
+| 25. Software engineering | [Evaluation-Driven Delivery: AI Agent Security Product Development](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/eval-driven-phat-trien-san-pham-bao-mat.md>) |
+| 25. Software engineering | [A Multi-Agent Engineering Team: From Writing Code to End-to-End Delivery](<./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/doi-multi-agent-giao-hang-dau-cuoi.md>) |
+| 26. Design engineering | [GenUI: From Answers to Deliverables](<./06-thuc-tien/chuong-26-design-engineering/genui.md>) |
+| 26. Design engineering | [Vibe Designing: An Intent-Driven AI Design Paradigm](<./06-thuc-tien/chuong-26-design-engineering/vibe-designing.md>) |
+| 27. Operations and IT | [Geely's Intelligent Operations Practice](<./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/geely-aiops.md>) |
+| 27. Operations and IT | [Tastien's Intelligent Operations Loop Across 10,000 Stores](<./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/tastien-aiops-chuoi-cua-hang.md>) |
+| 27. Operations and IT | [ChangJieTong's Observability and Intelligent Operations](<./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/chanjet-observability-va-aiops.md>) |
+| 28. Customer and operations | [MiniMax's Long-Horizon Memory Data Foundation](<./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/minimax-nen-tang-du-lieu-memory.md>) |
+| 28. Customer and operations | [Office Productivity at ShineWing, an Accounting Firm](<./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/shinewing-nang-cao-hieu-suat-van-phong.md>) |
+| 28. Customer and operations | [Bilibili's Cross-Platform Content Insights](<./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/bilibili-content-insight.md>) |
+| 28. Customer and operations | [Data Agent for Operational Analytics](<./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/data-agent-phan-tich-van-hanh.md>) |
 
 ### Suggested reading paths
 
@@ -151,15 +151,15 @@ Thanks to everyone who has helped with architecture, writing, case studies, and 
 
 | Contribution area | Contributors |
 | --- | --- |
-| Preface | 麻芃 |
-| Developer Survey Report | 任娟, 王晨 |
-| Architecture | 王晨, 刘军, 沈林 |
-| Building | 刘军, 泮圣伟, 王晨 |
-| Runtime | 赵庆杰, 李诗波, 林清山, 黄晓萌, 张添翼, 赵源筱, 孙校, 宋震, 胡庆达, 柳遵飞, 朱桐, 余华峰, 罗鑫, 孔可青 |
-| Governance | 肖长军, 周洋, 张磊, 王方, 张海彬, 程书意, 刘子明, 饶子昊, 任懿, 杨永, 王硕, 马昕, 刘宇轩, 杨翊 |
-| Optimization | 张寒萌, 李盛荣, 王亚宁, 孙坚运, 马云雷, 王桢, 郑前祎, 刘航, 陈新 |
-| Practice | 杨涛, 朱颜, 余艾琳, 胡峻 |
-| Conclusion and Outlook | 林演 |
+| Preface | Ma Peng |
+| Developer Survey Report | Ren Juan, Wang Chen |
+| Architecture | Wang Chen, Liu Jun, Shen Lin |
+| Building | Liu Jun, Pan Shengwei, Wang Chen |
+| Runtime | Zhao Qingjie, Li Shibo, Lin Qingshan, Huang Xiaomeng, Zhang Tianyi, Zhao Yuanxiao, Sun Xiao, Song Zhen, Hu Qingda, Liu Zunfei, Zhu Tong, Yu Huafeng, Luo Xin, Kong Keqing |
+| Governance | Xiao Changjun, Zhou Yang, Zhang Lei, Wang Fang, Zhang Haibin, Cheng Shuyi, Liu Ziming, Rao Zihao, Ren Yi, Yang Yong, Wang Shuo, Ma Xin, Liu Yuxuan, Yang Yi |
+| Optimization | Zhang Hanmeng, Li Shengrong, Wang Yaning, Sun Jianyun, Ma Yunlei, Wang Zhen, Zheng Qianyi, Liu Hang, Chen Xin |
+| Practice | Yang Tao, Zhu Yan, Yu Ailin, Hu Jun |
+| Conclusion and Outlook | Lin Yan |
 
 ### External Contributors
 

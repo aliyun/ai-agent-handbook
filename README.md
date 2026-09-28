@@ -1,177 +1,186 @@
 # README
 
-中文 | [English](./README_EN.md)
+Tiếng Việt | [English](./README_EN.md) | [中文](https://github.com/aliyun/ai-agent-handbook)
 
 # AI Agent HandBook
 
-按照 Agent 的架构、构建、运行、治理和调优应用生命周期，总结了我们在企业级 Agent 落地过程中的实践经验和体会，若白皮书能对个人学习和企业落地 Agent 起到一点点的促进作用，将是我们莫大的荣幸。
+Bám theo vòng đời ứng dụng của Agent — kiến trúc, xây dựng, vận hành, quản trị và tối ưu — cuốn sách này tổng kết những kinh nghiệm và bài học chúng tôi rút ra trong quá trình đưa Agent vào môi trường doanh nghiệp. Nếu cuốn sách trắng này đóng góp được dù chỉ một phần nhỏ cho việc học tập cá nhân và cho việc triển khai Agent ở doanh nghiệp, đó đã là niềm vinh hạnh lớn của chúng tôi.
 
-谨以此项目，献给参与 AI 建设的所有同行者们。
+Xin dành tặng dự án này cho tất cả những người đồng hành đang góp sức xây dựng AI.
+
+> **Về bản tiếng Việt.** Đây là bản dịch tiếng Việt của *AI Agent HandBook* do Alibaba Cloud khởi xướng và duy trì mã nguồn mở. Bản dịch giữ nguyên các thuật ngữ kỹ thuật tiếng Anh đã phổ biến trong cộng đồng (Agent, Harness, Context, Sandbox, Trajectory, Observability…) và diễn giải bằng tiếng Việt, nhằm giúp kỹ sư Việt Nam đọc hiểu nhanh mà vẫn tra cứu được tài liệu gốc. Xem thêm [Bảng thuật ngữ](./THUAT-NGU.md).
 
 ---
 
-## 1. 白皮书架构与写作背景
+## 1. Bối cảnh và cấu trúc của cuốn sách trắng
 
-2025年9月，我们发布了[《AI 原生应用架构白皮书》](https://developer.aliyun.com/ebook/8479)，围绕 AI 原生应用的 DevOps 全生命周期，从架构设计、技术选型、工程实践到运维优化，对概念和重难点进行体系化的拆解，并尝试提供一些解题思路。但随着模型和智能体技术的快速发展，我们发现，市场的关注度已经从快速构建智能体，转向以下三大新挑战：
+Tháng 9 năm 2025, chúng tôi phát hành [*Sách trắng Kiến trúc Ứng dụng AI-Native*](https://developer.aliyun.com/ebook/8479), xoay quanh toàn bộ vòng đời DevOps của ứng dụng AI-native: từ thiết kế kiến trúc, lựa chọn công nghệ, thực hành kỹ thuật cho đến vận hành và tối ưu. Cuốn sách đó bóc tách một cách hệ thống các khái niệm và điểm khó, đồng thời đề xuất một số hướng giải quyết. Nhưng cùng với tốc độ phát triển rất nhanh của model và công nghệ Agent, chúng tôi nhận thấy mối quan tâm của thị trường đã dịch chuyển từ "xây Agent thật nhanh" sang ba thách thức mới:
 
-*   工程化挑战：从概率智能到可靠生产力，Agent 能够承担关键任务。
+*   **Thách thức kỹ thuật (Engineering):** đi từ trí tuệ mang tính xác suất đến năng lực sản xuất đáng tin cậy, để Agent có thể gánh vác những nhiệm vụ trọng yếu.
 
-*   规模化挑战：稳定、安全、性能、成本，从单点试验到智能基础设施，Agent 能够被大规模部署。
+*   **Thách thức quy mô (Scaling):** ổn định, an toàn, hiệu năng, chi phí — đi từ thử nghiệm đơn lẻ đến hạ tầng trí tuệ, để Agent có thể được triển khai ở quy mô lớn.
 
-*   组织化挑战：从 Agent 孤岛到智能组织，Agent 能够进入核心业务流程。
+*   **Thách thức tổ chức (Organization):** đi từ những "ốc đảo Agent" rời rạc đến một tổ chức thông minh, để Agent thực sự bước vào các quy trình nghiệp vụ cốt lõi.
 
+Cuốn sách trắng của năm ngoái rõ ràng không còn đủ để đáp ứng những nhu cầu mới này.
 
-去年的那本白皮书，显然难以应对这些新的诉求。
+Vì vậy, chúng tôi đã tổ chức lại cấu trúc cuốn sách: nội dung cập nhật hơn, tỉ trọng phần thực hành cao hơn, và cách cộng tác mang tính cộng đồng hơn — nhằm cung cấp một tài liệu tham chiếu cho việc lựa chọn công nghệ và lập đề án nội bộ trong doanh nghiệp. Cuốn sách được duy trì lâu dài theo hình thức mã nguồn mở, để liên tục phản ánh những tư duy tiên phong và thực tiễn triển khai của kiến trúc ứng dụng AI-native.
 
-因此，我们重新梳理了白皮书的架构，希望通过更与时俱进的内容，更高的实践篇幅占比，以及更社区化的协作，为企业选型和内部立项提供参考，并通过开源的方式长期维护该白皮书，持续呈现 AI 原生应用架构的前沿思考和落地实践。
+## 2. Đối tượng độc giả và những gì bạn nhận được
 
-## 2. 目标读者与收获
+Cuốn sách trắng này chủ yếu hướng tới bối cảnh xây dựng và triển khai Agent ở quy mô doanh nghiệp. Nó phù hợp với kỹ sư quan tâm đến phát triển Agent, đồng thời có thể dùng cho việc lựa chọn công nghệ nội bộ, review kiến trúc, lập đề án dự án và xây dựng nhận thức chung giữa các nhóm.
 
-本白皮书主要面向企业级 Agent 构建与落地场景。它既适合关注 Agent 开发的工程人员，也适合用于企业内部的技术选型、架构评审、项目立项和跨团队共识建设。
-
-| 读者 | 建议关注 | 你将获得 |
+| Độc giả | Nên tập trung vào | Bạn sẽ nhận được |
 | --- | --- | --- |
-| Agent / AI 应用开发者 | 构建篇、运行篇、调优篇 | 掌握 Harness、上下文、状态、工具、沙箱、轨迹与评估闭环等核心工程方法。 |
-| 架构师与平台工程师 | 架构篇、运行篇、治理篇 | 建立从组件、平台责任到生命周期的完整架构视图，形成可扩展的 Agent 基础设施设计。 |
-| 技术负责人和研发管理者 | 架构篇、治理篇、实践篇 | 判断应用形态、成熟度、投入边界与生产风险，支撑选型、立项和组织协同。 |
-| 产品与业务负责人 | 调研报告、架构篇、实践篇 | 理解适合 Agent 的任务、人与 Agent 的责任边界，以及从试点走向核心流程的条件。 |
-| 安全、质量与运维人员 | 运行篇、治理篇、调优篇 | 建立可观测、审计、安全授权、上线验证、持续评估和故障归因机制。 |
-| 研究者与生态贡献者 | 全书与实践篇 | 了解企业一线问题、工程抽象和开放议题，并参与共同完善行业知识体系。 |
+| Lập trình viên Agent / ứng dụng AI | Phần Xây dựng, Vận hành, Tối ưu | Nắm được các phương pháp kỹ thuật cốt lõi: Harness, context, state, tool, sandbox, trajectory và vòng lặp đánh giá. |
+| Kiến trúc sư và kỹ sư nền tảng | Phần Kiến trúc, Vận hành, Quản trị | Dựng được bức tranh kiến trúc đầy đủ từ component, trách nhiệm nền tảng đến vòng đời, từ đó thiết kế hạ tầng Agent có khả năng mở rộng. |
+| Trưởng bộ phận kỹ thuật và quản lý R&D | Phần Kiến trúc, Quản trị, Thực tiễn | Đánh giá được hình thái ứng dụng, mức độ trưởng thành, giới hạn đầu tư và rủi ro sản xuất, phục vụ cho việc chọn lựa, lập đề án và phối hợp tổ chức. |
+| Product owner và lãnh đạo nghiệp vụ | Báo cáo khảo sát, phần Kiến trúc, Thực tiễn | Hiểu được loại nhiệm vụ nào phù hợp với Agent, ranh giới trách nhiệm giữa người và Agent, cùng điều kiện để đi từ thí điểm vào quy trình lõi. |
+| Nhân sự bảo mật, chất lượng và vận hành | Phần Vận hành, Quản trị, Tối ưu | Thiết lập được cơ chế observability, audit, phân quyền an toàn, kiểm định trước khi lên production, đánh giá liên tục và truy nguyên sự cố. |
+| Nhà nghiên cứu và người đóng góp hệ sinh thái | Toàn bộ sách và phần Thực tiễn | Hiểu được các vấn đề thực tế tại doanh nghiệp, các trừu tượng hoá kỹ thuật và những câu hỏi còn bỏ ngỏ, để cùng hoàn thiện hệ tri thức của ngành. |
 
-完整阅读后，你将能够：
+Sau khi đọc trọn vẹn, bạn sẽ có thể:
 
-- 从业务目标、任务确定性和风险出发，选择最低充分的 Agent 架构；
-- 理解 Model 与 Harness 的责任边界，不把所有问题都归因于模型能力；
-- 设计可持续推进、可中断恢复、可验证完成的 Agent 任务系统；
-- 为 Agent 建立执行环境、状态、流量、权限、观测与成本治理底座；
-- 用 Trace、Trajectory、黄金数据集和评估实验形成持续改进的数据飞轮；
-- 将方法映射到研发效能、设计、运维、企业 IT、客户运营等实际场景。
+- Xuất phát từ mục tiêu nghiệp vụ, độ xác định của nhiệm vụ và mức rủi ro để chọn kiến trúc Agent **tối giản nhưng đủ dùng**;
+- Hiểu ranh giới trách nhiệm giữa Model và Harness, thay vì quy mọi vấn đề về năng lực của model;
+- Thiết kế hệ thống task cho Agent có thể tiến triển bền bỉ, gián đoạn rồi khôi phục được, và kiểm chứng được khi hoàn thành;
+- Xây dựng nền tảng môi trường thực thi, state, traffic, quyền hạn, observability và quản trị chi phí cho Agent;
+- Dùng Trace, Trajectory, golden dataset và thí nghiệm đánh giá để tạo ra bánh đà dữ liệu (data flywheel) cải tiến liên tục;
+- Ánh xạ các phương pháp này vào những bối cảnh thực tế: hiệu suất R&D, thiết kế, vận hành, IT doanh nghiệp, vận hành khách hàng…
 
-## 3. 阅读导引
+## 3. Hướng dẫn đọc
 
-### 目录结构
+### Cấu trúc thư mục
 
-| 篇章 | 目录 | 章节范围 | 阅读重点 |
+| Phần | Thư mục | Phạm vi chương | Trọng tâm |
 | --- | --- | --- | --- |
-| [2026 Agent 开发者调研报告](./2026-agent-survey-report.md) | 根目录 | — | 企业 Agent 开发、生产化、架构选型、工具链、治理与评估现状。 |
-| [前言](./00-preface/00-preface.md) | `00-preface/` | — | 白皮书结构和背景。 |
-| [架构篇](./01-architecture/) | `01-architecture/` | 第 1–2 章 | 定义对象、判断形态、选择成熟度并建立参考架构。 |
-| [构建篇](./02-build/) | `02-build/` | 第 3–6 章 | 以 Harness 为核心，组织任务、信息和行动。 |
-| [运行篇](./03-run/) | `03-run/` | 第 7–12 章 | 从单 Agent 稳定运行扩展到异步、多 Agent 与分布式通信。 |
-| [治理篇](./04-governance/) | `04-governance/` | 第 13–16 章 | 让运行可见、行为有边界、资产可管理、上线前可验证。 |
-| [调优篇](./05-optimization/) | `05-optimization/` | 第 17–24 章 | 从模型与 Agent 两条主线构建持续优化闭环。 |
-| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章 | 企业实践、垂直场景与 Agent Infra 前沿探索。 |
-| [总结与展望篇](./07-conclusion/) | `07-conclusion/` | 第 30 章 | 从 Agentic Application 走向 Agentic OS。 |
+| [Báo cáo khảo sát lập trình viên Agent 2026](./2026-bao-cao-khao-sat-agent.md) | Thư mục gốc | — | Hiện trạng phát triển, đưa vào production, lựa chọn kiến trúc, bộ công cụ, quản trị và đánh giá Agent tại doanh nghiệp. |
+| [Lời nói đầu](./00-loi-noi-dau/00-loi-noi-dau.md) | `00-loi-noi-dau/` | — | Cấu trúc và bối cảnh của cuốn sách trắng. |
+| [Phần Kiến trúc](./01-kien-truc/) | `01-kien-truc/` | Chương 1–2 | Định nghĩa đối tượng, xác định hình thái, chọn mức trưởng thành và dựng kiến trúc tham chiếu. |
+| [Phần Xây dựng](./02-xay-dung/) | `02-xay-dung/` | Chương 3–6 | Lấy Harness làm trung tâm để tổ chức task, thông tin và hành động. |
+| [Phần Vận hành](./03-van-hanh/) | `03-van-hanh/` | Chương 7–12 | Từ việc chạy ổn định một Agent đơn lẻ mở rộng sang bất đồng bộ, multi-agent và giao tiếp phân tán. |
+| [Phần Quản trị](./04-quan-tri/) | `04-quan-tri/` | Chương 13–16 | Làm cho quá trình chạy trở nên nhìn thấy được, hành vi có ranh giới, tài sản quản lý được và kiểm chứng được trước khi lên production. |
+| [Phần Tối ưu](./05-toi-uu/) | `05-toi-uu/` | Chương 17–24 | Xây vòng lặp tối ưu liên tục theo hai trục chính: model và Agent. |
+| [Phần Thực tiễn](./06-thuc-tien/) | `06-thuc-tien/` | Chương 25–29 | Thực tiễn doanh nghiệp, bối cảnh chuyên ngành và những khám phá tiên phong về Agent Infra. |
+| [Phần Tổng kết và triển vọng](./07-tong-ket/) | `07-tong-ket/` | Chương 30 | Từ Agentic Application đi tới Agentic OS. |
 
-### 章节导航
+### Điều hướng theo chương
 
-| 篇章 | 章节 | 核心内容 |
+| Phần | Chương | Nội dung cốt lõi |
 | --- | --- | --- |
-| 架构篇 | [第 1 章　AI 原生应用的新阶段](<./01-architecture/第 1 章　AI 原生应用的新阶段.md>) | 应用形态演进、Agentic Application 的定义与边界、企业成熟度判断。 |
-| 架构篇 | [第 2 章　Agentic Application 参考架构](<./01-architecture/第 2 章　Agentic Application 参考架构.md>) | 组件视图、平台责任与生命周期视图，以及从决策到运行和改进的架构落位。 |
-| 构建篇 | [第 3 章　范式：Harness 的主流构建方式和责任边界](<./02-build/第 3 章 范式：Harness 的主流构建方式和责任边界.md>) | 高代码框架、产品化 Harness、Managed Agents、Agent 云产品与平台责任。 |
-| 构建篇 | [第 4 章　任务：编排、长程推进与协作流转](<./02-build/第 4 章 任务：编排、长程推进与协作流转.md>) | Agent Loop、任务状态机、计划、阶段门禁、委派、异步续行与完成证据。 |
-| 构建篇 | [第 5 章　信息：上下文、状态与可复用能力资产](<./02-build/第 5 章 信息：上下文、状态与可复用能力资产.md>) | Context Builder、压缩与卸载、Session、Task State、Workspace、Memory、Knowledge 与 Skill。 |
-| 构建篇 | [第 6 章　行动：受控执行、验证反馈与交付准备](<./02-build/第 6 章 行动：受控执行、验证反馈与交付准备.md>) | Action Plane、Function Calling、MCP、A2A、环境契约、权限、HITL 与验证闭环。 |
-| 运行篇 | [第 7 章　Agent 运行时与沙箱](<./03-run/第 7 章  Agent 运行时与沙箱.md>) | 沙箱、Agent Runtime、工作空间、环境生命周期与生产运行条件。 |
-| 运行篇 | [第 8 章　Agent 状态存储与语义资产](<./03-run/第 8 章 Agent 状态存储与语义资产.md>) | Event Log、Checkpoint、工作区快照、Artifact、长期记忆、RAG 与业务语义。 |
-| 运行篇 | [第 9 章　AI 网关与统一流量治理](<./03-run/第 9 章  AI 网关与统一流量治理.md>) | LLM、MCP、Agent 三类流量的身份、权限、预算、路由、审计与审批。 |
-| 运行篇 | [第 10 章　Agent 异步任务与自动化流程](<./03-run/第 10 章  Agent 异步任务与自动化流程.md>) | 同步与异步边界、任务完成语义、定时任务、长时任务与自动化工作流。 |
-| 运行篇 | [第 11 章　Multi-Agent 协作与编排](<./03-run/第 11章  Multi-Agent 协作与编排.md>) | 异构 Agent 接入、团队拓扑、任务分派、结果聚合与编排职责。 |
-| 运行篇 | [第 12 章　Agent 分布式通信](<./03-run/第 12 章 Agent 分布式通信.md>) | 能力面、协作面、内构面和人机面的通信协议与消息治理。 |
-| 治理篇 | [第 13 章　Agent 的可观测性](<./04-governance/第 13 章　Agent 的可观测性.md>) | 指标、日志、Trace、事件、成本归因与审计。 |
-| 治理篇 | [第 14 章　Agent 安全](<./04-governance/第 14 章　Agent 安全.md>) | Prompt Injection、身份鉴权、逐次校验、高危授权与数据出域防护。 |
-| 治理篇 | [第 15 章　AI 资产的发现与管理](<./04-governance/第 15 章　AI 资产的发现与管理.md>) | Prompt、Skill、MCP 与 Agent 的注册、版本、发现、依赖和发布管理。 |
-| 治理篇 | [第 16 章　Agent 行为生成与质量验证](<./04-governance/第 16 章　Agent 行为生成与质量验证.md>) | 用户模拟、环境模拟、场景配置与上线前的 Agent Simulation。 |
-| 调优篇 | [第 17 章　模型调优](<./05-optimization/第 17 章　模型调优.md>) | 模型问题的归因判据、SFT、Agentic RL、模型蒸馏与上线验收。 |
-| 调优篇 | [第 18 章　Agent 调优总览](<./05-optimization/第 18 章　Agent 调优总览.md>) | Agent 调优对象、方法边界与数据飞轮全景。 |
-| 调优篇 | [第 19 章　Agent 轨迹数据](<./05-optimization/第 19 章　Agent 轨迹数据.md>) | 从 Trace 到 Trajectory，组织可复用的行为与决策证据。 |
-| 调优篇 | [第 20 章　Agent 运行时数据处理](<./05-optimization/第 20 章　Agent 运行时数据处理.md>) | 运行数据采集、清洗、加工与声明式数据 Pipeline。 |
-| 调优篇 | [第 21 章　Agent 黄金数据集](<./05-optimization/第 21 章　Agent 黄金数据集.md>) | 构建带输入、轨迹、结果与判据的高质量评估数据资产。 |
-| 调优篇 | [第 22 章　Agent 优化：Badcase](<./05-optimization/第 22 章　Agent 优化：Badcase.md>) | Badcase 发现、归因、修复、回归与实验验证。 |
-| 调优篇 | [第 23 章　受控自进化](<./05-optimization/第 23 章　受控自进化.md>) | 把有效经验转化为 Memory、Skill、工具和运行机制，并控制自进化风险。 |
-| 调优篇 | [第 24 章　Agent 边缘运行时与全球优化](<./05-optimization/第 24 章　Agent 边缘运行时与全球优化.md>) | 边缘运行时、边缘评估、性能成本、内容分发、安全与仿真。 |
-| 实践篇 | [第 25 章　研发效能](<./06-case-study/第25章 研发效能/>) | 代码审查、缺陷检测、补丁交付、研发协作与端到端交付实践。 |
-| 实践篇 | [第 26 章　设计工程](<./06-case-study/第26章 设计工程/>) | Vibe Designing 与 GenUI 的设计范式和工程实践。 |
-| 实践篇 | [第 27 章　运维、安全与企业 IT](<./06-case-study/第27章 运维、安全与企业IT/>) | 汽车、连锁零售和企业软件的大规模智能运维实践。 |
-| 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和 Data Agent 实践。 |
-| 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
-| 总结与展望篇 | [第 30 章　从 Agentic Application 到 Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | 从单个应用走向可协作、可治理、可持续演进的智能系统。 |
+| Kiến trúc | [Chương 1 — Giai đoạn mới của ứng dụng AI-native](./01-kien-truc/chuong-01-giai-doan-moi-cua-ung-dung-ai-native.md) | Sự tiến hoá hình thái ứng dụng, định nghĩa và ranh giới của Agentic Application, đánh giá mức trưởng thành của doanh nghiệp. |
+| Kiến trúc | [Chương 2 — Kiến trúc tham chiếu của Agentic Application](./01-kien-truc/chuong-02-kien-truc-tham-chieu-agentic-application.md) | Góc nhìn component, trách nhiệm nền tảng và vòng đời, cùng cách định vị kiến trúc từ quyết định đến vận hành và cải tiến. |
+| Xây dựng | [Chương 3 — Paradigm: các cách xây Harness phổ biến và ranh giới trách nhiệm](./02-xay-dung/chuong-03-paradigm-harness-va-ranh-gioi-trach-nhiem.md) | Framework high-code, Harness đóng gói sản phẩm, Managed Agents, sản phẩm Agent trên cloud và trách nhiệm nền tảng. |
+| Xây dựng | [Chương 4 — Task: điều phối, tiến trình dài và luân chuyển cộng tác](./02-xay-dung/chuong-04-task-dieu-phoi-tien-trinh-dai-va-cong-tac.md) | Agent Loop, state machine của task, plan, cổng kiểm soát theo giai đoạn, uỷ nhiệm, tiếp tục bất đồng bộ và bằng chứng hoàn thành. |
+| Xây dựng | [Chương 5 — Thông tin: context, state và tài sản năng lực tái sử dụng](./02-xay-dung/chuong-05-thong-tin-context-state-va-nang-luc-tai-su-dung.md) | Context Builder, nén và offload, Session, Task State, Workspace, Memory, Knowledge và Skill. |
+| Xây dựng | [Chương 6 — Hành động: thực thi có kiểm soát, phản hồi kiểm chứng và chuẩn bị bàn giao](./02-xay-dung/chuong-06-hanh-dong-thuc-thi-co-kiem-soat-va-xac-thuc.md) | Action Plane, Function Calling, MCP, A2A, hợp đồng môi trường, quyền hạn, HITL và vòng lặp kiểm chứng. |
+| Vận hành | [Chương 7 — Agent Runtime và Sandbox](./03-van-hanh/chuong-07-agent-runtime-va-sandbox.md) | Sandbox, Agent Runtime, workspace, vòng đời môi trường và điều kiện chạy production. |
+| Vận hành | [Chương 8 — Lưu trữ trạng thái và tài sản ngữ nghĩa của Agent](./03-van-hanh/chuong-08-luu-tru-trang-thai-va-tai-san-ngu-nghia.md) | Event Log, Checkpoint, snapshot workspace, Artifact, bộ nhớ dài hạn, RAG và ngữ nghĩa nghiệp vụ. |
+| Vận hành | [Chương 9 — AI Gateway và quản trị traffic thống nhất](./03-van-hanh/chuong-09-ai-gateway-va-quan-tri-traffic-thong-nhat.md) | Định danh, quyền hạn, ngân sách, routing, audit và phê duyệt cho ba loại traffic: LLM, MCP và Agent. |
+| Vận hành | [Chương 10 — Task bất đồng bộ và quy trình tự động hoá của Agent](./03-van-hanh/chuong-10-task-bat-dong-bo-va-quy-trinh-tu-dong-hoa.md) | Ranh giới đồng bộ/bất đồng bộ, ngữ nghĩa hoàn thành task, task định kỳ, task chạy dài và workflow tự động hoá. |
+| Vận hành | [Chương 11 — Multi-Agent: cộng tác và orchestration](./03-van-hanh/chuong-11-multi-agent-cong-tac-va-orchestration.md) | Tích hợp Agent dị chủng, topology của team, phân công task, tổng hợp kết quả và trách nhiệm orchestration. |
+| Vận hành | [Chương 12 — Giao tiếp phân tán của Agent](./03-van-hanh/chuong-12-agent-giao-tiep-phan-tan.md) | Giao thức truyền thông và quản trị message trên bốn mặt phẳng: năng lực, cộng tác, nội bộ và người–máy. |
+| Quản trị | [Chương 13 — Observability của Agent](./04-quan-tri/chuong-13-observability-cua-agent.md) | Metric, log, Trace, event, quy kết chi phí và audit. |
+| Quản trị | [Chương 14 — Bảo mật Agent](./04-quan-tri/chuong-14-bao-mat-agent.md) | Prompt Injection, định danh và xác thực, kiểm tra từng bước, uỷ quyền thao tác rủi ro cao và chống rò rỉ dữ liệu ra ngoài. |
+| Quản trị | [Chương 15 — Khám phá và quản lý tài sản AI](./04-quan-tri/chuong-15-kham-pha-va-quan-ly-tai-san-ai.md) | Đăng ký, version, khám phá, phụ thuộc và quản lý phát hành cho Prompt, Skill, MCP và Agent. |
+| Quản trị | [Chương 16 — Sinh hành vi và kiểm định chất lượng Agent](./04-quan-tri/chuong-16-sinh-hanh-vi-va-kiem-dinh-chat-luong.md) | Mô phỏng người dùng, mô phỏng môi trường, cấu hình kịch bản và Agent Simulation trước khi lên production. |
+| Tối ưu | [Chương 17 — Tối ưu model](./05-toi-uu/chuong-17-toi-uu-model.md) | Tiêu chí quy kết vấn đề về model, SFT, Agentic RL, distillation và nghiệm thu trước khi lên production. |
+| Tối ưu | [Chương 18 — Tổng quan tối ưu Agent](./05-toi-uu/chuong-18-tong-quan-toi-uu-agent.md) | Đối tượng tối ưu, ranh giới phương pháp và toàn cảnh bánh đà dữ liệu. |
+| Tối ưu | [Chương 19 — Dữ liệu Trajectory của Agent](./05-toi-uu/chuong-19-du-lieu-trajectory.md) | Từ Trace đến Trajectory, tổ chức bằng chứng hành vi và quyết định có thể tái sử dụng. |
+| Tối ưu | [Chương 20 — Xử lý dữ liệu runtime của Agent](./05-toi-uu/chuong-20-xu-ly-du-lieu-runtime.md) | Thu thập, làm sạch, gia công dữ liệu vận hành và pipeline dữ liệu khai báo. |
+| Tối ưu | [Chương 21 — Golden dataset cho Agent](./05-toi-uu/chuong-21-golden-dataset.md) | Xây tài sản dữ liệu đánh giá chất lượng cao, gồm input, trajectory, kết quả và tiêu chí phán định. |
+| Tối ưu | [Chương 22 — Tối ưu Agent: Badcase](./05-toi-uu/chuong-22-toi-uu-agent-badcase.md) | Phát hiện, quy kết, khắc phục, hồi quy và kiểm chứng bằng thí nghiệm đối với badcase. |
+| Tối ưu | [Chương 23 — Tự tiến hoá có kiểm soát](./05-toi-uu/chuong-23-tu-tien-hoa-co-kiem-soat.md) | Chuyển kinh nghiệm hiệu quả thành Memory, Skill, tool và cơ chế vận hành, đồng thời kiểm soát rủi ro tự tiến hoá. |
+| Tối ưu | [Chương 24 — Edge Runtime và tối ưu toàn cầu](./05-toi-uu/chuong-24-edge-runtime-va-toi-uu-toan-cau.md) | Runtime biên, đánh giá tại biên, hiệu năng và chi phí, phân phối nội dung, bảo mật và mô phỏng. |
+| Thực tiễn | [Chương 25 — Hiệu suất kỹ thuật (R&D)](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/) | Code review, phát hiện lỗi, bàn giao patch, cộng tác R&D và thực tiễn giao hàng đầu-cuối. |
+| Thực tiễn | [Chương 26 — Design Engineering](./06-thuc-tien/chuong-26-design-engineering/) | Paradigm thiết kế và thực tiễn kỹ thuật của Vibe Designing và GenUI. |
+| Thực tiễn | [Chương 27 — Vận hành, bảo mật và IT doanh nghiệp](./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/) | Thực tiễn AIOps quy mô lớn trong ngành ô tô, chuỗi bán lẻ và phần mềm doanh nghiệp. |
+| Thực tiễn | [Chương 28 — Khách hàng, bán hàng và vận hành](./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/) | Bộ nhớ dài hạn, insight nội dung, nâng cao hiệu suất văn phòng và thực tiễn Data Agent. |
+| Thực tiễn | [Chương 29 — Hạng mục GOAI Agent Infra: khám phá tiên phong về cộng tác multi-agent](./06-thuc-tien/chuong-29-goai-agent-infra.md) | Các tác phẩm xuất sắc tại Giải thưởng Mã nguồn mở AI Thế giới và những khám phá Agent Infra đa lĩnh vực. |
+| Tổng kết và triển vọng | [Chương 30 — Từ Agentic Application đến Agentic OS](./07-tong-ket/chuong-30-tu-agentic-application-den-agentic-os.md) | Từ một ứng dụng đơn lẻ đi tới hệ thống trí tuệ có thể cộng tác, quản trị và tiến hoá bền vững. |
 
-### 实践案例导航
+### Điều hướng các case study
 
-| 章节 | 案例 |
+| Chương | Case study |
 | --- | --- |
-| 第 25 章　研发效能 | [ABACI 内核补丁定向测试与缺陷检测智能体](<./06-case-study/第25章 研发效能/ABACI 内核补丁定向测试与缺陷检测智能体.md>) |
-| 第 25 章　研发效能 | [Kitta：领域专用 Code Review Agent](<./06-case-study/第25章 研发效能/Kitta：领域专用 Code Review Agent.md>) |
-| 第 25 章　研发效能 | [PatchPilot Agents：让内核补丁交付成为可编排、可验证的工程闭环](<./06-case-study/第25章 研发效能/PatchPilot Agents：让内核补丁交付成为可编排、可验证的工程闭环.md>) |
-| 第 25 章　研发效能 | [从报警到自动修复，PolarDB-X 的 Loop 工程实践](<./06-case-study/第25章 研发效能/从报警到自动修复，PolarDB-X 的 Loop 工程实践.md>) |
-| 第 25 章　研发效能 | [从编码提效到端到端交付，云通信的人机协作实践](<./06-case-study/第25章 研发效能/从编码提效到端到端交付，云通信的人机协作实践.md>) |
-| 第 25 章　研发效能 | [从评测驱动到端到端交付：AI Agent 安全产品研发提效实践](<./06-case-study/第25章 研发效能/从评测驱动到端到端交付：AI Agent 安全产品研发提效实践.md>) |
-| 第 25 章　研发效能 | [多 Agent 组成研发小队：AI 研发如何从写代码走向端到端交付](<./06-case-study/第25章 研发效能/多 Agent 组成研发小队：AI 研发如何从写代码走向端到端交付.md>) |
-| 第 26 章　设计工程 | [GenUI：让 Agent 从给出答案走向交付结果](<./06-case-study/第26章 设计工程/GenUI：让 Agent 从给出答案走向交付结果.md>) |
-| 第 26 章　设计工程 | [Vibe Designing：意图驱动的AI设计范式进化](<./06-case-study/第26章 设计工程/Vibe Designing：意图驱动的AI设计范式进化.md>) |
-| 第 27 章　运维、安全与企业 IT | [吉利汽车智能运维的落地实践](<./06-case-study/第27章 运维、安全与企业IT/吉利汽车智能运维的落地实践.md>) |
-| 第 27 章　运维、安全与企业 IT | [塔斯汀万店连锁的智能运维闭环实践](<./06-case-study/第27章 运维、安全与企业IT/塔斯汀万店连锁的智能运维闭环实践.md>) |
-| 第 27 章　运维、安全与企业 IT | [畅捷通的可观测与智能运维实践](<./06-case-study/第27章 运维、安全与企业IT/畅捷通的可观测与智能运维实践.md>) |
-| 第 28 章　客户、销售与运营 | [MiniMax 构建海量长周期记忆数据底座的实践](<./06-case-study/第28章 客户、销售与运营/MiniMax 构建海量长周期记忆数据底座的实践.md>) |
-| 第 28 章　客户、销售与运营 | [会计师事务所信永中和的办公提效探索](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
-| 第 28 章　客户、销售与运营 | [哔哩哔哩构建全域内容洞察的实践](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
-| 第 28 章　客户、销售与运营 | [运营分析 Data Agent 实践](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
+| Chương 25 — Hiệu suất kỹ thuật | [ABACI: Agent kiểm thử có định hướng và phát hiện lỗi cho patch kernel](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/abaci-kiem-thu-patch-kernel-va-phat-hien-loi.md) |
+| Chương 25 — Hiệu suất kỹ thuật | [Kitta: Code Review Agent chuyên ngành](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/kitta-code-review-agent-chuyen-nganh.md) |
+| Chương 25 — Hiệu suất kỹ thuật | [PatchPilot Agents: biến việc bàn giao patch kernel thành vòng lặp kỹ thuật điều phối được và kiểm chứng được](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/patchpilot-agents.md) |
+| Chương 25 — Hiệu suất kỹ thuật | [Từ cảnh báo đến tự động sửa lỗi: thực tiễn kỹ thuật Loop của PolarDB-X](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/polardb-x-tu-canh-bao-den-tu-dong-sua-loi.md) |
+| Chương 25 — Hiệu suất kỹ thuật | [Từ tăng tốc viết code đến bàn giao đầu-cuối: thực tiễn cộng tác người–máy tại Cloud Communication](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/hop-tac-nguoi-may-tai-cloud-communication.md) |
+| Chương 25 — Hiệu suất kỹ thuật | [Từ eval-driven đến bàn giao đầu-cuối: thực tiễn tăng hiệu suất phát triển sản phẩm bảo mật AI Agent](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/eval-driven-phat-trien-san-pham-bao-mat.md) |
+| Chương 25 — Hiệu suất kỹ thuật | [Đội multi-agent: AI trong R&D đi từ viết code tới bàn giao đầu-cuối](./06-thuc-tien/chuong-25-hieu-suat-ky-thuat/doi-multi-agent-giao-hang-dau-cuoi.md) |
+| Chương 26 — Design Engineering | [GenUI: đưa Agent từ chỗ đưa ra câu trả lời tới chỗ bàn giao kết quả](./06-thuc-tien/chuong-26-design-engineering/genui.md) |
+| Chương 26 — Design Engineering | [Vibe Designing: sự tiến hoá của paradigm thiết kế AI dẫn dắt bởi ý định](./06-thuc-tien/chuong-26-design-engineering/vibe-designing.md) |
+| Chương 27 — Vận hành, bảo mật và IT doanh nghiệp | [Thực tiễn triển khai AIOps tại Geely Auto](./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/geely-aiops.md) |
+| Chương 27 — Vận hành, bảo mật và IT doanh nghiệp | [Vòng lặp AIOps khép kín cho chuỗi vạn cửa hàng Tastien](./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/tastien-aiops-chuoi-cua-hang.md) |
+| Chương 27 — Vận hành, bảo mật và IT doanh nghiệp | [Thực tiễn observability và AIOps tại Chanjet](./06-thuc-tien/chuong-27-van-hanh-bao-mat-va-it-doanh-nghiep/chanjet-observability-va-aiops.md) |
+| Chương 28 — Khách hàng, bán hàng và vận hành | [MiniMax xây nền tảng dữ liệu bộ nhớ dài hạn quy mô lớn](./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/minimax-nen-tang-du-lieu-memory.md) |
+| Chương 28 — Khách hàng, bán hàng và vận hành | [Hãng kiểm toán ShineWing khám phá việc nâng cao hiệu suất văn phòng](./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/shinewing-nang-cao-hieu-suat-van-phong.md) |
+| Chương 28 — Khách hàng, bán hàng và vận hành | [Bilibili xây dựng năng lực insight nội dung toàn miền](./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/bilibili-content-insight.md) |
+| Chương 28 — Khách hàng, bán hàng và vận hành | [Thực tiễn Data Agent cho phân tích vận hành](./06-thuc-tien/chuong-28-khach-hang-ban-hang-va-van-hanh/data-agent-phan-tich-van-hanh.md) |
 
-### 推荐阅读路径
+### Lộ trình đọc gợi ý
 
-- **第一次系统了解企业 Agent**：调研报告 → 第 1–2 章 → 第 3–6 章 → 第 13–16 章。
-- **正在把 Agent 接入生产**：第 7–9 章 → 第 13–14 章 → 第 18–23 章。
-- **正在建设多 Agent 系统**：第 4–6 章 → 第 10–12 章 → 第 13、16 章。
-- **负责评估与持续优化**：第 13 章 → 第 18–23 章 → 对应领域实践案例。
-- **负责选型或项目立项**：调研报告 → 第 1–3 章 → 实践篇 → 第 30 章。
+- **Lần đầu tìm hiểu Agent doanh nghiệp một cách hệ thống:** Báo cáo khảo sát → Chương 1–2 → Chương 3–6 → Chương 13–16.
+- **Đang đưa Agent vào production:** Chương 7–9 → Chương 13–14 → Chương 18–23.
+- **Đang xây hệ thống multi-agent:** Chương 4–6 → Chương 10–12 → Chương 13, 16.
+- **Phụ trách đánh giá và tối ưu liên tục:** Chương 13 → Chương 18–23 → case study của lĩnh vực tương ứng.
+- **Phụ trách lựa chọn công nghệ hoặc lập đề án:** Báo cáo khảo sát → Chương 1–3 → Phần Thực tiễn → Chương 30.
 
-## 4. 下一步规划
+## 4. Kế hoạch tiếp theo
 
-白皮书将以开放项目的方式持续维护，而不是在首次发布后封存。接下来的重点包括：
+Cuốn sách trắng sẽ được duy trì liên tục như một dự án mở, thay vì đóng băng sau lần phát hành đầu tiên. Các trọng tâm sắp tới bao gồm:
 
-- **扩展企业实践案例**：增加更多来自研发、运营、客服、数据、安全、财务和行业场景的一线案例，补充成功路径、架构取舍与真实失败模式。
-- **增加云资源线上体验**：围绕沙箱、Runtime、AI 网关、状态存储、可观测和评估等关键能力，设计可复现的云上体验流程，让读者从阅读进一步走向动手验证。
-- **持续完善治理内容**：跟进身份权限、Prompt Injection 防护、数据出域、审计、资产注册、版本治理和上线前仿真等企业核心议题。
-- **持续完善评估体系**：补充任务成功率、轨迹评估、LLM-as-Judge、黄金数据集、Badcase 回归、线上实验和成本质量权衡等方法与案例。
-- **跟进技术演进**：持续吸收模型、Harness、协议、Runtime、多 Agent 和 Agentic OS 的新进展，并及时修正已经不再适用的判断。
-- **建设社区协作机制**：逐步完善内容规范、案例模板、术语表、校对流程和版本发布方式，降低高质量贡献的门槛。
+- **Mở rộng case study doanh nghiệp:** bổ sung thêm các case thực chiến từ R&D, vận hành, chăm sóc khách hàng, dữ liệu, bảo mật, tài chính và các bối cảnh ngành dọc, kèm theo con đường thành công, đánh đổi kiến trúc và những kiểu thất bại có thật.
+- **Bổ sung trải nghiệm thực hành trên cloud:** thiết kế các luồng trải nghiệm có thể tái lập trên cloud xoay quanh những năng lực then chốt như sandbox, Runtime, AI Gateway, lưu trữ trạng thái, observability và đánh giá, để độc giả đi từ đọc sang tự tay kiểm chứng.
+- **Hoàn thiện nội dung quản trị:** theo sát các chủ đề cốt lõi của doanh nghiệp như định danh và phân quyền, phòng chống Prompt Injection, dữ liệu rời khỏi biên, audit, đăng ký tài sản, quản trị version và mô phỏng trước khi lên production.
+- **Hoàn thiện hệ thống đánh giá:** bổ sung các phương pháp và case về tỉ lệ thành công của task, đánh giá trajectory, LLM-as-Judge, golden dataset, hồi quy badcase, thí nghiệm online và đánh đổi giữa chi phí với chất lượng.
+- **Bám sát tiến hoá công nghệ:** liên tục hấp thụ tiến bộ mới về model, Harness, giao thức, Runtime, multi-agent và Agentic OS, đồng thời kịp thời đính chính những nhận định không còn phù hợp.
+- **Xây dựng cơ chế cộng tác cộng đồng:** từng bước hoàn thiện quy chuẩn nội dung, template case study, bảng thuật ngữ, quy trình hiệu đính và cách phát hành phiên bản, nhằm hạ thấp rào cản cho những đóng góp chất lượng cao.
 
-### 欢迎贡献
+### Hoan nghênh đóng góp
 
-欢迎开发者、架构师、研究者、企业技术团队和产品实践者参与共建。你可以：
+Chúng tôi hoan nghênh lập trình viên, kiến trúc sư, nhà nghiên cứu, đội kỹ thuật doanh nghiệp và những người làm sản phẩm cùng tham gia xây dựng. Bạn có thể:
 
-- 提交 Issue，指出事实错误、概念歧义、链接失效或需要补充的主题；
-- 提交 Pull Request，完善章节、修正内容、优化图表或补充参考资料；
-- 分享经过脱敏的企业实践、故障复盘、评估方法与架构取舍；
-- 提供可复现的代码、云资源体验流程、数据集或实验方案；
-- 参与术语统一、技术审校、案例评审和内容翻译。
+- Mở Issue để chỉ ra sai sót về dữ kiện, khái niệm mơ hồ, link hỏng hoặc chủ đề cần bổ sung;
+- Gửi Pull Request để hoàn thiện chương, sửa nội dung, cải thiện sơ đồ hoặc bổ sung tài liệu tham khảo;
+- Chia sẻ thực tiễn doanh nghiệp đã được ẩn danh hoá, các buổi hậu kiểm sự cố, phương pháp đánh giá và những đánh đổi kiến trúc;
+- Cung cấp code có thể tái lập, luồng trải nghiệm trên cloud, dataset hoặc phương án thí nghiệm;
+- Tham gia thống nhất thuật ngữ, thẩm định kỹ thuật, review case study và dịch nội dung.
 
-贡献内容应尊重原创与授权边界；涉及企业数据、客户信息、内部系统和安全细节时，请先完成必要的脱敏与许可确认。
+Nội dung đóng góp cần tôn trọng bản quyền và ranh giới cấp phép; khi liên quan tới dữ liệu doanh nghiệp, thông tin khách hàng, hệ thống nội bộ và chi tiết bảo mật, vui lòng hoàn tất việc ẩn danh hoá và xác nhận quyền sử dụng trước.
 
-## 5. 贡献者
+#### Đóng góp cho bản tiếng Việt
 
-感谢所有参与架构设计、章节写作、案例整理与内容审校的贡献者。
+Bản dịch này hướng tới cộng đồng kỹ thuật Việt Nam. Khi đóng góp, vui lòng:
 
-### 阿里云
+- Bám theo [Bảng thuật ngữ](./THUAT-NGU.md) để giữ thuật ngữ nhất quán giữa các chương;
+- Giữ nguyên thuật ngữ kỹ thuật tiếng Anh đã phổ biến, thay vì dịch cứng sang tiếng Việt;
+- Giữ nguyên cấu trúc heading, bảng và đường dẫn ảnh so với bản gốc, để dễ đối chiếu và merge các cập nhật từ upstream.
 
-| 贡献领域 | 贡献者                                                 |
+## 5. Người đóng góp
+
+Xin cảm ơn tất cả những người đã tham gia thiết kế kiến trúc, viết chương, biên soạn case study và hiệu đính nội dung.
+
+### Alibaba Cloud
+
+| Lĩnh vực đóng góp | Người đóng góp |
 | --- |-----------------------------------------------------|
-| 前言 | 麻芃                                                  |
-| 开发者调查报告 | 任娟、王晨                                               |
-| 架构篇 | 王晨、刘军、沈林                                            |
-| 构建篇 | 刘军、泮圣伟、王晨                                           |
-| 运行篇 | 赵庆杰、李诗波、林清山、黄晓萌、张添翼、赵源筱、孙校、宋震、胡庆达、柳遵飞、朱桐、余华峰、罗鑫、孔可青 |
-| 治理篇 | 肖长军、周洋、张磊、王方、张海彬、程书意、刘子明、饶子昊、任懿、杨永、王硕、马昕、刘宇轩、杨翊     |
-| 调优篇 | 张寒萌、李盛荣、王亚宁、孙坚运、马云雷、王桢、郑前祎、刘航、陈新                    |
-| 实践篇 | 杨涛、朱颜、余艾琳、胡峻                                        |
-| 总结与展望篇 | 林演                                                  |
+| Lời nói đầu | Ma Peng |
+| Báo cáo khảo sát lập trình viên | Ren Juan, Wang Chen |
+| Phần Kiến trúc | Wang Chen, Liu Jun, Shen Lin |
+| Phần Xây dựng | Liu Jun, Pan Shengwei, Wang Chen |
+| Phần Vận hành | Zhao Qingjie, Li Shibo, Lin Qingshan, Huang Xiaomeng, Zhang Tianyi, Zhao Yuanxiao, Sun Xiao, Song Zhen, Hu Qingda, Liu Zunfei, Zhu Tong, Yu Huafeng, Luo Xin, Kong Keqing |
+| Phần Quản trị | Xiao Changjun, Zhou Yang, Zhang Lei, Wang Fang, Zhang Haibin, Cheng Shuyi, Liu Ziming, Rao Zihao, Ren Yi, Yang Yong, Wang Shuo, Ma Xin, Liu Yuxuan, Yang Yi |
+| Phần Tối ưu | Zhang Hanmeng, Li Shengrong, Wang Yaning, Sun Jianyun, Ma Yunlei, Wang Zhen, Zheng Qianyi, Liu Hang, Chen Xin |
+| Phần Thực tiễn | Yang Tao, Zhu Yan, Yu Ailin, Hu Jun |
+| Phần Tổng kết và triển vọng | Lin Yan |
 
-### 外部贡献者
+### Người đóng góp bên ngoài
 
-项目持续开放社区贡献，欢迎开发者、架构师、研究者、企业技术团队和产品实践者通过 Issue 或 Pull Request 参与内容共建；贡献被采纳后，贡献者信息将补充到本模块。
+Dự án luôn mở cho đóng góp từ cộng đồng. Chúng tôi hoan nghênh lập trình viên, kiến trúc sư, nhà nghiên cứu, đội kỹ thuật doanh nghiệp và những người làm sản phẩm cùng xây dựng nội dung qua Issue hoặc Pull Request; sau khi đóng góp được chấp nhận, thông tin người đóng góp sẽ được bổ sung vào mục này.
 
 ---
 
-如果这份白皮书可以帮助您更好地理解、构建、运行、治理和调优 Agent，欢迎分享、讨论并参与共建。
+Nếu cuốn sách trắng này giúp bạn hiểu, xây dựng, vận hành, quản trị và tối ưu Agent tốt hơn, rất mong bạn chia sẻ, thảo luận và cùng tham gia xây dựng.
