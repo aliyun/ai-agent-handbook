@@ -158,6 +158,10 @@ for (const chapter of pages.filter((p) =>
       await diagram.scrollIntoViewIfNeeded();
       await expect(diagram).toHaveAttribute("data-rendered", "true");
       await expect(diagram.locator(".diagram-error")).toHaveCount(0);
+      await expect(diagram.locator("foreignObject")).toHaveCount(0);
+    }
+    if (chapter.href === "/build/chapter-03.html") {
+      await diagrams.first().screenshot({ path: "test-results/diagram-dagre.png" });
     }
     await diagrams.first().getByRole("button", { name: "查看大图" }).click();
     await expect(page.getByRole("dialog")).toBeVisible();

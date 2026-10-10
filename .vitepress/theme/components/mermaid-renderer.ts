@@ -7,6 +7,7 @@ export function renderDiagram(code: string, dark: boolean) {
       startOnLoad: false,
       securityLevel: "strict",
       layout: "dagre",
+      htmlLabels: false,
       theme: dark ? "dark" : "neutral",
       fontFamily: "system-ui, sans-serif",
       flowchart: { useMaxWidth: true, htmlLabels: false },
