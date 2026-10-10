@@ -1,12 +1,14 @@
-# README
+# AI Agent Handbook
 
 中文 | [English](./README_EN.md)
-
-# AI Agent HandBook
 
 按照 Agent 的架构、构建、运行、治理和调优应用生命周期，总结了我们在企业级 Agent 落地过程中的实践经验和体会，若白皮书能对个人学习和企业落地 Agent 起到一点点的促进作用，将是我们莫大的荣幸。
 
 谨以此项目，献给参与 AI 建设的所有同行者们。
+
+[在线阅读](https://aliyun.github.io/ai-agent-handbook/) · [全书目录](https://aliyun.github.io/ai-agent-handbook/contents.html) · [阅读指南](https://aliyun.github.io/ai-agent-handbook/reading-guide.html)
+
+阅读站提供章节导航、中文搜索、图表与图片放大、明暗主题和阅读位置记忆。本地预览可使用 Node.js 22 执行 `npm ci`、`npm run dev`；站点维护与 GitHub Pages 发布方法见[维护说明](https://github.com/aliyun/ai-agent-handbook/blob/main/WEBSITE.md)。
 
 ---
 

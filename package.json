@@ -1,0 +1,29 @@
+{
+  "name": "ai-agent-handbook",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vitepress dev --host 127.0.0.1",
+    "build": "vitepress build",
+    "preview": "vitepress preview --host 127.0.0.1",
+    "check": "node scripts/check-book.mjs",
+    "check:build": "node scripts/check-build.mjs",
+    "test": "playwright test"
+  },
+  "overrides": {
+    "vite": "6.4.4",
+    "esbuild": "0.25.12",
+    "katex": "0.18.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "cheerio": "1.1.2",
+    "markdown-it": "14.3.2",
+    "mermaid": "12.1.0",
+    "vitepress": "1.6.4",
+    "vue": "3.5.43"
+  }
+}

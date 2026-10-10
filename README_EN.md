@@ -1,12 +1,12 @@
-# README
+# AI Agent Handbook
 
 [中文](./README.md) | English
-
-# AI Agent HandBook
 
 Following the agent lifecycle—from architecture and building to operation, governance, and optimization—we share the experience and lessons we have gained from deploying enterprise agents. If this white paper helps individuals learn or organizations put agents into practice, we would be deeply grateful.
 
 We dedicate this project to everyone contributing to the development of AI.
+
+Read the [online edition](https://aliyun.github.io/ai-agent-handbook/) with chapter navigation, search, diagrams, and reading preferences. The chapters are currently in Chinese. To preview locally with Node.js 22, run `npm ci` and `npm run dev`. See the [website maintenance guide](https://github.com/aliyun/ai-agent-handbook/blob/main/WEBSITE.md) for GitHub Pages deployment.
 
 ---
 
