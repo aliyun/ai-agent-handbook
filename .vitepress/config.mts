@@ -21,6 +21,8 @@ export default defineConfig({
   lang: "zh-CN",
   base,
   cleanUrls: false,
+  // A book's sidebar contains many long chapters; fetch each when opened.
+  router: { prefetchLinks: false },
   lastUpdated: true,
   srcExclude: ["node_modules/**", "scripts/**", "tests/**", "WEBSITE.md"],
   rewrites: Object.fromEntries(pages.map((p) => [p.source, p.route + ".md"])),

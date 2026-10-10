@@ -146,6 +146,8 @@ for (const chapter of pages.filter((p) =>
 )) {
   test(`render every Mermaid diagram: ${chapter.href}`, async ({ page }) => {
     const errors: string[] = [];
+    const requests: string[] = [];
+    page.on("request", request => requests.push(request.url()));
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(chapter.href.slice(1));
     const diagrams = page.locator(".mermaid-diagram");
@@ -161,5 +163,7 @@ for (const chapter of pages.filter((p) =>
     await expect(page.getByRole("dialog")).toBeVisible();
     await page.keyboard.press("Escape");
     expect(errors).toEqual([]);
+    expect(requests.some(url => /\/elk-[^/]+\.js/.test(url))).toBe(false);
+    expect(requests.some(url => /\/survey\.md\.[^/]+\.js/.test(url))).toBe(false);
   });
 }

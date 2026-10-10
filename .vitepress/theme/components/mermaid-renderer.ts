@@ -6,6 +6,7 @@ export function renderDiagram(code: string, dark: boolean) {
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",
+      layout: "dagre",
       theme: dark ? "dark" : "neutral",
       fontFamily: "system-ui, sans-serif",
       flowchart: { useMaxWidth: true, htmlLabels: false },
