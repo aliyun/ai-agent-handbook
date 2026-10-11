@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { withBase } from "vitepress";
 import { data as book } from "../../book.data";
-const props = defineProps({ chapter: Number });
+const props = defineProps({ chapter: [Number, String] });
 const chapter = computed(() =>
   book.parts.flatMap((p) => p.pages).find((p) => p.chapter === props.chapter),
 );
