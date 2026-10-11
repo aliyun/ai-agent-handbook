@@ -59,7 +59,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | [Runtime](./03-run/) | `03-run/` | 7–12 | From reliable single-agent execution to asynchronous and distributed multi-agent systems. |
 | [Governance](./04-governance/) | `04-governance/` | 13–16 | Make operations visible, behavior bounded, assets manageable, and release behavior testable. |
 | [Optimization](./05-optimization/) | `05-optimization/` | 17–24 | Continuous improvement of both models and agents. |
-| [Practice](./06-case-study/) | `06-case-study/` | 25–29 | Enterprise cases, domain applications, and agent-infrastructure exploration. |
+| [Practice](./06-case-study/) | `06-case-study/` | 25–29 and Jev topic | Enterprise cases, domain applications, agent infrastructure, and structured decisions. |
 | [Conclusion and Outlook](./07-conclusion/) | `07-conclusion/` | 30 | From Agentic Application to Agentic OS. |
 
 ### Chapter guide
@@ -95,6 +95,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Practice | [27. Operations, Security, and Enterprise IT](<./06-case-study/第27章 运维、安全与企业IT/>) | Production operations in automotive, retail, and enterprise software. |
 | Practice | [28. Customer, Sales, and Operations](<./06-case-study/第28章 客户、销售与运营/>) | Long-term memory, content insights, office productivity, and data agents. |
 | Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | Open-source competition projects and agent-infrastructure exploration. |
+| Practice | [Jev: Structured Decision Making](<./06-case-study/Jev 专题/>) | An introduction to Jev, an illustrative API example, and links to reusable decision patterns. |
 | Conclusion and Outlook | [30. From Agentic Application to Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | From individual applications toward collaborative, governable, evolving systems. |
 
 ### Case-study guide
@@ -117,6 +118,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | 28. Customer and operations | [Office Productivity at ShineWing, an Accounting Firm](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
 | 28. Customer and operations | [Bilibili's Cross-Platform Content Insights](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
 | 28. Customer and operations | [Data Agent for Operational Analytics](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
+| Jev topic | [Understanding Jev: Fast Structured Decisions](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 
 ### Suggested reading paths
 
