@@ -208,6 +208,22 @@ for (const part of parts) {
     part.pages.push(chapter);
     readingOrder.push(chapter, ...(chapter.children || []));
   }
+  if (part.id === "cases") {
+    const topic = page("website/case-jev.md", "cases/jev/index", {
+      chapter: "jev",
+      part: part.title,
+    });
+    topic.children = [
+      page(
+        "06-case-study/Jev 专题/HiRoute：用 Jev 做任务路由与阶段胜任度反馈.md",
+        "cases/jev/hiroute",
+        { chapter: "jev", part: part.title },
+      ),
+    ];
+    topic.sourceDirectory = "06-case-study/Jev 专题";
+    part.pages.push(topic);
+    readingOrder.push(topic, ...topic.children);
+  }
 }
 
 export const extraPages = [
