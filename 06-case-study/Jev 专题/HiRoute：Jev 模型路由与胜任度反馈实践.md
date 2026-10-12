@@ -4,24 +4,15 @@
 
 [HiRoute](https://github.com/higress-group/HiRoute) 把 Jev 放在模型调用之前，判断当前任务所需的能力，并在后续决策机会评价此前阶段的执行表现。Jev 返回结构化判断，HiRoute 根据已发布的路由策略选择执行模型，原有 Agent 继续负责读文件、调用工具和完成交付。
 
-本文结合公开实现和实验，介绍怎样把分类、复杂度和胜任度组合成可观测的路由闭环，以及怎样核对其真实收益。
+本文结合公开实现和实验，介绍怎样把分类、复杂度和胜任度组合成可观测的路由闭环，以及怎样核对其真实收益。文中的配图可点击放大，产品截图的细节可在预览中查看。
 
 ## 1. 把判断接到现有 Agent 工作流
 
 HiRoute 是运行在本机的开源路由引擎，Desktop 与 CLI 共用本地 Gateway。Agent 使用一份稳定的路由计划，背后的执行模型可以按工作阶段变化。
 
-```mermaid
-flowchart TB
-    A[现有 Agent 发起模型请求] --> B[HiRoute 准备当前任务与可见历史]
-    B --> C[Jev 回答结构化问题]
-    C --> D[HiRoute 校验答案并应用路由策略]
-    D --> E[省钱或常规模型组]
-    D --> F[主力模型组]
-    E --> G[执行模型响应，Agent 继续工作]
-    F --> G
-    G --> H[记录实际执行与阶段证据]
-    H --> B
-```
+![HiRoute 准备状态，百炼 System One 返回判断，HiRoute 应用策略，原有 Agent 执行并留下下一次决策的证据](../../assets/imgs/hiroute-jev/decision-loop-zh.png)
+
+图 1：结构化判断与模型执行的闭环。原理讲解图，非产品截图或实验测量。
 
 图中的反馈发生在需要重新决策的请求上。同一轮中可识别、可继承冻结决策的工具续接复用已有选择；新用户消息重新判断。这样既能调整能力，也能避免每次工具调用都额外请求 Jev。
 
@@ -29,7 +20,7 @@ flowchart TB
 
 | 方式 | 用法 | 适用场景 |
 | --- | --- | --- |
-| 内置决策模型 | 在 HiRoute 中保存 OpenRouter Jev 等连接，由内置适配器构造问题和转换答案 | 直接配置路由 |
+| 内置决策模型 | 在 HiRoute 中保存百炼 System One 连接，由内置适配器构造问题和转换答案 | 直接配置路由 |
 | 自定义扩展 | 部署参考 HTTP 服务，接收 HiRoute 决策请求，再调用 Jev | 自行管理服务或修改供应商集成 |
 
 两种方式都遵循相同分工：**决策模型提供判断，HiRoute 执行策略，执行模型完成任务。** 阈值、模型组、故障接力和记录身份由 HiRoute 管理；Jev 的答案不会直接指定模型凭据或替代执行授权。[实现与配置说明](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/README.zh-CN.md)
@@ -65,17 +56,23 @@ Jev 的同次请求可以包含多个问题，但不能要求一个问题读取�
 
 若选中审稿，就读取第 3 个答案。第 2 个答案缺失不影响该路径；第 3 个答案无效时，保留审稿类别并使用其主力组。评分仍绑定已经发生的阶段：上一阶段是写稿，就评价写稿，不因当前选择审稿而改变评分对象。[问题映射与归约](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/api/system-one-design.md)
 
+![任务类别选择分支，复杂度选择组，胜任度评价上一实际阶段；同次 System One 请求中的问题彼此独立](../../assets/imgs/hiroute-jev/independent-questions-zh.png)
+
+图 2：三个问题对应不同评价对象。HiRoute 在答案返回后归约，问题之间不互读结果。
+
 ### 2.3 概率、评分和置信度分别使用
 
 复杂度取完整概率分布中的简单档概率，不把 `confidence` 当成简单概率，也不把任意量表的 `score` 或 `1-score` 当成通用替代值。
 
 胜任度采用 **0 / 0.5 / 1** 三个等距锚点。对应的 System One `Score` 返回 0–2 范围内的值，适配器用原始 `score / 2` 转为 HiRoute 的 0–1 范围。`confidence` 表示答案的不确定性，不能代替工作完成质量。
 
-下面是通过 OpenRouter 调用 Jev 的**精简示意请求**。文本与响应数值用于解释映射，并非实验实测结果，也不是 HiRoute 自定义扩展的入站 JSON：
+下面采用**百炼 System One API**，模型为 `decision-model-preview`。示例使用 Token Plan 个人版接入点，需要对应的套餐 API Key（`sk-sp-` 前缀）；将自己的密钥配置到环境变量 `DASHSCOPE_API_KEY`。使用业务空间时，按 API 参考换成含 `{WorkspaceId}` 的地域域名，并使用该业务空间的 API Key。[百炼 API 参考](https://help.aliyun.com/zh/model-studio/decision-model-api)、[Token Plan 接入说明](https://help.aliyun.com/zh/model-studio/token-plan-decision-model)
+
+这是**精简示意请求**。文本与响应数值用于解释映射，并非实验实测结果，也不是 HiRoute 自定义扩展的入站 JSON：
 
 ```json
 {
-  "model": "typesafe/jev-1.13",
+  "model": "decision-model-preview",
   "state": {
     "latest_user": [{"kind": "text", "text": "根据已提供的资料，补齐来源表格。"}],
     "visible_conversation": [{
@@ -108,6 +105,16 @@ Jev 的同次请求可以包含多个问题，但不能要求一个问题读取�
 }
 ```
 
+将上述 JSON 保存为 `decision-request.json`，通过 HTTP 调用：
+
+```sh
+curl --fail-with-body -sS \
+  -X POST 'https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone' \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H 'Content-Type: application/json' \
+  --data-binary @decision-request.json
+```
+
 精简响应：
 
 ```json
@@ -135,6 +142,10 @@ Jev 的同次请求可以包含多个问题，但不能要求一个问题读取�
 默认简单概率阈值为 **0.8**，胜任度下限为 **0.5**。这两个参数是策略设置，不是 Jev 的固定能力指标。
 
 低分保护只使用对上一实际阶段的本次新评分，并核对类别、已发布计划版本和评分标准。写稿的低分不能使审稿类别升级；过去保存的低分不会反复作为新低分。评分缺失保持未评分，部分证据评分保留标记，二者均不当作零分触发保护。
+
+![简单概率为 0.91 时，上一阶段胜任度 0.48 仅在本次新评分、完整证据、同类别及同计划与标准下触发主力保护](../../assets/imgs/hiroute-jev/competence-guard-zh.png)
+
+图 3：前述示意响应的消费方式。阈值可配置；评分不适用时，此例仍可按已达阈值的简单概率选择省钱组。
 
 这也允许模型回切：每条新用户消息重新判断，在当前组内选择合格候选。省钱或常规组因候选不可用而接力主力组，则属于可用性接力，应与因任务复杂或胜任度低而选主力分别记录。[当前组选择实现](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/crates/gateway/src/core_runtime/classification/group_policy.rs)
 
@@ -178,6 +189,14 @@ Jev 的同次请求可以包含多个问题，但不能要求一个问题读取�
 
 这是 **2026-10-04 公开的历史运行**，其决策保留了部分历史标记。当前版本的低分保护要求适用的完整评分，不能把历史保护行为当作当前版本在部分证据下也会升级的证明。这个案例证明实际发生过自动接力并完成交付；中间每次选择是否最优，仍需另外评价。[请求顺序、评分对象与独立验收](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/cases/unattended-engineering/handoff-notes.md)
 
+![真实 HiRoute Desktop 会话界面按实际模型展示执行阶段，包含 Qwen 的 0.48、Astra 摘要的 0.78 和最终阶段的未评分状态](../../assets/imgs/hiroute-jev/desktop-session-competence-zh.png)
+
+图 4：macOS 原生 HiRoute Desktop 截图，2026-10-05 捕获。产品读取隔离副本中的原始 HTTPX 观测记录，原始阶段与评分保持不变；这是历史数据回放，并非实验当场截图或新一轮模型评测。
+
+![真实 HiRoute Desktop 计划视图分别汇总省钱组与主力组的已评分和待评分阶段，提供查看阶段入口](../../assets/imgs/hiroute-jev/desktop-plan-competence-zh.png)
+
+图 5：同次原生捕获的计划汇总。原始 0.485、0.775 在界面中显示为 0.48、0.78；Astra 最终阶段仍未评分，不计入平均分。两种模型的分数来自不同工作阶段，不能当作同任务排名。[截图来源与捕获记录](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/competence-product-views.json)
+
 ### 4.3 后续实验：路由评分需要独立评价
 
 2026-10-06 的写稿／审稿实验中，Qwen 写稿、GLM 审稿的混合分工没有显示质量增益。两次初审入口发生 Jev 超时，后续分别有 6、9 个请求继承 Writing 回退，实际使用 Qwen；这不是 15 次独立超时。
@@ -188,12 +207,16 @@ Jev 的同次请求可以包含多个问题，但不能要求一个问题读取�
 
 ### 5.1 配置一个双组计划
 
-1. 在 HiRoute 的“模型 → 决策模型”添加 **OpenRouter Jev**，保存完整端点 `https://openrouter.ai/api/alpha/decisions`、模型 `typesafe/jev-1.13` 和自己的凭据，并测试连接。
+1. 在 HiRoute 的“模型 → 决策模型”添加连接，选择 **百炼 Token Plan**，核对完整端点 `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone`、模型 `decision-model-preview` 和自己的套餐 API Key，保存并测试连接。使用按量业务空间时，改选“百炼业务空间”，按官方文档填写带业务空间 ID 的完整地域接入点。
 2. 建立“智能省钱”计划，选择该连接，在省钱组和主力组中分别配置可用执行模型。
 3. 按自己的任务定义简单／复杂条件与胜任评分锚点，先固定阈值，再开展代表性任务测试。
 4. 发布计划，将其接入现有 Agent；观察实际组、实际模型、选择原因和后续阶段评分。
 
-连接测试使用合成输入验证传输和必要字段，不等于实际任务判断准确。需要修改供应商集成时，可以部署[可独立安装的 Jev 参考扩展](https://github.com/higress-group/HiRoute/tree/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/extensions/jev-decider)，其 HiRoute 入站地址为 `/v1/decisions`；上面的 OpenRouter 地址是供应商端点，二者使用不同 JSON。
+![真实 HiRoute Desktop 智能省钱配置界面展示百炼 Token Plan 的 Qwen 3.8 Flash 省钱组和 Qwen 3.8 Max 主力组](../../assets/imgs/hiroute-jev/desktop-smart-saving-zh.png)
+
+图 6：2026-10-08 的 macOS 原生产品截图，展示尚未保存或启用的双组配置。图中 Flash / Max 是执行模型示例；决策连接另选百炼 System One，和第 4 节历史实验的 Qwen / Astra 组合分别理解。[截图来源说明](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/ILLUSTRATIONS.md)
+
+连接测试使用合成输入验证传输和必要字段，不等于实际任务判断准确。需要修改供应商集成时，可以部署[可独立安装的 Jev 参考扩展](https://github.com/higress-group/HiRoute/tree/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/extensions/jev-decider)，其 HiRoute 入站地址为 `/v1/decisions`；上面的 System One 地址是供应商端点，二者使用不同 JSON。
 
 ### 5.2 先离线核对历史证据
 
@@ -216,4 +239,4 @@ python3 experiments/reproduce.py report
 - **让反馈绑定具体阶段。** 同时检查类别、评分标准和证据覆盖；记录选择理由与实际执行，便于解释换模和回切。
 - **以整单交付衡量收益。** 预先固定验收门槛，计入决策调用和失败尝试，保留未达标样本，独立检查内容质量。
 
-实现核对版本为 HiRoute 公共仓库的 `5232db559bb8e856d44549d5e1488c7cf4f78d83`。供应商 API 以 [TypeSafe System One](https://docs.typesafe.ai/api) 和 [OpenRouter Decisions](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) 文档为准；历史实验的模型、参数和结果以各自冻结记录为准。
+实现核对版本为 HiRoute 公共仓库的 `5232db559bb8e856d44549d5e1488c7cf4f78d83`。本文接入示例以 [百炼 System One API](https://help.aliyun.com/zh/model-studio/decision-model-api) 和 [Token Plan 接入说明](https://help.aliyun.com/zh/model-studio/token-plan-decision-model) 为准；历史实验的模型、端点、参数和结果仍以各自冻结记录为准。
