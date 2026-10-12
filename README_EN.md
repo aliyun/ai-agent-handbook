@@ -117,7 +117,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | 28. Customer and operations | [Office Productivity at ShineWing, an Accounting Firm](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
 | 28. Customer and operations | [Bilibili's Cross-Platform Content Insights](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
 | 28. Customer and operations | [Data Agent for Operational Analytics](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
-| Jev topic | [HiRoute: Task Routing and Stage Competence Feedback with Jev](<./06-case-study/Jev 专题/HiRoute：用 Jev 做任务路由与阶段胜任度反馈.md>) |
+| Jev topic | [HiRoute: Model Routing and Competence Feedback with Jev](<./06-case-study/Jev 专题/HiRoute：Jev 模型路由与胜任度反馈实践.md>) |
 
 ### Suggested reading paths
 

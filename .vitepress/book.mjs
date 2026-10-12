@@ -215,7 +215,7 @@ for (const part of parts) {
     });
     topic.children = [
       page(
-        "06-case-study/Jev 专题/HiRoute：用 Jev 做任务路由与阶段胜任度反馈.md",
+        "06-case-study/Jev 专题/HiRoute：Jev 模型路由与胜任度反馈实践.md",
         "cases/jev/hiroute",
         { chapter: "jev", part: part.title },
       ),
