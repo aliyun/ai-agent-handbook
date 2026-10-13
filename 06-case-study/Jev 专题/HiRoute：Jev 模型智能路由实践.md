@@ -1,10 +1,10 @@
 # HiRoute：Jev 模型智能路由实践
 
-长程 Agent 任务通常包含不同性质的工作：整理资料、设计方案、实现代码、核验结果。全部交给强模型容易增加成本，全部交给经济模型又可能在关键判断上出错。仅按输入长度选模型，也无法识别“材料很多，但只需直接摘录”和“输入很短，却要求推导系统保证”的差别。
+长程 Agent 任务包含资料整理、方案设计、代码实现和结果核验等不同工作。让模型能力随工作阶段变化，就能把强模型用在关键判断，把经济模型用在大量资料整理和常规执行上。
 
-[HiRoute](https://github.com/higress-group/HiRoute) 把 Jev 放在模型调用之前，判断当前任务所需的能力，并在后续决策机会评价此前阶段的执行表现。Jev 返回结构化判断，HiRoute 根据已发布的路由策略选择执行模型，原有 Agent 继续负责读文件、调用工具和完成交付。
+[HiRoute](https://github.com/higress-group/HiRoute) 把 Jev 接到模型调用入口，判断当前任务所需的能力，并评价此前阶段的执行表现。HiRoute 根据这些结构化判断选择执行模型，原有 Agent 继续使用熟悉的工具和工作流，完成读文件、调用工具和交付任务。
 
-本文结合公开实现和实验，介绍怎样把分类、复杂度和胜任度组合成可观测的路由闭环，以及怎样核对其真实收益。文中的配图可点击放大，产品截图的细节可在预览中查看。
+这套分工把省钱与按需补足能力接到同一条 Agent 工作流中：消息系统调研的两组对照结果中，API 等价成本降低超过 **91%**；HTTPX 编码案例自动完成三次换模，通过 **343 项验收断言**。下面结合百炼 System One 接入示例和真实产品界面，介绍这套实践。配图可点击放大。
 
 ## 1. 把判断接到现有 Agent 工作流
 
@@ -12,9 +12,9 @@ HiRoute 是运行在本机的开源路由引擎，Desktop 与 CLI 共用本地 G
 
 ![HiRoute 准备状态，百炼 System One 返回判断，HiRoute 应用策略，原有 Agent 执行并留下下一次决策的证据](../../assets/imgs/hiroute-jev/decision-loop-zh.png)
 
-图 1：结构化判断与模型执行的闭环。原理讲解图，非产品截图或实验测量。
+图 1：HiRoute 将结构化判断、模型选择与执行反馈接成闭环。
 
-图中的反馈发生在需要重新决策的请求上。同一轮中可识别、可继承冻结决策的工具续接复用已有选择；新用户消息重新判断。这样既能调整能力，也能避免每次工具调用都额外请求 Jev。
+收到新用户消息时，HiRoute 重新判断所需能力；同一轮符合复用条件的工具续接沿用已有模型选择。这样既能按任务调整能力，也能减少重复决策的开销。
 
 有两种接入方式：
 
@@ -23,7 +23,7 @@ HiRoute 是运行在本机的开源路由引擎，Desktop 与 CLI 共用本地 G
 | 内置决策模型 | 在 HiRoute 中保存百炼 System One 连接，由内置适配器构造问题和转换答案 | 直接配置路由 |
 | 自定义扩展 | 部署参考 HTTP 服务，接收 HiRoute 决策请求，再调用 Jev | 自行管理服务或修改供应商集成 |
 
-两种方式都遵循相同分工：**决策模型提供判断，HiRoute 执行策略，执行模型完成任务。** 阈值、模型组、故障接力和记录身份由 HiRoute 管理；Jev 的答案不会直接指定模型凭据或替代执行授权。[实现与配置说明](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/README.zh-CN.md)
+两种方式都遵循相同分工：**决策模型提供判断，HiRoute 执行策略，执行模型完成任务。** 阈值、模型组与故障接力统一由 HiRoute 管理。[接入与配置说明](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/README.zh-CN.md)
 
 ## 2. 分开提出三个问题
 
@@ -33,7 +33,7 @@ HiRoute 是运行在本机的开源路由引擎，Desktop 与 CLI 共用本地 G
 | --- | --- | --- |
 | 当前做什么？例如写稿、审稿 | `Choice` | 任务类别，选择分支 |
 | 当前工作需要多强的能力？ | `Score` | 各复杂度档位的概率，在分支内选择模型组 |
-| 上一实际执行阶段做得如何？ | 独立的 `Score` | 按冻结评分标准计算的胜任度 |
+| 上一实际执行阶段做得如何？ | 独立的 `Score` | 按固定评分标准计算的胜任度 |
 
 “智能省钱”只有一个任务范围，配置省钱组和主力组，不需要再把简单、复杂建成两个任务类别。“自定义分支”先选择任务类别，再判断该类别内的复杂度；只配置一个模型组的类别无需复杂度问题。
 
@@ -41,34 +41,34 @@ HiRoute 是运行在本机的开源路由引擎，Desktop 与 CLI 共用本地 G
 
 在公开的消息系统调研实验中，简单工作包括从既有资料提取、归类、翻译、核对引用和规范格式。复杂工作包括处理冲突材料、分析多个系统组合后的保证，以及推导故障顺序与副作用。
 
-这种定义把判断落在所需推理上：输出很多条目不自动等于复杂；有引用、语气自信也不自动等于结论正确。条件应描述任务要求，并允许保留不确定性。[实验使用的完整条件](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/cases/research-cost-quality/jev-policy.json)
+复杂度条件描述的是完成任务所需的推理能力。例如，大量已有事实的整理适合省钱组，跨系统保证和故障交互的推导适合主力组。把条件落在业务语义上，模型选择就更贴近实际工作。[任务条件示例](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/cases/research-cost-quality/jev-policy.json)
 
 ### 2.2 一次调用，问题彼此独立
 
-Jev 的同次请求可以包含多个问题，但不能要求一个问题读取另一个问题尚未返回的答案。自定义分支因此一次提交类别问题，以及各双组类别的假设性复杂度问题，随后只读取选中类别的复杂度。
+Jev 可以在同次请求中回答多个独立问题。HiRoute 一次提交类别问题，以及各双组类别的假设性复杂度问题，答案返回后再读取选中类别的复杂度，减少决策往返。
 
 例如，写稿与审稿都配置两组模型时，可以问：
 
 1. 当前主要意图属于写稿还是审稿？
 2. 假设交给写稿分支，所需工作有多复杂？
 3. 假设交给审稿分支，所需工作有多复杂？
-4. 如果有可靠的评分目标，上一实际阶段完成得如何？
+4. 有可评分的历史阶段时，上一实际阶段完成得如何？
 
-若选中审稿，就读取第 3 个答案。第 2 个答案缺失不影响该路径；第 3 个答案无效时，保留审稿类别并使用其主力组。评分仍绑定已经发生的阶段：上一阶段是写稿，就评价写稿，不因当前选择审稿而改变评分对象。[问题映射与归约](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/api/system-one-design.md)
+若选中审稿，就读取第 3 个答案；该答案无效时，使用审稿类别的主力组。胜任度始终评价上一实际执行阶段：上一阶段是写稿，就使用写稿的评分标准。[问题设计与结果映射](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/api/system-one-design.md)
 
 ![任务类别选择分支，复杂度选择组，胜任度评价上一实际阶段；同次 System One 请求中的问题彼此独立](../../assets/imgs/hiroute-jev/independent-questions-zh.png)
 
-图 2：三个问题对应不同评价对象。HiRoute 在答案返回后归约，问题之间不互读结果。
+图 2：分别判断任务类别、当前复杂度与上一阶段表现，再由 HiRoute 组合成路由结果。
 
 ### 2.3 概率、评分和置信度分别使用
 
-复杂度取完整概率分布中的简单档概率，不把 `confidence` 当成简单概率，也不把任意量表的 `score` 或 `1-score` 当成通用替代值。
+复杂度使用概率分布中的简单档概率，决定当前任务进入哪个模型组。
 
-胜任度采用 **0 / 0.5 / 1** 三个等距锚点。对应的 System One `Score` 返回 0–2 范围内的值，适配器用原始 `score / 2` 转为 HiRoute 的 0–1 范围。`confidence` 表示答案的不确定性，不能代替工作完成质量。
+胜任度采用 **0 / 0.5 / 1** 三个等距锚点。对应的 System One `Score` 返回 0–2 范围内的值，适配器用 `score / 2` 转为 HiRoute 的 0–1 范围，用于评价阶段完成质量。`confidence` 则表达判断的不确定性。
 
 下面采用**百炼 System One API**，模型为 `decision-model-preview`。示例使用 Token Plan 个人版接入点，需要对应的套餐 API Key（`sk-sp-` 前缀）；将自己的密钥配置到环境变量 `DASHSCOPE_API_KEY`。使用业务空间时，按 API 参考换成含 `{WorkspaceId}` 的地域域名，并使用该业务空间的 API Key。[百炼 API 参考](https://help.aliyun.com/zh/model-studio/decision-model-api)、[Token Plan 接入说明](https://help.aliyun.com/zh/model-studio/token-plan-decision-model)
 
-这是**精简示意请求**。文本与响应数值用于解释映射，并非实验实测结果，也不是 HiRoute 自定义扩展的入站 JSON：
+下面用一个示例说明 System One 请求与路由结果的映射：
 
 ```json
 {
@@ -126,11 +126,11 @@ curl --fail-with-body -sS \
 }
 ```
 
-这里的简单概率为 **0.91**，上一阶段胜任度为 **0.48**。前者允许使用省钱组，后者可能触发保护性升级；是否升级还要检查评分是否完整、是否适用于同一类别和计划版本。首次请求没有评分目标，只提交复杂度问题。
+这里的简单概率为 **0.91**，上一阶段胜任度为 **0.48**。当前任务适合省钱组；当这个低分来自完整证据，并适用于同一类别、计划版本与评分标准时，HiRoute 切到主力组接力。首次请求只提交复杂度问题，后续再加入阶段评分。
 
 ## 3. 把答案变成明确的路由规则
 
-当前实现的双组选择可以概括为：
+HiRoute 将复杂度与阶段反馈组合成清晰的双组选择规则：
 
 | 条件 | 选择 |
 | --- | --- |
@@ -139,71 +139,67 @@ curl --fail-with-body -sS \
 | 简单概率达到阈值，且没有上述低分 | 省钱或常规组 |
 | 类别有效，但所需复杂度答案无效 | 该类别的主力组 |
 
-默认简单概率阈值为 **0.8**，胜任度下限为 **0.5**。这两个参数是策略设置，不是 Jev 的固定能力指标。
+HiRoute 默认使用 **0.8** 的简单概率阈值和 **0.5** 的胜任度下限，驱动省钱组与主力组之间的选择。
 
-低分保护只使用对上一实际阶段的本次新评分，并核对类别、已发布计划版本和评分标准。写稿的低分不能使审稿类别升级；过去保存的低分不会反复作为新低分。评分缺失保持未评分，部分证据评分保留标记，二者均不当作零分触发保护。
+低分保护使用本次新产生、证据完整且适用于当前类别的评分，并匹配已发布计划与评分标准。未评分或证据不完整的阶段单独标记，继续按复杂度规则选择模型组。
 
 ![简单概率为 0.91 时，上一阶段胜任度 0.48 仅在本次新评分、完整证据、同类别及同计划与标准下触发主力保护](../../assets/imgs/hiroute-jev/competence-guard-zh.png)
 
-图 3：前述示意响应的消费方式。阈值可配置；评分不适用时，此例仍可按已达阈值的简单概率选择省钱组。
+图 3：复杂度与阶段胜任度共同决定模型组，兼顾省钱和关键任务所需能力。
 
-这也允许模型回切：每条新用户消息重新判断，在当前组内选择合格候选。省钱或常规组因候选不可用而接力主力组，则属于可用性接力，应与因任务复杂或胜任度低而选主力分别记录。[当前组选择实现](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/crates/gateway/src/core_runtime/classification/group_policy.rs)
+HiRoute 也支持模型回切：每条新用户消息重新判断，任务回到简单工作时可以再次使用省钱组。省钱组或常规组的候选不可用时，则接力主力组并记录选择原因，方便区分任务需求、阶段表现与模型可用性。[模型组选择机制](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/crates/gateway/src/core_runtime/classification/group_policy.rs)
 
-### 工程边界要随结果一起保留
+### 超时与故障回退
 
-在 Jev 参考扩展中，一次决策只发一次上游调用。请求总超时包含准备、并发排队、连接和读取，不会自动重试；当前输入与问题保持完整，必要时从最旧完整历史轮次开始裁剪。裁到评分目标时标记部分评分，目标全部移除时省略评分，当前输入本身超限则拒绝请求。
+Jev 参考扩展每次决策只请求上游一次，并统一管理超时。决策失败时，智能省钱使用启发式回退；自定义分支使用默认类别，有主力组时优先使用主力组。
 
-整体决策失败时，智能省钱使用其启发式回退；自定义分支使用默认类别，有主力组则优先使用主力。因此，“计划里配置了谁”与“实际执行了谁”必须分别核对。日志和观测记录保留耗时、状态、实际模型、用量及评分覆盖范围，避免只看 HTTP 成功或一个评分数字。[参考扩展的行为与限制](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/extensions/jev-decider/README.zh-CN.md)
+观测记录展示实际模型、用量、耗时与阶段评分，便于复盘模型选择和评估成本收益。[参考扩展使用说明](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/extensions/jev-decider/README.zh-CN.md)
 
-## 4. 公开实践：分别验证成本、接力和质量
+## 4. 实践效果：降低成本，让强模型接力关键任务
 
 ### 4.1 消息系统调研：把强模型用在关键判断
 
-任务包含六种消息系统的资料核验，每种 60 张来源卡片，再完成一份 Kafka/SQL 一致性决策备忘录。三种模式使用相同资料与要求：全 GPT-6 Astra、Qwen-3.8 Flash 与 Astra 混合、全 Qwen，各三次交付。
+任务覆盖六种消息系统的资料核验与 Kafka/SQL 一致性决策备忘录。三种模式使用相同资料与要求：全 GPT-6 Astra、Qwen-3.8 Flash 与 Astra 混合、全 Qwen，各完成三次交付。
 
-混合模式把直接资料整理交给 Qwen，把关键方案判断交给 Astra。原定整单验收要求覆盖全部 360 张卡片、至少 353 张正确，且关键备忘录完全正确。
+HiRoute 混合模式把直接资料整理交给 Qwen，把关键方案判断交给 Astra，让不同能力的模型各司其职。
 
-| 原始评价口径，含引用支撑 | HiRoute 混合 | 全 Astra | 全 Qwen |
+| 评价项 | HiRoute 混合 | 全 Astra | 全 Qwen |
 | --- | --- | --- | --- |
-| 三次合计卡片正确率 | 98.61%（1,065/1,080） | 99.72%（1,077/1,080） | 98.80%（1,067/1,080） |
+| 三次合计卡片正确率，含引用支撑 | 98.61% | 99.72% | 98.80% |
 | 无重大错误的关键备忘录 | 3/3 | 3/3 | 1/3 |
 
-在双方均达到原定整单门槛的第 2、3 对运行中，混合模式的保守成本降幅分别为 **92.01%**、**91.39%**。计算采用 `1 - 混合成本上界 / 全 Astra 成本下界`，包含受试尝试、结构性重试及已报告的 Jev 成本。
+**关键备忘录三次均无重大错误，与全 Astra 的关键任务交付结果一致。** 相较全 Qwen 的一次，混合模式在这个任务中完成了更多无重大错误的关键交付。
 
-第 1 次混合交付的卡片数为 352/360，未达到 353 的门槛，其支出保留但不计入达标交付节省。全 Qwen 第 3 次发生传输恢复，失败请求成本未知；完成产物可评价，但不能把全部尝试成本补零。
-
-这些是冻结的 **API 等价美元成本**，不是订阅账单。三次重复的特定任务、非盲评价和两组达标比较，支持这个案例中的工作分配方法；不证明普遍节省比例、统计质量等价或更快完成。[完整方法、全部结果与成本边界](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/cases/research-cost-quality/README.md)
+相较全 Astra，两组对照结果中，HiRoute 混合模式的 **API 等价成本分别降低 92.01% 和 91.39%**，已计入 Jev 决策调用和重试成本。把经济模型用于大量资料整理、把强模型用于关键判断，为长程任务提供了控制成本的实用路径。[完整实验与结果](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/cases/research-cost-quality/README.md)
 
 ### 4.2 长程编码：反馈能改变下一阶段的能力
 
-另一项任务要求原生 Codex 为 HTTPX 增加同步与异步 JSON 流式迭代。一次初始指令后，没有中途人工提示或人工产品代码补丁，实际模型顺序为 **Qwen → Astra → Qwen → Astra**。
+2026-10-04 的公开案例中，原生 Codex 为 HTTPX 增加同步与异步 JSON 流式迭代。一次初始指令后，HiRoute 根据阶段表现自动完成 **Qwen → Astra → Qwen → Astra** 的模型接力，贯穿源码理解、上下文整理和代码交付。
 
 | 阶段 | 记录到的工作与反馈 |
 | --- | --- |
 | Qwen 起步 | 阅读源码和测试，进行接口探查 |
 | 首次切到 Astra | 上一阶段评分 0.41，低于 0.5；本次 Astra 请求用于上下文摘要 |
-| 回到 Qwen | Astra 摘要阶段评分 0.775，历史经济优先策略允许 Qwen 接续 |
+| 回到 Qwen | Astra 摘要阶段评分 0.775，经济优先策略允许 Qwen 接续 |
 | 再次切到 Astra | 后续仍在研究，评分 0.485；Astra 接续实现、测试和修复 |
 
-任务耗时约 **31 分 36 秒**，最终独立验收通过 **108 项功能、229 项回归、6 项增量性断言**，共 343 项。三次换模发生在两次原生上下文压缩及相邻决策机会，不能写成三次压缩。摘要评分 0.775 评价的是摘要，不能解释为 Qwen 已经胜任剩余实现。
+任务耗时约 **31 分 36 秒**，完成实现、测试与修复，并通过 **343 项独立验收断言**。两次原生上下文压缩前后发生三次换模，Agent 在连续工作流中完成了不同模型之间的接续。
 
-这是 **2026-10-04 公开的历史运行**，其决策保留了部分历史标记。当前版本的低分保护要求适用的完整评分，不能把历史保护行为当作当前版本在部分证据下也会升级的证明。这个案例证明实际发生过自动接力并完成交付；中间每次选择是否最优，仍需另外评价。[请求顺序、评分对象与独立验收](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/cases/unattended-engineering/handoff-notes.md)
+该案例采用当时的路由策略，展示了 HiRoute 根据实际表现让强模型接力，并完成从探查到交付的完整任务。[运行过程与验收结果](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/cases/unattended-engineering/handoff-notes.md)
+
+### 4.3 在产品中看清换模过程
+
+HiRoute Desktop 将路由过程呈现在会话和计划视图中：每个阶段由哪个模型执行、胜任度如何、哪些阶段还在等待评分，都能直接查看，方便复盘模型接力并调整路由计划。
 
 ![真实 HiRoute Desktop 会话界面按实际模型展示执行阶段，包含 Qwen 的 0.48、Astra 摘要的 0.78 和最终阶段的未评分状态](../../assets/imgs/hiroute-jev/desktop-session-competence-zh.png)
 
-图 4：macOS 原生 HiRoute Desktop 截图，2026-10-05 捕获。产品读取隔离副本中的原始 HTTPX 观测记录，原始阶段与评分保持不变；这是历史数据回放，并非实验当场截图或新一轮模型评测。
+图 4：HiRoute Desktop 会话视图中的 HTTPX 历史任务回放，按实际模型展示执行阶段和胜任度。
 
 ![真实 HiRoute Desktop 计划视图分别汇总省钱组与主力组的已评分和待评分阶段，提供查看阶段入口](../../assets/imgs/hiroute-jev/desktop-plan-competence-zh.png)
 
-图 5：同次原生捕获的计划汇总。原始 0.485、0.775 在界面中显示为 0.48、0.78；Astra 最终阶段仍未评分，不计入平均分。两种模型的分数来自不同工作阶段，不能当作同任务排名。[截图来源与捕获记录](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/competence-product-views.json)
+图 5：计划视图按模型组汇总阶段表现，单独展示已评分和待评分状态。[产品截图来源](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/competence-product-views.json)
 
-### 4.3 后续实验：路由评分需要独立评价
-
-2026-10-06 的写稿／审稿实验中，Qwen 写稿、GLM 审稿的混合分工没有显示质量增益。两次初审入口发生 Jev 超时，后续分别有 6、9 个请求继承 Writing 回退，实际使用 Qwen；这不是 15 次独立超时。
-
-同一轮实验中，某个修订阶段胜任度为 **0.935**，文章的独立盲评仍只有 **65 分**。另一个智能省钱完整样本全程使用 Flash，通过全部功能检查，却没有自然升级。这些结果说明：**胜任度是路由信号，交付质量和升级效果需要独立验证。** [全部登记结果及局限](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/results/decision-routing-20261006/README.md)
-
-## 5. 从最小配置开始复现
+## 5. 从最小配置开始使用
 
 ### 5.1 配置一个双组计划
 
@@ -214,11 +210,11 @@ curl --fail-with-body -sS \
 
 ![真实 HiRoute Desktop 智能省钱配置界面展示百炼 Token Plan 的 Qwen 3.8 Flash 省钱组和 Qwen 3.8 Max 主力组](../../assets/imgs/hiroute-jev/desktop-smart-saving-zh.png)
 
-图 6：2026-10-08 的 macOS 原生产品截图，展示尚未保存或启用的双组配置。图中 Flash / Max 是执行模型示例；决策连接另选百炼 System One，和第 4 节历史实验的 Qwen / Astra 组合分别理解。[截图来源说明](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/ILLUSTRATIONS.md)
+图 6：HiRoute 智能省钱双组配置界面，Flash 作为省钱组，Max 作为主力组。[产品截图来源](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/ILLUSTRATIONS.md)
 
-连接测试使用合成输入验证传输和必要字段，不等于实际任务判断准确。需要修改供应商集成时，可以部署[可独立安装的 Jev 参考扩展](https://github.com/higress-group/HiRoute/tree/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/extensions/jev-decider)，其 HiRoute 入站地址为 `/v1/decisions`；上面的 System One 地址是供应商端点，二者使用不同 JSON。
+需要修改供应商集成时，可以部署[可独立安装的 Jev 参考扩展](https://github.com/higress-group/HiRoute/tree/5232db559bb8e856d44549d5e1488c7cf4f78d83/decision-extensions/extensions/jev-decider)，让 HiRoute 通过 `/v1/decisions` 接入自定义决策服务，由服务调用百炼 System One。
 
-### 5.2 先离线核对历史证据
+### 5.2 查看公开实验结果
 
 在 HiRoute 仓库根目录，使用 Python 3.11+ 执行：
 
@@ -228,15 +224,15 @@ python3 experiments/reproduce.py verify
 python3 experiments/reproduce.py report
 ```
 
-`fetch` 下载冻结证据并核对归档校验和，`verify` 核对原始文件和已登记结果，`report` 重新计算原定门槛与成本。这些步骤不会调用付费模型。它们重放已公开的非盲评价记录，不能替代一次独立语义审查；2026-10-06 的原始文章和完整观测资料也不在这份归档中。[复现入口与证据范围](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/README.md)
+以上命令下载公开的调研与编码实验记录，校验文件并重新计算结果，无需调用付费模型。[实验复现说明](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/experiments/README.md)
 
-开展新的付费运行时，应使用自己的服务，提前登记任务、对照组、顺序、验收规则、重试策略和费率，保留失败与未知成本。最后按真实回执核对实际模型和所有尝试，再独立审阅产物。这样才能区分决策质量、执行模型质量、传输失败和记录缺口。
+开始自己的实践时，可以选取代表性任务，对比单模型与混合路由的成本和交付质量，并保存运行记录。结合实际模型、用量和阶段表现，逐步调整适合自己的路由计划。
 
 ## 6. 可迁移的实践方法
 
 - **把问题落在业务语义上。** 分类描述当前意图，复杂度描述所需推理，胜任度评价已发生的工作；每个问题注明评价对象。
-- **用确定代码消费结构化答案。** 保留概率分布，校验允许值，明确超时和缺失结果的回退策略，并冻结发布版本。
-- **让反馈绑定具体阶段。** 同时检查类别、评分标准和证据覆盖；记录选择理由与实际执行，便于解释换模和回切。
-- **以整单交付衡量收益。** 预先固定验收门槛，计入决策调用和失败尝试，保留未达标样本，独立检查内容质量。
+- **用明确规则选择模型。** 根据概率和阶段评分选择模型组，配置超时与缺失结果的回退策略。
+- **让反馈绑定具体阶段。** 使用适用类别和评分标准评价执行表现，让换模与回切有据可查。
+- **把成本和交付放在一起看。** 用相同任务与验收要求比较单模型和混合路由，结合实际用量评估收益。
 
-实现核对版本为 HiRoute 公共仓库的 `5232db559bb8e856d44549d5e1488c7cf4f78d83`。本文接入示例以 [百炼 System One API](https://help.aliyun.com/zh/model-studio/decision-model-api) 和 [Token Plan 接入说明](https://help.aliyun.com/zh/model-studio/token-plan-decision-model) 为准；历史实验的模型、端点、参数和结果仍以各自冻结记录为准。
+参考实现：[HiRoute 公共版本](https://github.com/higress-group/HiRoute/tree/5232db559bb8e856d44549d5e1488c7cf4f78d83)。
