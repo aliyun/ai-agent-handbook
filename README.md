@@ -122,7 +122,7 @@
 | 第 28 章　客户、销售与运营 | [哔哩哔哩构建全域内容洞察的实践](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
 | 第 28 章　客户、销售与运营 | [运营分析 Data Agent 实践](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
 | Jev 专题 | [深度解析 Jev 模型：如何快速做结构化决策](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
-| Jev 专题 | [HiRoute：Jev 模型路由与胜任度反馈实践](<./06-case-study/Jev 专题/HiRoute：Jev 模型路由与胜任度反馈实践.md>) |
+| Jev 专题 | [HiRoute：Jev 模型智能路由实践](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
 
 ### 推荐阅读路径
 

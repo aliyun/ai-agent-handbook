@@ -220,7 +220,7 @@ for (const part of parts) {
         { chapter: "jev", part: part.title },
       ),
       page(
-        "06-case-study/Jev 专题/HiRoute：Jev 模型路由与胜任度反馈实践.md",
+        "06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md",
         "cases/jev/hiroute",
         { chapter: "jev", part: part.title },
       ),
