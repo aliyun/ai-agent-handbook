@@ -219,6 +219,11 @@ for (const part of parts) {
         "cases/jev/deep-dive",
         { chapter: "jev", part: part.title },
       ),
+      page(
+        "06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md",
+        "cases/jev/hiroute",
+        { chapter: "jev", part: part.title },
+      ),
     ];
     topic.sourceDirectory = "06-case-study/Jev 专题";
     part.pages.push(topic);

@@ -1,0 +1,81 @@
+{
+  "schema": "handbook.hiroute-jev-illustrations/v1",
+  "source_revision": "5232db559bb8e856d44549d5e1488c7cf4f78d83",
+  "images": [
+    {
+      "file": "competence-guard-zh.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1497644,
+      "sha256": "3bddf9c31a3e9157ee2a14375ab16f01ba39af1fbeb9b6c9b7273583fe7cc0af",
+      "kind": "generated-explanatory-slide",
+      "tool": "image_gen",
+      "date": "2026-10-12",
+      "measurements": false,
+      "product_screenshot": false
+    },
+    {
+      "file": "decision-loop-zh.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1402399,
+      "sha256": "2fb2ded24a4fb38cd545831e262957c71a2158b5786a0870c930fdd11b2e5e5f",
+      "kind": "generated-explanatory-slide",
+      "tool": "image_gen",
+      "date": "2026-10-12",
+      "measurements": false,
+      "product_screenshot": false
+    },
+    {
+      "file": "desktop-plan-competence-zh.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 297038,
+      "sha256": "99bb1d202de501563ffe9e877b038fd83c2da9fc1ea4736b88590bc4c63474bf",
+      "kind": "native-product-screenshot",
+      "capture_date": "2026-10-05",
+      "image_edits": false,
+      "source": "https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/assets/desktop-plan-competence-zh.png",
+      "data_origin": "Same historical replay; final Astra stage remains unrated",
+      "public_source_blob_verified": true
+    },
+    {
+      "file": "desktop-session-competence-zh.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 189914,
+      "sha256": "77acce3ed9554a566e88bb95492e6446e6a28e765ba83edaa71d323cf8187276",
+      "kind": "native-product-screenshot",
+      "capture_date": "2026-10-05",
+      "image_edits": false,
+      "source": "https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/assets/desktop-session-competence-zh.png",
+      "data_origin": "Unchanged historical HTTPX stage records in an isolated native product replay",
+      "public_source_blob_verified": true
+    },
+    {
+      "file": "desktop-smart-saving-zh.png",
+      "width": 2400,
+      "height": 1626,
+      "bytes": 396690,
+      "sha256": "6727c42eb2c9382a00b970d932473d8e08ae6a8d3e3e6e2c18633a5f2d8263a4",
+      "kind": "native-product-screenshot",
+      "capture_date": "2026-10-08",
+      "image_edits": false,
+      "source": "https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/assets/launch-smart-saving-zh.png",
+      "data_origin": "Unsaved native configuration demonstration, not a new model run",
+      "public_source_blob_verified": true
+    },
+    {
+      "file": "independent-questions-zh.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1382237,
+      "sha256": "447bb2041124f3e11e0d773073ae1ed95ee6a27ec9074844f1d5f2ce9f237373",
+      "kind": "generated-explanatory-slide",
+      "tool": "image_gen",
+      "date": "2026-10-12",
+      "measurements": false,
+      "product_screenshot": false
+    }
+  ]
+}
