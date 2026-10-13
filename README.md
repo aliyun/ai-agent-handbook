@@ -62,7 +62,7 @@
 | [运行篇](./03-run/) | `03-run/` | 第 7–12 章 | 从单 Agent 稳定运行扩展到异步、多 Agent 与分布式通信。 |
 | [治理篇](./04-governance/) | `04-governance/` | 第 13–16 章 | 让运行可见、行为有边界、资产可管理、上线前可验证。 |
 | [调优篇](./05-optimization/) | `05-optimization/` | 第 17–24 章 | 从模型与 Agent 两条主线构建持续优化闭环。 |
-| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章 | 企业实践、垂直场景与 Agent Infra 前沿探索。 |
+| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章、Jev 专题 | 企业实践、垂直场景、Agent Infra 前沿探索与结构化决策。 |
 | [总结与展望篇](./07-conclusion/) | `07-conclusion/` | 第 30 章 | 从 Agentic Application 走向 Agentic OS。 |
 
 ### 章节导航
@@ -98,6 +98,7 @@
 | 实践篇 | [第 27 章　运维、安全与企业 IT](<./06-case-study/第27章 运维、安全与企业IT/>) | 汽车、连锁零售和企业软件的大规模智能运维实践。 |
 | 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和 Data Agent 实践。 |
 | 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
+| 实践篇 | [Jev 专题：结构化决策的实践](<./06-case-study/Jev 专题/>) | Jev 的模型解析、接口示例与可复用的决策模式。 |
 | 总结与展望篇 | [第 30 章　从 Agentic Application 到 Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | 从单个应用走向可协作、可治理、可持续演进的智能系统。 |
 
 ### 实践案例导航
@@ -120,6 +121,7 @@
 | 第 28 章　客户、销售与运营 | [会计师事务所信永中和的办公提效探索](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
 | 第 28 章　客户、销售与运营 | [哔哩哔哩构建全域内容洞察的实践](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
 | 第 28 章　客户、销售与运营 | [运营分析 Data Agent 实践](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
+| Jev 专题 | [深度解析 Jev 模型：如何快速做结构化决策](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 
 ### 推荐阅读路径
 

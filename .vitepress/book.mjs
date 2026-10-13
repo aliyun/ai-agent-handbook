@@ -208,6 +208,22 @@ for (const part of parts) {
     part.pages.push(chapter);
     readingOrder.push(chapter, ...(chapter.children || []));
   }
+  if (part.id === "cases") {
+    const topic = page("website/case-jev.md", "cases/jev/index", {
+      chapter: "jev",
+      part: part.title,
+    });
+    topic.children = [
+      page(
+        "06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md",
+        "cases/jev/deep-dive",
+        { chapter: "jev", part: part.title },
+      ),
+    ];
+    topic.sourceDirectory = "06-case-study/Jev 专题";
+    part.pages.push(topic);
+    readingOrder.push(topic, ...topic.children);
+  }
 }
 
 export const extraPages = [
