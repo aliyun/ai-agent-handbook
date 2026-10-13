@@ -215,6 +215,11 @@ for (const part of parts) {
     });
     topic.children = [
       page(
+        "06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md",
+        "cases/jev/deep-dive",
+        { chapter: "jev", part: part.title },
+      ),
+      page(
         "06-case-study/Jev 专题/HiRoute：Jev 模型路由与胜任度反馈实践.md",
         "cases/jev/hiroute",
         { chapter: "jev", part: part.title },
