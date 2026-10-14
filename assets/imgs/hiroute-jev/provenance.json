@@ -54,16 +54,13 @@
     },
     {
       "file": "desktop-smart-saving-zh.png",
-      "width": 2400,
-      "height": 1626,
-      "bytes": 396690,
-      "sha256": "6727c42eb2c9382a00b970d932473d8e08ae6a8d3e3e6e2c18633a5f2d8263a4",
-      "kind": "native-product-screenshot",
-      "capture_date": "2026-10-08",
-      "image_edits": false,
-      "source": "https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/assets/launch-smart-saving-zh.png",
-      "data_origin": "Unsaved native configuration demonstration, not a new model run",
-      "public_source_blob_verified": true
+      "width": 2522,
+      "height": 1980,
+      "bytes": 1697146,
+      "sha256": "4048c9f46a6568cabfa495c3497d020100148febb5f657f14ac1d1eca804fb30",
+      "kind": "user-provided-product-screenshots",
+      "received_date": "2026-10-14",
+      "composition": "Original screenshot 3 copied unchanged"
     },
     {
       "file": "independent-questions-zh.png",
@@ -91,17 +88,13 @@
     },
     {
       "file": "desktop-custom-branches-zh.png",
-      "width": 2400,
-      "height": 1626,
-      "bytes": 582838,
-      "sha256": "449021b7a331b98dc3bded5f6b0f784b94eb3f2bfd55511232e673dd2669c675",
-      "kind": "native-product-screenshot",
-      "capture_date": "2026-10-14",
-      "tool": "cua_repl native HiRoute app screenshot",
-      "image_edits": false,
-      "format_conversion": "Native JPEG capture decoded to PNG; no cropping, retouching or compositing",
-      "data_origin": "Native unsaved writing/review configuration; review task condition and regular/primary groups",
-      "saved_or_enabled": false
+      "width": 3480,
+      "height": 1980,
+      "bytes": 2484219,
+      "sha256": "d161a5d10b50f266b06a94e33bfef84a1cb7477f163e5d3c2cf27f4f426b8bdf",
+      "kind": "user-provided-product-screenshots",
+      "received_date": "2026-10-14",
+      "composition": "Original screenshots 1 and 2 placed left to right at native resolution with a 24 px white gap; no cropping or content alteration"
     }
   ]
 }
