@@ -204,7 +204,7 @@ curl --fail-with-body -sS \
 
 于是，这次任务进入审稿分支，再根据复杂度选择审稿主力组。上例中的写稿类别只配置一个常规组，因此没有类内复杂度判断。
 
-如果写稿和审稿都配置双组，HiRoute 会一次问三个独立问题：属于哪类、假设交给写稿有多复杂、假设交给审稿有多复杂。返回后，只读取选中类别的复杂度。这样便能在一次 System One 调用中完成分类和程度判断。
+如果写稿和审稿都配置双组，HiRoute 会一次问三个独立问题：属于哪类、假设交给写稿有多复杂、假设交给审稿有多复杂。返回后，只读取选中类别的复杂度。这样便能在一次 System One 调用中完成分类和程度判断。下面的历史上下文示例会给出实际发给百炼的完整请求，把分类、程度判断和阶段评分连起来看。
 
 ![类别、复杂度和阶段表现是三个独立问题，HiRoute 根据各自含义组合结果](../../assets/imgs/hiroute-jev/independent-questions-zh.png)
 
@@ -246,6 +246,167 @@ HiRoute 用 **0、0.5、1** 三个锚点描述阶段完成质量。例如，技�
 图 6：当前工作不复杂，也可能因为上一阶段需要补足能力而交给主力组。
 
 在有人参与的场景里，“遗漏了故障场景”这样的反馈会帮助 Jev 理解之前的产出。在无人执行场景里，则主要结合任务要求与可见的阶段记录评价进展。第一次调用尚无可评阶段时，先根据当前任务选择模型；后续记录逐渐积累，阶段评价也就能够参与决策。
+
+### 把分类、历史和评分放进一次请求
+
+沿用前面的写稿、审稿配置，看看一条完整请求。用户先让 Agent 写方案，再要求按故障清单审稿。上一轮审稿只核对了正常路径和事务回滚，用户接着指出遗漏，要求补上消息发送失败这一项。
+
+这时，Jev 需要同时看清三件事：本轮仍然是审稿；补充工作范围明确；上一阶段没有完成全部核查。下面是发给百炼 System One 的完整 body：
+
+```json
+{
+  "model": "decision-model-preview",
+  "state": {
+    "latest_user": [
+      {
+        "kind": "text",
+        "text": "你漏掉了数据库提交成功、消息发送失败的情况。对照前面给出的故障清单，只补充这一条审稿意见，不必重新审阅全文。"
+      }
+    ],
+    "visible_conversation": [
+      {
+        "user": [
+          {
+            "kind": "text",
+            "text": "请根据这些材料写一段方案说明：先提交数据库事务，再发送消息。故障清单包含正常完成、事务失败回滚、事务提交成功但消息发送失败三种情况。"
+          }
+        ],
+        "status": "completed",
+        "steps": [
+          [
+            {
+              "kind": "text",
+              "text": "草稿：数据库事务提交成功后发送消息；事务失败时回滚。消息发送失败时，数据库中已经写入的数据需要通过补发或补偿处理。"
+            }
+          ]
+        ]
+      },
+      {
+        "user": [
+          {
+            "kind": "text",
+            "text": "请按上述故障清单审阅这段草稿，检查三种情况是否都说明了，并给出审稿意见。"
+          }
+        ],
+        "status": "completed",
+        "steps": [
+          [
+            {
+              "kind": "text",
+              "text": "审稿意见：正常路径与事务失败回滚已核对，草稿中的这两处描述与材料一致。"
+            }
+          ]
+        ]
+      }
+    ],
+    "history_partial": false,
+    "assessment_from": 1
+  },
+  "questions": {
+    "q0": {
+      "type": "choice",
+      "instructions": "结合可见历史理解 state.latest_user，按当前请求的主要意图选择类别。条件重叠时取最符合主要意图的一项，均不匹配时选择 writing。不要因为上一阶段有遗漏就改变任务类别。",
+      "criteria": {
+        "writing": "撰写、续写或改写文章，包括根据反馈修稿。",
+        "review": "审阅、核实文章并提出意见。"
+      }
+    },
+    "q1": {
+      "type": "score",
+      "instructions": "假设当前任务交给审稿分支，结合历史理解指代，只判断 state.latest_user 所要求的当前审稿工作需要的程度，不评价此前的完成质量。不要读取其他问题的答案。",
+      "criteria": [
+        "范围明确的格式、措辞与已知事实核查。",
+        "需要逐项核对来源、检查因果推断或全篇论证。"
+      ]
+    },
+    "q2": {
+      "type": "score",
+      "instructions": "只评价从 state.visible_conversation[state.assessment_from] 起到历史末尾已执行的审稿阶段，检查是否按故障清单完成核查。state.latest_user 中的明确反馈可用于理解遗漏，但本轮补充工作尚未执行，不作为已完成成果。",
+      "criteria": [
+        "关键事实失真、没有有效进展，或需要大幅纠正。",
+        "已有可用成果，但存在明显遗漏或论证问题。",
+        "事实与引用准确，完成了该阶段要求。"
+      ]
+    }
+  }
+}
+```
+
+这里的 `state` 把当前要求和执行历史分开了：`latest_user` 是本轮待做的补充，`visible_conversation` 则保留此前的写稿和审稿记录。每轮的 `user` 是当时的要求，`steps` 是实际执行产出，`status: "completed"` 表示这轮执行已经结束。
+
+`assessment_from: 1` 从第二条历史记录开始评分，因此 **Jev 评价的是上一轮审稿**。第一条写稿记录仍可帮助它理解背景，但不会被混进这次阶段评分。`history_partial: false` 表示这里提供的历史没有缺口。
+
+三个问题分别承担分类、程度判断和阶段评分：`q0` 对应 `categorical`，`q1` 对应审稿分支的 `ordinal`，`q2` 对应历史审稿阶段的 `assessment`。它们共享上下文，各自判断自己的问题，一次调用就能返回全部结果。
+
+将上面的 JSON 保存为 `history-decision-request.json`，沿用前面的百炼端点和 API Key：
+
+```sh
+curl --fail-with-body -sS \
+  -X POST 'https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone' \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H 'Content-Type: application/json' \
+  --data-binary @history-decision-request.json
+```
+
+假设返回如下结果，数值用于演示这次选择：
+
+```json
+{
+  "answers": {
+    "q0": {
+      "type": "choice",
+      "choice": "review",
+      "probabilities": {
+        "writing": 0.04,
+        "review": 0.96
+      }
+    },
+    "q1": {
+      "type": "score",
+      "score": 0.09,
+      "probabilities": {
+        "0": 0.91,
+        "1": 0.09
+      }
+    },
+    "q2": {
+      "type": "score",
+      "score": 0.96,
+      "probabilities": {
+        "0": 0.2,
+        "1": 0.64,
+        "2": 0.16
+      }
+    }
+  }
+}
+```
+
+HiRoute 将这些答案转换为：
+
+```json
+{
+  "decision": {
+    "kind": "categorical",
+    "choice": "review",
+    "refinement": {
+      "kind": "ordinal",
+      "probabilities": {
+        "simple": 0.91,
+        "complex": 0.09
+      }
+    }
+  },
+  "assessment": {
+    "score": 0.48,
+    "partial": false
+  }
+}
+```
+
+`q0` 选中审稿分支，`q1` 给出的简单概率是 **0.91**，高于默认阈值 **0.8**；但 `q2` 的 `score: 0.96` 转换后只有 **0.48**，低于胜任度下限 **0.5**。在本例中，上一阶段与本轮都属于同一审稿分支，使用同一计划版本和评分标准，历史评分也完整，因此 HiRoute 启用审稿主力组，接手补齐遗漏。
+
+**“本轮工作简单”和“上一阶段需要更强能力来补足”可以同时成立。** 这正是把历史上下文、分类和胜任度判断放在一起的价值：用户指出遗漏后，系统既理解接下来要做什么，也能据此调整模型分工。
 
 ## 先配置一个能用的计划
 
