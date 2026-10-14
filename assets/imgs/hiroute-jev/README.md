@@ -13,3 +13,9 @@
 历史记录截图保持原始阶段身份和分数；0.485、0.775 的两位小数显示为 0.48、0.78，最终 Astra 阶段仍未评分。这些分数来自不同工作阶段，不代表受控模型排名。配置截图中的执行模型组合用于说明双组界面，与文章历史实验分别理解。
 
 公开原始说明见 [ILLUSTRATIONS.md](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/ILLUSTRATIONS.md) 与 [原生捕获记录](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/competence-product-views.json)。本次复制后核对了三张截图的公开 Git 对象和 SHA-256；文件尺寸、哈希及来源见 [provenance.json](provenance.json)。
+
+## 自定义分支配置截图
+
+`desktop-custom-branches-zh.png` 与 `desktop-branch-judgment-zh.png` 于 2026-10-14 通过 Computer Use 在真实 macOS HiRoute Desktop 中捕获。新建的“写稿与审稿”示例选择百炼决策连接；审稿分支展示常规、主力模型组，并单独设置 0.85 简单概率阈值、0.6 胜任度下限和中文程度提示词。
+
+两图来自未保存、未启用的同一个配置示例。截图后取消新建并返回原页面，没有发布路由、改变已有计划或调用模型。截图工具返回的 JPEG 仅转换为 PNG，保持原尺寸；没有裁剪、重绘或合成界面。它们用于说明配置操作，模型组合和阈值是示例设置。尺寸及哈希记录在 `provenance.json`。
