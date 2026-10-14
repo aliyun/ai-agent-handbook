@@ -1,6 +1,6 @@
 # HiRoute Jev 实践配图
 
-三张带文字的讲解图由内置 `image_gen` 生成，用于解释产品职责、独立问题和当前路由规则，不是产品截图或实验测量。中文文字、字段名、箭头与示意计算已经逐图核对；原始提示词见 [illustration-prompts.json](illustration-prompts.json)。
+四张带文字的讲解图由内置 `image_gen` 生成，用于解释对话反馈与自主执行、产品职责、独立问题和当前路由规则，不是产品截图或实验测量。中文文字、字段名、箭头与示意计算已经逐图核对；原始提示词见 [illustration-prompts.json](illustration-prompts.json)。
 
 三张产品图是未修改的 macOS 原生 HiRoute Desktop 截图，来自 [HiRoute 公共提交](https://github.com/higress-group/HiRoute/tree/5232db559bb8e856d44549d5e1488c7cf4f78d83)，按原仓库 [Apache-2.0 许可证](https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/LICENSE) 引用并保留出处。
 

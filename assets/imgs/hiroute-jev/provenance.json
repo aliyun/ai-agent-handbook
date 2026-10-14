@@ -76,6 +76,18 @@
       "date": "2026-10-12",
       "measurements": false,
       "product_screenshot": false
+    },
+    {
+      "file": "feedback-routing-zh.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1675653,
+      "sha256": "ff74eee0bbf56271704324a9bad87ed83043eb3197f52afdfc069615bd0183ad",
+      "kind": "generated-explanatory-slide",
+      "tool": "image_gen",
+      "date": "2026-10-14",
+      "measurements": false,
+      "product_screenshot": false
     }
   ]
 }
