@@ -54,16 +54,13 @@
     },
     {
       "file": "desktop-smart-saving-zh.png",
-      "width": 2400,
-      "height": 1626,
-      "bytes": 396690,
-      "sha256": "6727c42eb2c9382a00b970d932473d8e08ae6a8d3e3e6e2c18633a5f2d8263a4",
-      "kind": "native-product-screenshot",
-      "capture_date": "2026-10-08",
-      "image_edits": false,
-      "source": "https://github.com/higress-group/HiRoute/blob/5232db559bb8e856d44549d5e1488c7cf4f78d83/news/assets/launch-smart-saving-zh.png",
-      "data_origin": "Unsaved native configuration demonstration, not a new model run",
-      "public_source_blob_verified": true
+      "width": 2522,
+      "height": 1980,
+      "bytes": 1697146,
+      "sha256": "4048c9f46a6568cabfa495c3497d020100148febb5f657f14ac1d1eca804fb30",
+      "kind": "user-provided-product-screenshots",
+      "received_date": "2026-10-14",
+      "composition": "Original screenshot 3 copied unchanged"
     },
     {
       "file": "independent-questions-zh.png",
@@ -76,6 +73,28 @@
       "date": "2026-10-12",
       "measurements": false,
       "product_screenshot": false
+    },
+    {
+      "file": "feedback-routing-zh.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1675653,
+      "sha256": "ff74eee0bbf56271704324a9bad87ed83043eb3197f52afdfc069615bd0183ad",
+      "kind": "generated-explanatory-slide",
+      "tool": "image_gen",
+      "date": "2026-10-14",
+      "measurements": false,
+      "product_screenshot": false
+    },
+    {
+      "file": "desktop-custom-branches-zh.png",
+      "width": 3480,
+      "height": 1980,
+      "bytes": 2484219,
+      "sha256": "d161a5d10b50f266b06a94e33bfef84a1cb7477f163e5d3c2cf27f4f426b8bdf",
+      "kind": "user-provided-product-screenshots",
+      "received_date": "2026-10-14",
+      "composition": "Original screenshots 1 and 2 placed left to right at native resolution with a 24 px white gap; no cropping or content alteration"
     }
   ]
 }
