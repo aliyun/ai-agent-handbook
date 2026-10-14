@@ -102,20 +102,6 @@
       "format_conversion": "Native JPEG capture decoded to PNG; no cropping, retouching or compositing",
       "data_origin": "Native unsaved writing/review configuration; review task condition and regular/primary groups",
       "saved_or_enabled": false
-    },
-    {
-      "file": "desktop-branch-judgment-zh.png",
-      "width": 2400,
-      "height": 1626,
-      "bytes": 635613,
-      "sha256": "f9436d74d07053497bf0da9e409c7544ac12f1041fa77809eb8c37fd38793d34",
-      "kind": "native-product-screenshot",
-      "capture_date": "2026-10-14",
-      "tool": "cua_repl native HiRoute app screenshot",
-      "image_edits": false,
-      "format_conversion": "Native JPEG capture decoded to PNG; no cropping, retouching or compositing",
-      "data_origin": "Same unsaved review branch; independent thresholds 0.85/0.6 and Chinese degree prompts",
-      "saved_or_enabled": false
     }
   ]
 }
