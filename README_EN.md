@@ -2,7 +2,7 @@
 
 [中文](./README.md) | English
 
-Following the agent lifecycle—from architecture and building to operation, governance, and optimization—we share the experience and lessons we have gained from deploying enterprise agents. If this white paper helps individuals learn or organizations put agents into practice, we would be deeply grateful.
+Organized around the Agent application lifecycle (architecture, building, operations, governance, and optimization), this open-source project gathers Alibaba Cloud's practical experience, lessons learned, and insights from bringing enterprise-grade Agents into production. We add the latest internal practices every week and revise published content from time to time. We'd be honored if this project helps, even a little, with your own learning or your company's Agent rollout.
 
 We dedicate this project to everyone contributing to the development of AI.
 
@@ -161,7 +161,7 @@ Thanks to everyone who has helped with architecture, writing, case studies, and 
 | Runtime | 赵庆杰, 李诗波, 林清山, 黄晓萌, 张添翼, 赵源筱, 孙校, 宋震, 胡庆达, 柳遵飞, 朱桐, 余华峰, 罗鑫, 孔可青 |
 | Governance | 肖长军, 周洋, 张磊, 王方, 张海彬, 程书意, 刘子明, 饶子昊, 任懿, 杨永, 王硕, 马昕, 刘宇轩, 杨翊 |
 | Optimization | 张寒萌, 李盛荣, 王亚宁, 孙坚运, 马云雷, 王桢, 郑前祎, 刘航, 陈新 |
-| Practice | 杨涛, 朱颜, 余艾琳, 胡峻，姜剑，张添翼，赵彬、周远航 |
+| Practice | 杨涛, 朱颜, 余艾琳, 胡峻，姜剑，张添翼，赵彬、周远航、郑天 |
 | Conclusion and Outlook | 林演 |
 
 ### External Contributors
