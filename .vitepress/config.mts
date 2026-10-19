@@ -24,7 +24,13 @@ export default defineConfig({
   // A book's sidebar contains many long chapters; fetch each when opened.
   router: { prefetchLinks: false },
   lastUpdated: true,
-  srcExclude: ["node_modules/**", "scripts/**", "tests/**", "WEBSITE.md"],
+  srcExclude: [
+    "node_modules/**",
+    "scripts/**",
+    "tests/**",
+    "WEBSITE.md",
+    "共读微信群.md",
+  ],
   rewrites: Object.fromEntries(pages.map((p) => [p.source, p.route + ".md"])),
   head: [
     [
