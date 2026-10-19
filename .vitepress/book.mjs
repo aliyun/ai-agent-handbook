@@ -228,6 +228,22 @@ for (const part of parts) {
     topic.sourceDirectory = "06-case-study/Jev 专题";
     part.pages.push(topic);
     readingOrder.push(topic, ...topic.children);
+
+    const personalAgent = page(
+      "website/case-personal-agent.md",
+      "cases/personal-agent/index",
+      { chapter: "personal-agent", part: part.title },
+    );
+    personalAgent.children = [
+      page(
+        "06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md",
+        "cases/personal-agent/observations",
+        { chapter: "personal-agent", part: part.title },
+      ),
+    ];
+    personalAgent.sourceDirectory = "06-case-study/Personal Agent 专题";
+    part.pages.push(personalAgent);
+    readingOrder.push(personalAgent, ...personalAgent.children);
   }
 }
 
