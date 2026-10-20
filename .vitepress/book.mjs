@@ -229,6 +229,22 @@ for (const part of parts) {
     part.pages.push(topic);
     readingOrder.push(topic, ...topic.children);
 
+    const inference = page(
+      "website/case-inference.md",
+      "cases/inference/index",
+      { chapter: "inference", part: part.title },
+    );
+    inference.children = [
+      page(
+        "06-case-study/推理框架专题/深入浅出推理框架.md",
+        "cases/inference/intro",
+        { chapter: "inference", part: part.title },
+      ),
+    ];
+    inference.sourceDirectory = "06-case-study/推理框架专题";
+    part.pages.push(inference);
+    readingOrder.push(inference, ...inference.children);
+
     const personalAgent = page(
       "website/case-personal-agent.md",
       "cases/personal-agent/index",
