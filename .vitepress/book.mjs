@@ -110,7 +110,7 @@ const caseGroups = [
       ["minimax", "MiniMax"],
       ["shinewing", "会计师事务所"],
       ["bilibili", "哔哩哔哩"],
-      ["data-agent", "运营分析"],
+      ["topsports", "从单点探索"],
     ],
   },
 ];

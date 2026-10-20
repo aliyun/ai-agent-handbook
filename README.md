@@ -96,7 +96,7 @@
 | 实践篇 | [第 25 章　研发效能](<./06-case-study/第25章 研发效能/>) | 代码审查、缺陷检测、补丁交付、研发协作与端到端交付实践。 |
 | 实践篇 | [第 26 章　设计工程](<./06-case-study/第26章 设计工程/>) | Vibe Designing 与 GenUI 的设计范式和工程实践。 |
 | 实践篇 | [第 27 章　运维、安全与企业 IT](<./06-case-study/第27章 运维、安全与企业IT/>) | 汽车、连锁零售和企业软件的大规模智能运维实践。 |
-| 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和 Data Agent 实践。 |
+| 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和零售门店的企业级智能体实践。 |
 | 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
 | 实践篇 | [Jev 专题](<./06-case-study/Jev 专题/>) | Jev 的模型解析、接口示例与可复用的决策模式。 |
 | 实践篇 | [Personal Agent 专题](<./06-case-study/Personal Agent 专题/>) | Personal Agent 的产品路线、技术挑战与商业化方向。 |
@@ -121,7 +121,7 @@
 | 第 28 章　客户、销售与运营 | [MiniMax 构建海量长周期记忆数据底座的实践](<./06-case-study/第28章 客户、销售与运营/MiniMax 构建海量长周期记忆数据底座的实践.md>) |
 | 第 28 章　客户、销售与运营 | [会计师事务所信永中和的办公提效探索](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
 | 第 28 章　客户、销售与运营 | [哔哩哔哩构建全域内容洞察的实践](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
-| 第 28 章　客户、销售与运营 | [运营分析 Data Agent 实践](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
+| 第 28 章　客户、销售与运营 | [从单点探索到规模化运营：滔搏体育基于 AgentCore 与 AgentLoop 的企业级智能体实践](<./06-case-study/第28章 客户、销售与运营/从单点探索到规模化运营：滔搏体育基于 AgentCore 与 AgentLoop 的企业级智能体实践.md>) |
 | Jev 专题 | [深度解析 Jev 模型：如何快速做结构化决策](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 | Jev 专题 | [HiRoute：Jev 模型智能路由实践](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
 | Personal Agent 专题 | [Personal Agent 产品技术与商业观察](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |

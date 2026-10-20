@@ -93,7 +93,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Practice | [25. Software Engineering Productivity](<./06-case-study/第25章 研发效能/>) | Code review, defect detection, patch delivery, and end-to-end engineering. |
 | Practice | [26. Design Engineering](<./06-case-study/第26章 设计工程/>) | Vibe Designing and GenUI. |
 | Practice | [27. Operations, Security, and Enterprise IT](<./06-case-study/第27章 运维、安全与企业IT/>) | Production operations in automotive, retail, and enterprise software. |
-| Practice | [28. Customer, Sales, and Operations](<./06-case-study/第28章 客户、销售与运营/>) | Long-term memory, content insights, office productivity, and data agents. |
+| Practice | [28. Customer, Sales, and Operations](<./06-case-study/第28章 客户、销售与运营/>) | Long-term memory, content insights, office productivity, and enterprise agents for retail stores. |
 | Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | Open-source competition projects and agent-infrastructure exploration. |
 | Practice | [Jev: Structured Decision Making](<./06-case-study/Jev 专题/>) | An introduction to Jev, an illustrative API example, and links to reusable decision patterns. |
 | Practice | [Personal Agent: Product, Technology, and Business Observations](<./06-case-study/Personal Agent 专题/>) | Product approaches, technical challenges, and business models of Personal Agents. |
@@ -118,7 +118,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | 28. Customer and operations | [MiniMax's Long-Horizon Memory Data Foundation](<./06-case-study/第28章 客户、销售与运营/MiniMax 构建海量长周期记忆数据底座的实践.md>) |
 | 28. Customer and operations | [Office Productivity at ShineWing, an Accounting Firm](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
 | 28. Customer and operations | [Bilibili's Cross-Platform Content Insights](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
-| 28. Customer and operations | [Data Agent for Operational Analytics](<./06-case-study/第28章 客户、销售与运营/运营分析 Data Agent 实践.md>) |
+| 28. Customer and operations | [Scaling Enterprise Agents at Topsports](<./06-case-study/第28章 客户、销售与运营/从单点探索到规模化运营：滔搏体育基于 AgentCore 与 AgentLoop 的企业级智能体实践.md>) |
 | Jev topic | [Understanding Jev: Fast Structured Decisions](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 | Jev topic | [HiRoute: Intelligent Model Routing with Jev](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
 | Personal Agent topic | [Personal Agent: Product, Technology, and Business Observations](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
