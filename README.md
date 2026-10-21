@@ -62,7 +62,7 @@
 | [运行篇](./03-run/) | `03-run/` | 第 7–12 章 | 从单 Agent 稳定运行扩展到异步、多 Agent 与分布式通信。 |
 | [治理篇](./04-governance/) | `04-governance/` | 第 13–16 章 | 让运行可见、行为有边界、资产可管理、上线前可验证。 |
 | [调优篇](./05-optimization/) | `05-optimization/` | 第 17–24 章 | 从模型与 Agent 两条主线构建持续优化闭环。 |
-| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章、Jev 专题、推理框架专题、Personal Agent 专题 | 企业实践、垂直场景、Agent Infra 前沿探索、结构化决策、推理框架科普与 Personal Agent 观察。 |
+| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章、Jev 专题、Personal Agent 专题 | 企业实践、垂直场景、Agent Infra 前沿探索、结构化决策与 Personal Agent 观察。 |
 | [总结与展望篇](./07-conclusion/) | `07-conclusion/` | 第 30 章 | 从 Agentic Application 走向 Agentic OS。 |
 
 ### 章节导航
@@ -85,7 +85,7 @@
 | 治理篇 | [第 14 章　Agent 安全](<./04-governance/第 14 章　Agent 安全.md>) | Prompt Injection、身份鉴权、逐次校验、高危授权与数据出域防护。 |
 | 治理篇 | [第 15 章　AI 资产的发现与管理](<./04-governance/第 15 章　AI 资产的发现与管理.md>) | Prompt、Skill、MCP 与 Agent 的注册、版本、发现、依赖和发布管理。 |
 | 治理篇 | [第 16 章　Agent 行为生成与质量验证](<./04-governance/第 16 章　Agent 行为生成与质量验证.md>) | 用户模拟、环境模拟、场景配置与上线前的 Agent Simulation。 |
-| 调优篇 | [第 17 章　模型调优](<./05-optimization/第 17 章　模型调优.md>) | 模型问题的归因判据、SFT、Agentic RL、模型蒸馏与上线验收。 |
+| 调优篇 | [第 17 章　模型调优](<./05-optimization/第 17 章　模型调优/>) | 模型问题的归因判据、SFT、Agentic RL、模型蒸馏与上线验收，以及推理框架的基础原理。 |
 | 调优篇 | [第 18 章　Agent 调优总览](<./05-optimization/第 18 章　Agent 调优总览.md>) | Agent 调优对象、方法边界与数据飞轮全景。 |
 | 调优篇 | [第 19 章　Agent 轨迹数据](<./05-optimization/第 19 章　Agent 轨迹数据.md>) | 从 Trace 到 Trajectory，组织可复用的行为与决策证据。 |
 | 调优篇 | [第 20 章　Agent 运行时数据处理](<./05-optimization/第 20 章　Agent 运行时数据处理.md>) | 运行数据采集、清洗、加工与声明式数据 Pipeline。 |
@@ -99,7 +99,6 @@
 | 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和零售门店的企业级智能体实践。 |
 | 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
 | 实践篇 | [Jev 专题](<./06-case-study/Jev 专题/>) | Jev 的模型解析、接口示例与可复用的决策模式。 |
-| 实践篇 | [推理框架专题](<./06-case-study/推理框架专题/>) | 推理框架与模型、智能体的关系，主流开源推理框架的发展，以及一个请求在推理框架内部的处理过程。 |
 | 实践篇 | [Personal Agent 专题](<./06-case-study/Personal Agent 专题/>) | Personal Agent 的产品路线、技术挑战与商业化方向。 |
 | 总结与展望篇 | [第 30 章　从 Agentic Application 到 Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | 从单个应用走向可协作、可治理、可持续演进的智能系统。 |
 
@@ -125,13 +124,12 @@
 | 第 28 章　客户、销售与运营 | [从单点探索到规模化运营：滔搏体育的企业级智能体实践](<./06-case-study/第28章 客户、销售与运营/从单点探索到规模化运营：滔搏体育的企业级智能体实践.md>) |
 | Jev 专题 | [深度解析 Jev 模型：如何快速做结构化决策](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 | Jev 专题 | [HiRoute：Jev 模型智能路由实践](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
-| 推理框架专题 | [深入浅出推理框架](<./06-case-study/推理框架专题/深入浅出推理框架.md>) |
 | Personal Agent 专题 | [Personal Agent 产品技术与商业观察](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
 
 ### 推荐阅读路径
 
 - **第一次系统了解企业 Agent**：调研报告 → 第 1–2 章 → 第 3–6 章 → 第 13–16 章。
-- **正在把 Agent 接入生产**：第 7–9 章 → 第 13–14 章 → 第 18–23 章；自行部署模型时，可先读推理框架专题，再读第 13 章 13.5.2 节。
+- **正在把 Agent 接入生产**：第 7–9 章 → 第 13–14 章 → 第 18–23 章；自行部署模型时，可先读第 17 章《深入浅出推理框架》，再读第 13 章 13.5.2 节。
 - **正在建设多 Agent 系统**：第 4–6 章 → 第 10–12 章 → 第 13、16 章。
 - **负责评估与持续优化**：第 13 章 → 第 18–23 章 → 对应领域实践案例。
 - **负责选型或项目立项**：调研报告 → 第 1–3 章 → 实践篇 → 第 30 章。

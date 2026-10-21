@@ -71,6 +71,19 @@ export const parts = [
   },
 ];
 
+// Numbered chapters made of several articles: a landing page keeps the original
+// chapter URL, and each article gets a stable slug under it.
+const chapterGroups = [
+  {
+    chapter: 17,
+    landing: "website/chapter-17.md",
+    articles: [
+      ["overview", "模型调优综述"],
+      ["inference", "深入浅出推理框架"],
+    ],
+  },
+];
+
 // Stable public slugs are independent of Chinese filenames and editorial titles.
 const caseGroups = [
   {
@@ -165,8 +178,35 @@ for (const part of parts) {
   readingOrder.push(part.guide);
   for (const number of part.chapters) {
     const group = caseGroups.find((g) => g.chapter === number);
+    const articleGroup = chapterGroups.find((g) => g.chapter === number);
     let chapter;
-    if (group) {
+    if (articleGroup) {
+      const route = `${part.id}/chapter-${String(number).padStart(2, "0")}`;
+      chapter = page(articleGroup.landing, route, {
+        chapter: number,
+        part: part.title,
+      });
+      const dir = exactlyOne(
+        files.filter(
+          (f) => !f.endsWith(".md") && new RegExp(`^第\\s*${number}\\s*章`).test(f),
+        ),
+        `chapter ${number} directory`,
+      );
+      const articles = readdirSync(path.join(root, part.dir, dir)).filter((f) =>
+        f.endsWith(".md"),
+      );
+      chapter.children = articleGroup.articles.map(([slug, prefix]) =>
+        page(
+          `${part.dir}/${dir}/${exactlyOne(
+            articles.filter((f) => f.startsWith(prefix)),
+            prefix,
+          )}`,
+          `${route}/${slug}`,
+          { chapter: number, part: part.title },
+        ),
+      );
+      chapter.sourceDirectory = `${part.dir}/${dir}`;
+    } else if (group) {
       chapter = page(
         `website/case-${number}.md`,
         `cases/chapter-${number}/index`,
@@ -228,22 +268,6 @@ for (const part of parts) {
     topic.sourceDirectory = "06-case-study/Jev 专题";
     part.pages.push(topic);
     readingOrder.push(topic, ...topic.children);
-
-    const inference = page(
-      "website/case-inference.md",
-      "cases/inference/index",
-      { chapter: "inference", part: part.title },
-    );
-    inference.children = [
-      page(
-        "06-case-study/推理框架专题/深入浅出推理框架.md",
-        "cases/inference/intro",
-        { chapter: "inference", part: part.title },
-      ),
-    ];
-    inference.sourceDirectory = "06-case-study/推理框架专题";
-    part.pages.push(inference);
-    readingOrder.push(inference, ...inference.children);
 
     const personalAgent = page(
       "website/case-personal-agent.md",
