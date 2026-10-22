@@ -255,23 +255,23 @@ for (const part of parts) {
     });
     topic.children = [
       page(
-        "06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md",
+        "06-case-study/Jev 专题/综述：深度解析 Jev 模型：如何快速做结构化决策.md",
         "cases/jev/deep-dive",
         { chapter: "jev", part: part.title },
       ),
       page(
-        "06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md",
-        "cases/jev/hiroute",
-        { chapter: "jev", part: part.title },
-      ),
-      page(
-        "06-case-study/Jev 专题/让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程.md",
+        "06-case-study/Jev 专题/开发框架：让 Agent 学会判断，从 Jev 接入到完整 Harness 决策流程.md",
         "cases/jev/harness-decisions",
         { chapter: "jev", part: part.title },
       ),
       page(
-        "06-case-study/Jev 专题/阿里云 AgentCore 高代码最佳实践：基于 AgentScope Java 与百炼决策模型构建智能工单分诊助手.md",
+        "06-case-study/Jev 专题/基于Jev 范式决策模型，构建智能工单分诊助手.md",
         "cases/jev/agentcore-ticket-triage",
+        { chapter: "jev", part: part.title },
+      ),
+      page(
+        "06-case-study/Jev 专题/Jev 模型智能路由实践.md",
+        "cases/jev/hiroute",
         { chapter: "jev", part: part.title },
       ),
     ];

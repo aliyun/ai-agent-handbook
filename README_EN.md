@@ -119,10 +119,10 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | 28. Customer and operations | [Office Productivity at ShineWing, an Accounting Firm](<./06-case-study/第28章 客户、销售与运营/会计师事务所信永中和的办公提效探索.md>) |
 | 28. Customer and operations | [Bilibili's Cross-Platform Content Insights](<./06-case-study/第28章 客户、销售与运营/哔哩哔哩构建全域内容洞察的实践.md>) |
 | 28. Customer and operations | [Scaling Enterprise Agents at Topsports](<./06-case-study/第28章 客户、销售与运营/从单点探索到规模化运营：滔搏体育的企业级智能体实践.md>) |
-| Jev topic | [Understanding Jev: Fast Structured Decisions](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
-| Jev topic | [HiRoute: Intelligent Model Routing with Jev](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
-| Jev topic | [Teaching Agents to Decide: From JEV Integration to a Complete Harness Decision Workflow](<./06-case-study/Jev 专题/让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程.md>) |
-| Jev topic | [AgentCore High-Code Practice: Building a Ticket Triage Assistant with AgentScope Java and a Model Studio Decision Model](<./06-case-study/Jev 专题/阿里云 AgentCore 高代码最佳实践：基于 AgentScope Java 与百炼决策模型构建智能工单分诊助手.md>) |
+| Jev topic | [Overview: Understanding Jev and Fast Structured Decisions](<./06-case-study/Jev 专题/综述：深度解析 Jev 模型：如何快速做结构化决策.md>) |
+| Jev topic | [Development Framework: Teaching Agents to Decide, from Jev Integration to a Complete Harness Decision Workflow](<./06-case-study/Jev 专题/开发框架：让 Agent 学会判断，从 Jev 接入到完整 Harness 决策流程.md>) |
+| Jev topic | [Building a Ticket Triage Assistant with a Jev-Style Decision Model](<./06-case-study/Jev 专题/基于Jev 范式决策模型，构建智能工单分诊助手.md>) |
+| Jev topic | [Intelligent Model Routing with Jev](<./06-case-study/Jev 专题/Jev 模型智能路由实践.md>) |
 | Personal Agent topic | [Personal Agent: Product, Technology, and Business Observations](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
 | Personal Agent topic | [From Personal Agents to Enterprise Agents: AgentScope's Agent as a Service Architecture](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
 

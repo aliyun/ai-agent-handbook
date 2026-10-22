@@ -1,6 +1,6 @@
-# 阿里云 AgentCore 高代码最佳实践：基于 AgentScope Java 与百炼决策模型构建智能工单分诊助手
+# 基于Jev 范式决策模型，构建智能工单分诊助手
 
-我们在《[让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程](<./让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程.md>)》分享过，如何在 AgentScope Java 接入 Jev 决策模型，将类型化请求、结果解析和校验封装在 JevClient 中。
+我们在《[开发框架：让 Agent 学会判断，从 Jev 接入到完整 Harness 决策流程](<./开发框架：让 Agent 学会判断，从 Jev 接入到完整 Harness 决策流程.md>)》分享过，如何在 AgentScope Java 接入 Jev 决策模型，将类型化请求、结果解析和校验封装在 JevClient 中。
 
 本文将以一个工单分诊助手为例，把开发、打包和上线的过程串起来：用 AgentScope Java 与百炼决策模型（国内网络无法使用 Jev）实现分诊，通过代码包部署到阿里云 AgentCore，再验证普通调用和流式调用。文章最后，再看这个助手如何加入 Team，参与任务分工与报告审核。
 
