@@ -98,7 +98,7 @@
 | 实践篇 | [第 27 章　运维、安全与企业 IT](<./06-case-study/第27章 运维、安全与企业IT/>) | 汽车、连锁零售和企业软件的大规模智能运维实践。 |
 | 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和零售门店的企业级智能体实践。 |
 | 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
-| 实践篇 | [Jev 专题](<./06-case-study/Jev 专题/>) | Jev 的模型解析、接口示例与可复用的决策模式。 |
+| 实践篇 | [Jev 专题](<./06-case-study/Jev 专题/>) | Jev 的模型解析、路由实践、接口示例与完整 Harness 决策流程。 |
 | 实践篇 | [Personal Agent 专题](<./06-case-study/Personal Agent 专题/>) | Personal Agent 的产品路线、技术挑战、商业化方向与 Agent as a Service 架构。 |
 | 总结与展望篇 | [第 30 章　从 Agentic Application 到 Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | 从单个应用走向可协作、可治理、可持续演进的智能系统。 |
 
@@ -124,6 +124,7 @@
 | 第 28 章　客户、销售与运营 | [从单点探索到规模化运营：滔搏体育的企业级智能体实践](<./06-case-study/第28章 客户、销售与运营/从单点探索到规模化运营：滔搏体育的企业级智能体实践.md>) |
 | Jev 专题 | [深度解析 Jev 模型：如何快速做结构化决策](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 | Jev 专题 | [HiRoute：Jev 模型智能路由实践](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
+| Jev 专题 | [让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程](<./06-case-study/Jev 专题/让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程.md>) |
 | Personal Agent 专题 | [Personal Agent 产品技术与商业观察](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
 | Personal Agent 专题 | [从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
 

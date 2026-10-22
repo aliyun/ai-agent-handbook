@@ -4,6 +4,8 @@
 
 HiRoute 实践介绍怎样通过百炼 System One 把任务判断与阶段胜任度反馈接到模型路由中，并通过公开实验核对成本、交付质量和实际执行。
 
+《让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程》介绍 AgentScope Java 的 JEV 接入方式，沿着工具选择、模型路由、执行防护、上下文治理、回答修订与轨迹评估，展示结构化判断如何进入完整任务流程，并提供 Java 与 Spring Boot 接入示例。
+
 <ChapterIndex chapter="jev" />
 
 ## 延伸实践

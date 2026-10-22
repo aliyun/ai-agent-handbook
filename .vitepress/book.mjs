@@ -264,6 +264,11 @@ for (const part of parts) {
         "cases/jev/hiroute",
         { chapter: "jev", part: part.title },
       ),
+      page(
+        "06-case-study/Jev 专题/让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程.md",
+        "cases/jev/harness-decisions",
+        { chapter: "jev", part: part.title },
+      ),
     ];
     topic.sourceDirectory = "06-case-study/Jev 专题";
     part.pages.push(topic);

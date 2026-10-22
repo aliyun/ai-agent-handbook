@@ -95,7 +95,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Practice | [27. Operations, Security, and Enterprise IT](<./06-case-study/第27章 运维、安全与企业IT/>) | Production operations in automotive, retail, and enterprise software. |
 | Practice | [28. Customer, Sales, and Operations](<./06-case-study/第28章 客户、销售与运营/>) | Long-term memory, content insights, office productivity, and enterprise agents for retail stores. |
 | Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | Open-source competition projects and agent-infrastructure exploration. |
-| Practice | [Jev: Structured Decision Making](<./06-case-study/Jev 专题/>) | An introduction to Jev, an illustrative API example, and links to reusable decision patterns. |
+| Practice | [Jev: Structured Decision Making](<./06-case-study/Jev 专题/>) | Model concepts, routing practices, API examples, and decision making throughout the harness lifecycle. |
 | Practice | [Personal Agent](<./06-case-study/Personal Agent 专题/>) | Product approaches, technical challenges, business models, and Agent as a Service architecture. |
 | Conclusion and Outlook | [30. From Agentic Application to Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | From individual applications toward collaborative, governable, evolving systems. |
 
@@ -121,6 +121,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | 28. Customer and operations | [Scaling Enterprise Agents at Topsports](<./06-case-study/第28章 客户、销售与运营/从单点探索到规模化运营：滔搏体育的企业级智能体实践.md>) |
 | Jev topic | [Understanding Jev: Fast Structured Decisions](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 | Jev topic | [HiRoute: Intelligent Model Routing with Jev](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
+| Jev topic | [Teaching Agents to Decide: From JEV Integration to a Complete Harness Decision Workflow](<./06-case-study/Jev 专题/让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程.md>) |
 | Personal Agent topic | [Personal Agent: Product, Technology, and Business Observations](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
 | Personal Agent topic | [From Personal Agents to Enterprise Agents: AgentScope's Agent as a Service Architecture](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
 
