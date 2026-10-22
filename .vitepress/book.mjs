@@ -269,6 +269,11 @@ for (const part of parts) {
         "cases/jev/harness-decisions",
         { chapter: "jev", part: part.title },
       ),
+      page(
+        "06-case-study/Jev 专题/阿里云 AgentCore 高代码最佳实践：基于 AgentScope Java 与百炼决策模型构建智能工单分诊助手.md",
+        "cases/jev/agentcore-ticket-triage",
+        { chapter: "jev", part: part.title },
+      ),
     ];
     topic.sourceDirectory = "06-case-study/Jev 专题";
     part.pages.push(topic);
