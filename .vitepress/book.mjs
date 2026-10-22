@@ -280,6 +280,11 @@ for (const part of parts) {
         "cases/personal-agent/observations",
         { chapter: "personal-agent", part: part.title },
       ),
+      page(
+        "06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md",
+        "cases/personal-agent/agentscope-aaas",
+        { chapter: "personal-agent", part: part.title },
+      ),
     ];
     personalAgent.sourceDirectory = "06-case-study/Personal Agent 专题";
     part.pages.push(personalAgent);

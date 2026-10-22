@@ -96,7 +96,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Practice | [28. Customer, Sales, and Operations](<./06-case-study/第28章 客户、销售与运营/>) | Long-term memory, content insights, office productivity, and enterprise agents for retail stores. |
 | Practice | [29. GOAI Agent Infra: Frontiers in Multi-Agent Collaboration](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | Open-source competition projects and agent-infrastructure exploration. |
 | Practice | [Jev: Structured Decision Making](<./06-case-study/Jev 专题/>) | An introduction to Jev, an illustrative API example, and links to reusable decision patterns. |
-| Practice | [Personal Agent: Product, Technology, and Business Observations](<./06-case-study/Personal Agent 专题/>) | Product approaches, technical challenges, and business models of Personal Agents. |
+| Practice | [Personal Agent](<./06-case-study/Personal Agent 专题/>) | Product approaches, technical challenges, business models, and Agent as a Service architecture. |
 | Conclusion and Outlook | [30. From Agentic Application to Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | From individual applications toward collaborative, governable, evolving systems. |
 
 ### Case-study guide
@@ -122,6 +122,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Jev topic | [Understanding Jev: Fast Structured Decisions](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 | Jev topic | [HiRoute: Intelligent Model Routing with Jev](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
 | Personal Agent topic | [Personal Agent: Product, Technology, and Business Observations](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
+| Personal Agent topic | [From Personal Agents to Enterprise Agents: AgentScope's Agent as a Service Architecture](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
 
 ### Suggested reading paths
 

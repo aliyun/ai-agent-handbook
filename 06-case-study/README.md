@@ -11,6 +11,7 @@
 - [深度解析 Jev 模型：如何快速做结构化决策](<./Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>)
 - [HiRoute：Jev 模型智能路由实践](<./Jev 专题/HiRoute：Jev 模型智能路由实践.md>)
 
-[Personal Agent 专题](<./Personal Agent 专题/>)关注 2026 年集中出现的 Personal Agent 产品，梳理十款产品的设计路线、全天候运行带来的技术挑战，以及 C 端与 B 端的商业化方向：
+[Personal Agent 专题](<./Personal Agent 专题/>)关注 Personal Agent 的产品路线、技术挑战与商业化方向，以及支撑个人助手和企业智能体持续工作的 Agent as a Service 架构：
 
 - [Personal Agent 产品技术与商业观察](<./Personal Agent 专题/Personal Agent 产品技术与商业观察.md>)
+- [从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构](<./Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>)

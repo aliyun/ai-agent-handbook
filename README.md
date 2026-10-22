@@ -99,7 +99,7 @@
 | 实践篇 | [第 28 章　客户、销售与运营](<./06-case-study/第28章 客户、销售与运营/>) | 长周期记忆、内容洞察、办公提效和零售门店的企业级智能体实践。 |
 | 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
 | 实践篇 | [Jev 专题](<./06-case-study/Jev 专题/>) | Jev 的模型解析、接口示例与可复用的决策模式。 |
-| 实践篇 | [Personal Agent 专题](<./06-case-study/Personal Agent 专题/>) | Personal Agent 的产品路线、技术挑战与商业化方向。 |
+| 实践篇 | [Personal Agent 专题](<./06-case-study/Personal Agent 专题/>) | Personal Agent 的产品路线、技术挑战、商业化方向与 Agent as a Service 架构。 |
 | 总结与展望篇 | [第 30 章　从 Agentic Application 到 Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | 从单个应用走向可协作、可治理、可持续演进的智能系统。 |
 
 ### 实践案例导航
@@ -125,6 +125,7 @@
 | Jev 专题 | [深度解析 Jev 模型：如何快速做结构化决策](<./06-case-study/Jev 专题/深度解析 Jev 模型：如何快速做结构化决策.md>) |
 | Jev 专题 | [HiRoute：Jev 模型智能路由实践](<./06-case-study/Jev 专题/HiRoute：Jev 模型智能路由实践.md>) |
 | Personal Agent 专题 | [Personal Agent 产品技术与商业观察](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
+| Personal Agent 专题 | [从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
 
 ### 推荐阅读路径
 
