@@ -21,7 +21,7 @@
   "devDependencies": {
     "@playwright/test": "1.64.0",
     "cheerio": "1.1.2",
-    "markdown-it": "14.3.2",
+    "markdown-it": "14.3.3",
     "mermaid": "12.1.0",
     "vitepress": "1.6.4",
     "vue": "3.5.43"
