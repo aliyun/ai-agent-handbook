@@ -2,7 +2,7 @@
 
 [中文](./README.md) | English
 
-Organized around the Agent application lifecycle (architecture, building, operations, governance, and optimization), this open-source project gathers Alibaba Cloud's practical experience, lessons learned, and insights from bringing enterprise-grade Agents into production. We add the latest internal practices every week and revise published content from time to time. We'd be honored if this project helps, even a little, with your own learning or your company's Agent rollout.
+Organized around the Agent application lifecycle (architecture, building, operations, governance, and optimization), this open-source project gathers practical experience, lessons learned, and insights from Alibaba Cloud, enterprise customers on the cloud, and developers in the open-source community as they bring enterprise-grade Agents into production. We add the latest practices every week and revise published content from time to time. We'd be honored if this project helps, even a little, with your own learning or your company's Agent rollout.
 
 We dedicate this project to everyone contributing to the development of AI.
 
