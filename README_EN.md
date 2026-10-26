@@ -54,6 +54,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | --- | --- | --- | --- |
 | [2026 Agent Developer Survey Report](./2026-agent-survey-report.md) | Repository root | — | Enterprise development, production adoption, architecture choices, toolchains, governance, and evaluation. |
 | [Preface](./00-preface/00-preface.md) | `00-preface/` | — | The white paper's structure and background. |
+| [Putting Intelligence to Work: From Creating Intelligence to Using It Well](<./00-preface/智以致用：从造出智能，到用好智能.md>) | `00-preface/` | — | From intelligent capabilities to reliable delivery through multimodality, full-stack systems, and harness engineering. |
 | [Architecture](./01-architecture/) | `01-architecture/` | 1–2 | Define the system, select an application form, assess maturity, and establish a reference architecture. |
 | [Building](./02-build/) | `02-build/` | 3–6 | Organize tasks, information, and actions around the harness. |
 | [Runtime](./03-run/) | `03-run/` | 7–12 | From reliable single-agent execution to asynchronous and distributed multi-agent systems. |

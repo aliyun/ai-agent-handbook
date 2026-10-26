@@ -163,6 +163,9 @@ function page(source, route, extra = {}) {
 
 export const readingOrder = [
   page("00-preface/00-preface.md", "preface", { part: "开始阅读" }),
+  page("00-preface/智以致用：从造出智能，到用好智能.md", "preface/putting-intelligence-to-work", {
+    part: "开始阅读",
+  }),
   page("2026-agent-survey-report.md", "survey", { part: "开始阅读" }),
 ];
 
@@ -323,7 +326,7 @@ export const sidebar = [
     text: "开始阅读",
     items: [
       { text: "阅读指南", link: "/reading-guide.html" },
-      ...readingOrder.slice(0, 2).map((p) => ({ text: p.title, link: p.href })),
+      ...readingOrder.filter((p) => p.part === "开始阅读").map((p) => ({ text: p.title, link: p.href })),
     ],
   },
   ...parts.map((part) => ({
