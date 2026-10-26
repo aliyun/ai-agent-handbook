@@ -96,6 +96,7 @@ const caseGroups = [
       ["polardb-x", "从报警到自动修复"],
       ["cloud-communications", "从编码提效"],
       ["security-engineering", "从评测驱动"],
+      ["agentic-soc-organization", "Agentic SOC 安全产品"],
       ["engineering-team", "多 Agent 组成研发小队"],
     ],
   },

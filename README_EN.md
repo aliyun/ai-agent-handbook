@@ -109,6 +109,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | 25. Software engineering | [From Alerts to Automatic Repair: PolarDB-X Loop Engineering](<./06-case-study/第25章 研发效能/从报警到自动修复，PolarDB-X 的 Loop 工程实践.md>) |
 | 25. Software engineering | [From Coding Productivity to End-to-End Delivery: Human-Agent Collaboration in Cloud Communications](<./06-case-study/第25章 研发效能/从编码提效到端到端交付，云通信的人机协作实践.md>) |
 | 25. Software engineering | [Evaluation-Driven Delivery: AI Agent Security Product Development](<./06-case-study/第25章 研发效能/从评测驱动到端到端交付：AI Agent 安全产品研发提效实践.md>) |
+| 25. Software engineering | [Organizational Restructuring Behind the Self-Evolution of Agentic SOC Security Products](<./06-case-study/第25章 研发效能/Agentic SOC 安全产品⾃进化背后的组织重构.md>) |
 | 25. Software engineering | [A Multi-Agent Engineering Team: From Writing Code to End-to-End Delivery](<./06-case-study/第25章 研发效能/多 Agent 组成研发小队：AI 研发如何从写代码走向端到端交付.md>) |
 | 26. Design engineering | [GenUI: From Answers to Deliverables](<./06-case-study/第26章 设计工程/GenUI：让 Agent 从给出答案走向交付结果.md>) |
 | 26. Design engineering | [Vibe Designing: An Intent-Driven AI Design Paradigm](<./06-case-study/第26章 设计工程/Vibe Designing：意图驱动的AI设计范式进化.md>) |
