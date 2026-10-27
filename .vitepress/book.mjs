@@ -98,6 +98,7 @@ const caseGroups = [
       ["security-engineering", "从评测驱动"],
       ["agentic-soc-organization", "Agentic SOC 安全产品"],
       ["engineering-team", "多 Agent 组成研发小队"],
+      ["aiops-agent-evaluation", "完整还原"],
     ],
   },
   {
