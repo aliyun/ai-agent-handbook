@@ -87,7 +87,7 @@
 | 治理篇 | [第 15 章　AI 资产的发现与管理](<./04-governance/第 15 章　AI 资产的发现与管理.md>) | Prompt、Skill、MCP 与 Agent 的注册、版本、发现、依赖和发布管理。 |
 | 治理篇 | [第 16 章　Agent 行为生成与质量验证](<./04-governance/第 16 章　Agent 行为生成与质量验证.md>) | 用户模拟、环境模拟、场景配置与上线前的 Agent Simulation。 |
 | 调优篇 | [第 17 章　模型调优](<./05-optimization/第 17 章　模型调优/>) | 模型问题的归因判据、SFT、Agentic RL、模型蒸馏与上线验收，以及推理框架的基础原理。 |
-| 调优篇 | [第 18 章　Agent 调优总览](<./05-optimization/第 18 章　Agent 调优总览.md>) | Agent 调优对象、方法边界与数据飞轮全景。 |
+| 调优篇 | [第 18 章　Agent 调优总览和实践](<./05-optimization/第 18 章　Agent 调优总览和实践/>) | Agent 调优对象、方法边界与数据飞轮全景，以及数据飞轮平台的选型与接入实践。 |
 | 调优篇 | [第 19 章　Agent 轨迹数据](<./05-optimization/第 19 章　Agent 轨迹数据.md>) | 从 Trace 到 Trajectory，组织可复用的行为与决策证据。 |
 | 调优篇 | [第 20 章　Agent 运行时数据处理](<./05-optimization/第 20 章　Agent 运行时数据处理.md>) | 运行数据采集、清洗、加工与声明式数据 Pipeline。 |
 | 调优篇 | [第 21 章　Agent 黄金数据集](<./05-optimization/第 21 章　Agent 黄金数据集.md>) | 构建带输入、轨迹、结果与判据的高质量评估数据资产。 |

@@ -84,7 +84,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Governance | [15. Discovery and Management of AI Assets](<./04-governance/第 15 章　AI 资产的发现与管理.md>) | Registration, versioning, discovery, dependencies, and releases for prompts, skills, MCP, and agents. |
 | Governance | [16. Agent Behavior Generation and Quality Validation](<./04-governance/第 16 章　Agent 行为生成与质量验证.md>) | User and environment simulation, scenarios, and pre-release validation. |
 | Optimization | [17. Model Tuning](<./05-optimization/第 17 章　模型调优/>) | Root-cause criteria, SFT, agentic RL, distillation, production acceptance, and inference framework basics. |
-| Optimization | [18. Overview of Agent Optimization](<./05-optimization/第 18 章　Agent 调优总览.md>) | Optimization targets, method boundaries, and the data flywheel. |
+| Optimization | [18. Agent Optimization: Overview and Practice](<./05-optimization/第 18 章　Agent 调优总览和实践/>) | Optimization targets, method boundaries, and the data flywheel, plus a first-hand account of selecting and onboarding a flywheel platform. |
 | Optimization | [19. Agent Trajectory Data](<./05-optimization/第 19 章　Agent 轨迹数据.md>) | Turning traces into reusable behavioral and decision evidence. |
 | Optimization | [20. Processing Agent Runtime Data](<./05-optimization/第 20 章　Agent 运行时数据处理.md>) | Collection, cleaning, processing, and declarative data pipelines. |
 | Optimization | [21. Golden Datasets for Agents](<./05-optimization/第 21 章　Agent 黄金数据集.md>) | Evaluation assets with inputs, trajectories, outcomes, and judging criteria. |

@@ -82,6 +82,14 @@ const chapterGroups = [
       ["inference", "深入浅出推理框架"],
     ],
   },
+  {
+    chapter: 18,
+    landing: "website/chapter-18.md",
+    articles: [
+      ["overview", "Agent 调优总览"],
+      ["flywheel-platform", "Agent 数据飞轮平台的选型和实践"],
+    ],
+  },
 ];
 
 // Stable public slugs are independent of Chinese filenames and editorial titles.
