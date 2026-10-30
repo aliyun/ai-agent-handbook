@@ -86,8 +86,8 @@ const chapterGroups = [
     chapter: 18,
     landing: "website/chapter-18.md",
     articles: [
-      ["overview", "Agent 调优总览"],
-      ["flywheel-platform", "Agent 数据飞轮平台的选型和实践"],
+      ["overview", "01 Agent 调优总览"],
+      ["flywheel-platform", "02 Agent 数据飞轮平台的选型和实践"],
     ],
   },
 ];
