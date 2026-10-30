@@ -78,8 +78,8 @@ const chapterGroups = [
     chapter: 17,
     landing: "website/chapter-17.md",
     articles: [
-      ["overview", "模型调优综述"],
-      ["inference", "深入浅出推理框架"],
+      ["overview", "01 模型调优综述"],
+      ["inference", "02 深入浅出推理框架"],
     ],
   },
   {
