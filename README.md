@@ -134,13 +134,6 @@
 | Personal Agent 专题 | [Personal Agent 产品技术与商业观察](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
 | Personal Agent 专题 | [从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
 
-### 推荐阅读路径
-
-- **第一次系统了解企业 Agent**：调研报告 → 第 1–2 章 → 第 3–6 章 → 第 13–16 章。
-- **正在把 Agent 接入生产**：第 7–9 章 → 第 13–14 章 → 第 18–23 章；自行部署模型时，可先读第 17 章《深入浅出推理框架》，再读第 13 章 13.5.2 节。
-- **正在建设多 Agent 系统**：第 4–6 章 → 第 10–12 章 → 第 13、16 章。
-- **负责评估与持续优化**：第 13 章 → 第 18–23 章 → 对应领域实践案例。
-- **负责选型或项目立项**：调研报告 → 第 1–3 章 → 实践篇 → 第 30 章。
 
 ## 4. 下一步规划
 
