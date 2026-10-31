@@ -6,7 +6,7 @@
 
 项目围绕 Agent 的架构、构建、运行、治理和调优的整个应用生命周期，总结了阿里云、云上的企业客户、开源社区的开发者用户在企业级 Agent 落地过程中的实践经验、教训和体会。我们每周会收录最新的实践，并对已发布的内容进行不定期更新。如果该项目能对个人学习和企业落地 Agent 起到一点点的促进作用，这将是我们莫大的荣幸。
 
-谨以此项目，献给参与 AI 建设的所有同行者们。
+谨以此项目，献给参与 AI 建设的同行者们。
 
 [在线阅读](https://aliyun.github.io/ai-agent-handbook/) · [全书目录](https://aliyun.github.io/ai-agent-handbook/contents.html) · [阅读指南](https://aliyun.github.io/ai-agent-handbook/reading-guide.html)
 
