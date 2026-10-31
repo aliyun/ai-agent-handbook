@@ -131,13 +131,6 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Personal Agent topic | [Personal Agent: Product, Technology, and Business Observations](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
 | Personal Agent topic | [From Personal Agents to Enterprise Agents: AgentScope's Agent as a Service Architecture](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
 
-### Suggested reading paths
-
-- **New to enterprise agents:** Survey → Chapters 1–2 → Chapters 3–6 → Chapters 13–16.
-- **Moving an agent into production:** Chapters 7–9 → Chapters 13–14 → Chapters 18–23. If you deploy models yourself, read "Inference Frameworks Explained" in Chapter 17 before Section 13.5.2.
-- **Building a multi-agent system:** Chapters 4–6 → Chapters 10–12 → Chapters 13 and 16.
-- **Responsible for evaluation and optimization:** Chapter 13 → Chapters 18–23 → relevant case studies.
-- **Responsible for selection or project approval:** Survey → Chapters 1–3 → Practice → Chapter 30.
 
 ## 4. Roadmap
 
