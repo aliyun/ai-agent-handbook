@@ -2,13 +2,13 @@
 
 [中文](./README.md) | English
 
-We welcome universities and other educational institutions to co-build an enterprise-grade Agent curriculum with us. If you are interested, please reach out on WeChat (max_0928).
-
 Organized around the Agent application lifecycle (architecture, building, operations, governance, and optimization), this open-source project gathers practical experience, lessons learned, and insights from Alibaba Cloud, enterprise customers on the cloud, and developers in the open-source community as they bring enterprise-grade Agents into production. We add the latest practices every week and revise published content from time to time. We'd be honored if this project helps, even a little, with your own learning or your company's Agent rollout.
 
 We dedicate this project to everyone contributing to the development of AI.
 
 Read the [online edition](https://aliyun.github.io/ai-agent-handbook/) with chapter navigation, search, diagrams, and reading preferences. The chapters are currently in Chinese. To preview locally with Node.js 22, run `npm ci` and `npm run dev`. See the [website maintenance guide](https://github.com/aliyun/ai-agent-handbook/blob/main/WEBSITE.md) for GitHub Pages deployment.
+
+We welcome universities and other educational institutions to co-build an enterprise-grade Agent curriculum with us. If you are interested, please reach out on WeChat (max_0928).
 
 ---
 
