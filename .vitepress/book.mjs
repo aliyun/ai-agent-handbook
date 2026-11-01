@@ -248,7 +248,7 @@ for (const part of parts) {
       const file = exactlyOne(
         files.filter(
           (f) =>
-            f.endsWith(".md") && new RegExp(`^第\\s*${number}\\s*章`).test(f),
+            f.endsWith(".md") && new RegExp(`^第\\s*0*${number}\\s*章`).test(f),
         ),
         `chapter ${number}`,
       );
