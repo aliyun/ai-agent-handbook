@@ -2,8 +2,6 @@
 
 中文 | [English](./README_EN.md)
 
-欢迎高校等教育机构等一起共建企业级 Agent 课程，若感兴趣，请添加微信（max_0928）进行沟通，备注共建。
-
 项目围绕 Agent 的架构、构建、运行、治理和调优的整个应用生命周期，总结了阿里云、云上的企业客户、开源社区的开发者用户在企业级 Agent 落地过程中的实践经验、教训和体会。我们每周会收录最新的实践，并对已发布的内容进行不定期更新。如果该项目能对个人学习和企业落地 Agent 起到一点点的促进作用，这将是我们莫大的荣幸。
 
 谨以此项目，献给参与 AI 建设的同行者们。
@@ -11,6 +9,8 @@
 [在线阅读](https://aliyun.github.io/ai-agent-handbook/) · [全书目录](https://aliyun.github.io/ai-agent-handbook/contents.html) · [阅读指南](https://aliyun.github.io/ai-agent-handbook/reading-guide.html)
 
 阅读站提供章节导航、中文搜索、图表与图片放大、明暗主题和阅读位置记忆。本地预览可使用 Node.js 22 执行 `npm ci`、`npm run dev`；站点维护与 GitHub Pages 发布方法见[维护说明](https://github.com/aliyun/ai-agent-handbook/blob/main/WEBSITE.md)。
+
+欢迎高校等教育机构等一起共建企业级 Agent 课程，若感兴趣，请添加微信（max_0928）进行沟通，备注共建。
 
 ---
 
