@@ -36,7 +36,7 @@ test("home and nav open a static level hub, only level 01 is playable", async ({
   await expect(page.locator(".level.planned .state")).toHaveText(["筹备中", "筹备中", "筹备中"]);
   await expect(page.locator(".level.planned h2")).toHaveText(["断线中断，如何优化？", "记忆错了，如何优化？", "调用成本高，如何优化？"]);
   await expect(page.locator(".planned-note")).toHaveText(["敬请期待", "敬请期待", "敬请期待"]);
-  await expect(page.locator(".intro")).toContainText("直接在浏览器里测试，看看你能拿多少分；");
+  await expect(page.locator(".intro > p:last-child")).toHaveText("你来优化这些场景下 Agent 的处理逻辑，看看能拿多少分。");
   await expect(page.locator(".footer p")).toHaveCount(0);
   await page.screenshot({ path: "test-results/challenge-hub-desktop.png", fullPage: true });
   await page.getByRole("link", { name: "进入第 01 关：Agent 退款超时，如何优化？" }).click();
