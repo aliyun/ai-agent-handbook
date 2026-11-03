@@ -199,6 +199,19 @@ html[data-reading-size="large"] {
 .book-button.secondary:hover {
   background: var(--vp-c-bg-soft);
 }
+.book-button.challenge-entry {
+  gap: 8px;
+  white-space: nowrap;
+}
+.challenge-entry .challenge-beta {
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+}
 .continue-reading {
   display: block;
   font-size: 12px;

@@ -32,8 +32,8 @@ onMounted(() => {
           <a class="book-button secondary" :href="withBase('/contents.html')"
             >浏览全书目录</a
           >
-          <a class="book-button secondary" :href="withBase('/challenges/')" target="_self"
-            >工程闯关 →</a
+          <a class="book-button secondary challenge-entry" :href="withBase('/challenges/')" target="_self"
+            >工程闯关 <span class="challenge-beta">Beta</span><span aria-hidden="true">→</span></a
           >
         </div>
         <a v-if="last" class="continue-reading" :href="last.href"

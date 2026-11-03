@@ -28,7 +28,12 @@ test("home and nav open a static level hub, only level 01 is playable", async ({
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("./");
-  await page.locator(".hero-actions").getByRole("link", { name: "工程闯关" }).click();
+  const challenge = page.locator(".hero-actions").getByRole("link", { name: "工程闯关" });
+  await expect(challenge.locator(".challenge-beta")).toHaveText("Beta");
+  await expect(challenge).toHaveClass(/secondary/);
+  await expect(page.locator(".hero-actions .primary")).toHaveCount(1);
+  await expect(page.locator(".hero-actions .primary")).toContainText("开始阅读");
+  await challenge.click();
   await expect(page.getByRole("heading", { name: "Agent 工程闯关", exact: true })).toBeVisible();
   await expect(page.locator(".level")).toHaveCount(4);
   await expect(page.locator(".enter")).toHaveCount(1);
