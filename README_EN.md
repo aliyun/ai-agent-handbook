@@ -77,7 +77,7 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 | Building | [6. Actions: Controlled Execution and Verification](<./02-build/第 6 章 行动：受控执行、验证反馈与交付准备.md>) | Action planes, Function Calling, MCP, A2A, environment contracts, permissions, and human approval. |
 | Runtime | [7. Agent Runtime and Sandboxes](<./03-run/第 07 章  Agent 运行时与沙箱.md>) | Sandboxes, runtime, workspaces, environment lifecycle, and production execution. |
 | Runtime | [8. Agent State Storage and Semantic Assets](<./03-run/第 08 章 Agent 状态存储与语义资产.md>) | Event logs, checkpoints, snapshots, artifacts, long-term memory, RAG, and business semantics. |
-| Runtime | [9. AI Gateways and Unified Traffic Governance](<./03-run/第 09 章  AI 网关与统一流量治理.md>) | Identity, permissions, budgets, routing, audit, and approval across LLM, MCP, and agent traffic. |
+| Runtime | [9. AI Gateways and Unified Traffic Governance](<./03-run/第 9 章 AI 网关与统一流量治理/>) | Identity, permissions, budgets, routing, audit, and approval across LLM, MCP, and agent traffic. |
 | Runtime | [10. Asynchronous Agent Tasks and Automation](<./03-run/第 10 章  Agent 异步任务与自动化流程.md>) | Synchronous/asynchronous boundaries, completion semantics, scheduled work, and workflows. |
 | Runtime | [11. Multi-Agent Coordination and Orchestration](<./03-run/第 11章  Multi-Agent 协作与编排.md>) | Heterogeneous agents, team topology, task assignment, result aggregation, and orchestration roles. |
 | Runtime | [12. Distributed Agent Communication](<./03-run/第 12 章 Agent 分布式通信.md>) | Protocol choices and message governance across capability, collaboration, internal, and human-agent interactions. |
