@@ -203,7 +203,15 @@ html[data-reading-size="large"] {
   gap: 8px;
   white-space: nowrap;
 }
-.challenge-entry .challenge-beta {
+.nav-challenge-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 24px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.challenge-beta {
   padding: 1px 6px;
   border-radius: 3px;
   background: var(--vp-c-brand-soft);

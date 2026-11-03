@@ -28,13 +28,13 @@ test("home and nav open a static level hub, only level 01 is playable", async ({
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("./");
-  const challenge = page.locator(".hero-actions").getByRole("link", { name: "工程闯关" });
+  const challenge = page.locator(".hero-actions").getByRole("link", { name: "闯关游戏" });
   await expect(challenge.locator(".challenge-beta")).toHaveText("Beta");
   await expect(challenge).toHaveClass(/secondary/);
   await expect(page.locator(".hero-actions .primary")).toHaveCount(1);
   await expect(page.locator(".hero-actions .primary")).toContainText("开始阅读");
   await challenge.click();
-  await expect(page.getByRole("heading", { name: "Agent 工程闯关", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Agent 闯关游戏", exact: true })).toBeVisible();
   await expect(page.locator(".level")).toHaveCount(4);
   await expect(page.locator(".enter")).toHaveCount(1);
   await expect(page.locator(".level.planned a")).toHaveCount(0);
@@ -50,9 +50,30 @@ test("home and nav open a static level hub, only level 01 is playable", async ({
   await page.getByRole("link", { name: "返回关卡目录" }).click();
   await expect(page.locator(".level")).toHaveCount(4);
   await page.getByRole("link", { name: "返回手册首页" }).click();
-  await page.locator(".VPNavBar").getByRole("link", { name: "工程闯关", exact: true }).click();
+  const navChallenge = page.locator(".VPNavBar").getByRole("link", { name: "闯关游戏" });
+  await expect(navChallenge.locator(".challenge-beta")).toHaveText("Beta");
+  await expect(navChallenge).toHaveAttribute("target", "_self");
+  await navChallenge.click();
   await expect(page.locator(".level")).toHaveCount(4);
   expect(errors).toEqual([]);
+});
+
+test("mobile home: game entry and navigation both show Beta in light and dark themes", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("./");
+  for (const dark of [false, true]) {
+    await page.evaluate(dark => document.documentElement.classList.toggle("dark", dark), dark);
+    await expect(page.locator(".hero-actions .challenge-beta")).toHaveText("Beta");
+    await page.locator(".VPNavBarHamburger").click();
+    const navChallenge = page.locator(".VPNavScreen").getByRole("link", { name: "闯关游戏" });
+    await expect(navChallenge.locator(".challenge-beta")).toBeVisible();
+    await expect(navChallenge).toHaveAttribute("target", "_self");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.locator(".VPNavBarHamburger").click();
+  }
+  await page.locator(".VPNavBarHamburger").click();
+  await page.locator(".VPNavScreen").getByRole("link", { name: "闯关游戏" }).click();
+  await expect(page.locator(".level")).toHaveCount(4);
 });
 
 test("deep path: Worker scores, code persistence, copy package and share URL", async ({ page }) => {
