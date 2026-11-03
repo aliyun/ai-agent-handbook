@@ -32,6 +32,9 @@ onMounted(() => {
           <a class="book-button secondary" :href="withBase('/contents.html')"
             >浏览全书目录</a
           >
+          <a class="book-button secondary" :href="withBase('/challenges/')" target="_self"
+            >工程闯关 →</a
+          >
         </div>
         <a v-if="last" class="continue-reading" :href="last.href"
           >继续上次阅读：{{ last.title }} <span>→</span></a

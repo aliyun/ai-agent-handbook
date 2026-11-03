@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AI Agent Handbook 工程闯关：在浏览器里修改 Agent 的处理逻辑，用测试学习退款重试、状态恢复、记忆与调用优化。第一关现已开放。">
+<title>Agent 工程闯关 · AI Agent Handbook</title>
+<link rel="icon" href="../favicon.svg">
+<style>
+:root{color-scheme:light;--bg:#faf9f6;--paper:#fffdf8;--text:#25362f;--muted:#64726b;--line:#dce2d8;--brand:#26705a;--soft:#edf3eb;--sans:-apple-system,system-ui,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--serif:Georgia,"Songti SC",serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 var(--sans);-webkit-font-smoothing:antialiased}a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible{outline:3px solid var(--brand);outline-offset:5px;border-radius:3px}.wrap{max-width:1120px;margin:auto;padding:0 32px}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;font:600 20px var(--serif);color:var(--text)}.brand img{width:28px;height:28px}.nav-links{display:flex;gap:24px;font-size:13px}.nav-links a{color:var(--muted)}.intro{padding:48px 0 32px}.eyebrow{margin:0 0 12px;color:var(--brand);font-size:12px;letter-spacing:.12em}h1{margin:0;font:400 clamp(30px,4vw,44px)/1.25 var(--serif)}.intro>p:last-child{max-width:720px;margin:16px 0 0;color:var(--muted)}.levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.level{display:flex;flex-direction:column;min-width:0;border:1px solid var(--line);border-radius:8px;padding:24px;background:var(--paper)}.level.available{border-color:#a6c6b3;box-shadow:inset 0 3px var(--brand)}.level-top{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);font-size:12px}.level-top>span:first-child{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em}.state{border:1px solid var(--line);border-radius:4px;padding:2px 8px}.available .state{border-color:#c4d7c9;background:var(--soft);color:var(--brand)}h2{margin:24px 0 10px;font-size:23px;line-height:1.45;font-weight:500}.level p{margin:0 0 24px;color:var(--muted);font-size:14px;flex:1}.level-action{display:flex;align-items:center;gap:16px;min-height:44px}.enter{display:inline-flex;align-items:center;justify-content:center;min-height:44px;gap:20px;padding:8px 18px;border-radius:5px;background:var(--brand);color:#fff;font-size:14px;font-weight:500}.enter:hover{background:#214a3b;text-decoration:none}.planned-note{color:var(--muted);font-size:13px}.footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:32px 0;margin-top:32px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.footer p{margin:0}.skip{position:absolute;top:-60px;left:16px;padding:8px 16px;background:var(--paper);z-index:1}.skip:focus{top:8px}
+@media(max-width:680px){.wrap{padding:0 20px}.nav{min-height:64px;gap:12px;flex-wrap:wrap;padding:12px 0}.brand{font-size:17px}.nav-links{gap:16px;font-size:12px}.intro{padding:32px 0 24px}.levels{grid-template-columns:1fr;gap:16px}.level{padding:20px}h2{font-size:21px;margin-top:20px}.footer{margin-top:24px;padding:24px 0;gap:12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#levels">跳转到关卡目录</a>
+<div class="wrap">
+<nav class="nav" aria-label="手册导航">
+<a class="brand" href="../"><img src="../favicon.svg" alt="">AI Agent Handbook</a>
+<div class="nav-links"><a href="../contents.html">全书目录</a><a href="https://github.com/aliyun/ai-agent-handbook" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
+</nav>
+<main>
+<header class="intro">
+<p class="eyebrow">AI AGENT HANDBOOK · 工程实践</p>
+<h1>Agent 工程闯关</h1>
+<p>我们提供 Agent，你来优化它的处理逻辑。直接在浏览器里测试，看看你能拿多少分；不需要 API Key，也可以复制题目给你的 Agent 帮忙改代码。</p>
+</header>
+<section class="levels" id="levels" aria-label="关卡目录">
+__LEVEL_CARDS__
+</section>
+</main>
+<footer class="footer"><a href="../">返回手册首页 →</a></footer>
+</div>
+</body>
+</html>

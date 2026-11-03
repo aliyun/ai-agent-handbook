@@ -3,7 +3,11 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { load } from "cheerio";
 import { pages, root } from "../.vitepress/book.mjs";
+import { levels } from "../challenges/levels.mjs";
 
+const checkedPages = [...pages, { href: "/challenges/" }, ...levels
+  .filter(level => level.status === "available")
+  .map(level => ({ href: `/challenges/${level.id}/` }))];
 const base = process.env.SITE_BASE || "/ai-agent-handbook/";
 const output = path.join(root, ".vitepress/dist");
 const origin = "https://book.test";
@@ -22,7 +26,7 @@ function document(file) {
   if (!cache.has(file)) cache.set(file, load(readFileSync(file, "utf8")));
   return cache.get(file);
 }
-for (const page of pages) {
+for (const page of checkedPages) {
   const url = new URL(base + page.href.slice(1), origin);
   const file = fileFor(url.pathname);
   assert.ok(file && existsSync(file), `Missing built page: ${page.href}`);
@@ -53,10 +57,23 @@ for (const page of pages) {
     }
   }
 }
+for (const level of levels) {
+  const dir = path.join(output, "challenges", level.id);
+  if (level.status === "planned") {
+    assert.ok(!existsSync(dir), `筹备中的关卡不应生成可访问页面：${level.id}`);
+  } else {
+    const $ = document(path.join(dir, "index.html"));
+    assert.equal($("body").attr("data-level"), level.id);
+    assert.equal($("body").attr("data-version"), level.version);
+    for (const file of ["worker.js", "sim.js", "sval.min.js", "sval.LICENSE.txt"]) {
+      assert.ok(existsSync(path.join(dir, file)), `缺少关卡运行资源：${level.id}/${file}`);
+    }
+  }
+}
 if (errors.length) {
   console.error([...new Set(errors)].join("\n"));
   process.exit(1);
 }
 console.log(
-  `Built site checked: all ${pages.length} pages, local links, fragment targets and assets resolve under ${base}.`,
+  `Built site checked: all ${checkedPages.length} pages, local links, fragment targets and assets resolve under ${base}.`,
 );

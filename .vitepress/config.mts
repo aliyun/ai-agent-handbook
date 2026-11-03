@@ -80,6 +80,7 @@ export default defineConfig({
     nav: [
       { text: "全书目录", link: "/contents.html", activeMatch: "/contents" },
       { text: "阅读指南", link: "/reading-guide.html" },
+      { text: "工程闯关", link: "/challenges/", target: "_self" },
       { text: "开发者调研", link: "/survey.html" },
       { text: "关于本书", link: "/about.html" },
     ],

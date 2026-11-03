@@ -6,10 +6,11 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "vitepress dev --host 127.0.0.1",
-    "build": "vitepress build",
+    "dev": "node scripts/build-challenges.mjs && vitepress dev --host 127.0.0.1",
+    "build": "node scripts/build-challenges.mjs && vitepress build",
     "preview": "vitepress preview --host 127.0.0.1",
-    "check": "node scripts/check-book.mjs",
+    "check": "node scripts/check-book.mjs && npm run check:challenges",
+    "check:challenges": "node challenges/01-refund-timeout/tests/run-tests.mjs",
     "check:build": "node scripts/check-build.mjs",
     "test": "playwright test"
   },
