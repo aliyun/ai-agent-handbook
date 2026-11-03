@@ -75,6 +75,14 @@ export const parts = [
 // chapter URL, and each article gets a stable slug under it.
 const chapterGroups = [
   {
+    chapter: 9,
+    landing: "website/chapter-09.md",
+    articles: [
+      ["overview", "01 AI 网关与统一流量治理综述"],
+      ["intelligent-routing", "02 智能路由：如何利用便宜模型提升智价比"],
+    ],
+  },
+  {
     chapter: 17,
     landing: "website/chapter-17.md",
     articles: [
