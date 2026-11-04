@@ -9,11 +9,8 @@
     "dev": "node scripts/build-challenges.mjs && vitepress dev --host 127.0.0.1",
     "build": "node scripts/build-challenges.mjs && vitepress build",
     "preview": "vitepress preview --host 127.0.0.1",
-    "check": "node scripts/check-book.mjs && npm run check:challenges && npm run check:leaderboard",
+    "check": "node scripts/check-book.mjs && npm run check:challenges",
     "check:challenges": "node challenges/01-refund-timeout/tests/run-tests.mjs",
-    "check:leaderboard": "node --test challenges/leaderboard/server.test.mjs",
-    "leaderboard": "node challenges/leaderboard/server.mjs",
-    "preview:leaderboard": "node scripts/preview-leaderboard.mjs",
     "check:build": "node scripts/check-build.mjs",
     "test": "playwright test"
   },

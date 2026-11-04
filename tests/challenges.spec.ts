@@ -79,10 +79,14 @@ test("mobile home: game entry and navigation both show Beta in light and dark th
 test("deep path: Worker scores, code persistence, copy package and share URL", async ({ page }) => {
   const errors: string[] = [];
   const missing: string[] = [];
+  const leaderboardRequests: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   page.on("response", response => { if (response.status() >= 400) missing.push(response.url()); });
+  page.on("request", request => { if (/leaderboard/i.test(request.url())) leaderboardRequests.push(request.url()); });
   await captureClipboard(page);
   await page.goto(levelPath);
+  await expect(page.locator("#leaderboardBtn, #scoreActions, #submitDialog, #leaderboardDialog")).toHaveCount(0);
+  await expect(page.locator(".underbench")).toHaveText("代码和成绩只保存在本机，不会上传。");
   const url = page.url();
   await page.evaluate(() => {
     localStorage.setItem("refund-once:code", "private-site-code");
@@ -99,6 +103,8 @@ test("deep path: Worker scores, code persistence, copy package and share URL", a
   await expect(page.locator("#verdictTitle")).toHaveText("本关通过");
   await expect(page.locator("#feedbackScore")).toContainText("96");
   await expect(page.locator("#scoreline")).toContainText("22 组");
+  await expect(page.getByRole("button", { name: /排行榜|提交成绩/ })).toHaveCount(0);
+  await page.screenshot({ path: "test-results/challenge-desktop-passed.png" });
   expect(await page.evaluate(key => localStorage.getItem(key + ":runs"), storage)).toBe("2");
   expect(await page.evaluate(key => localStorage.getItem(key + ":best"), storage)).toBe("96");
   expect(await page.evaluate(() => localStorage.getItem("agent-challenge:02-resume:v1:best"))).toBe("100");
@@ -108,6 +114,7 @@ test("deep path: Worker scores, code persistence, copy package and share URL", a
   expect(packageText).toContain("# 闯关说明");
   expect(packageText).toContain("# 接口速查");
   expect(packageText).toContain(url);
+  expect(packageText).not.toContain("排行榜");
   await expect(page.locator("#status")).toContainText("粘贴即可替换");
   await page.locator("#rulesBtn").click();
   await page.locator("#copyRules").click();
@@ -129,6 +136,7 @@ test("deep path: Worker scores, code persistence, copy package and share URL", a
   // GitHub Pages also serves the explicit index.html URL.
   await page.goto(levelPath + "index.html");
   await expect(page.locator("#code")).toBeEditable();
+  expect(leaderboardRequests).toEqual([]);
   expect(missing).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -143,6 +151,7 @@ for (const width of [320, 390]) {
     await expect(page.locator("#code")).toBeEditable();
     await expect(page.locator("#chapterLink")).toBeVisible();
     await expect(page.getByRole("link", { name: "返回关卡目录" })).toBeVisible();
+    await expect(page.locator("#leaderboardBtn, #scoreActions, #submitDialog, #leaderboardDialog")).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: `test-results/challenge-mobile-${width}.png`, fullPage: true });
     await page.locator("#rulesBtn").click();

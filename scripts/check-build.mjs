@@ -65,15 +65,12 @@ for (const level of levels) {
     const $ = document(path.join(dir, "index.html"));
     assert.equal($("body").attr("data-level"), level.id);
     assert.equal($("body").attr("data-version"), level.version);
-    for (const file of ["worker.js", "sim.js", "sval.min.js", "sval.LICENSE.txt", "leaderboard.js", "leaderboard.css", "leaderboard-config.js"]) {
+    for (const file of ["worker.js", "sim.js", "sval.min.js", "sval.LICENSE.txt"]) {
       assert.ok(existsSync(path.join(dir, file)), `缺少关卡运行资源：${level.id}/${file}`);
     }
-    assert.ok(!existsSync(path.join(dir, "server.mjs")), "排行榜服务端源码不能混入静态站点");
-    const expectedConfig = `window.ChallengeLeaderboardConfig = Object.freeze(${JSON.stringify({ apiUrl: (process.env.LEADERBOARD_API_URL || "").trim() })});\n`;
-    assert.equal(readFileSync(path.join(dir, "leaderboard-config.js"), "utf8"), expectedConfig, "排行榜 API 配置必须与本次构建环境一致");
   }
 }
-assert.ok(!existsSync(path.join(output, ".local")), "本地排行榜数据不能发布到静态站点");
+assert.ok(!existsSync(path.join(output, ".local")), "本地数据不能发布到静态站点");
 if (errors.length) {
   console.error([...new Set(errors)].join("\n"));
   process.exit(1);
