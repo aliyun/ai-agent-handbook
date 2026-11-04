@@ -6,9 +6,9 @@
 
 谨以此项目，献给参与 AI 建设的同行者们。
 
-[在线阅读](https://aliyun.github.io/ai-agent-handbook/) · [全书目录](https://aliyun.github.io/ai-agent-handbook/contents.html) · [阅读指南](https://aliyun.github.io/ai-agent-handbook/reading-guide.html)
+🤗 [在线阅读](https://aliyun.github.io/ai-agent-handbook/) 
 
-阅读站提供章节导航、中文搜索、图表与图片放大、明暗主题和阅读位置记忆。本地预览可使用 Node.js 22 执行 `npm ci`、`npm run dev`；站点维护与 GitHub Pages 发布方法见[维护说明](https://github.com/aliyun/ai-agent-handbook/blob/main/WEBSITE.md)。
+💯 [在线闯关](https://aliyun.github.io/ai-agent-handbook/challenges/) ，我们设计了一些小游戏，来看看你能拿多少分吧？
 
 欢迎高校等教育机构等一起共建企业级 Agent 课程，若感兴趣，请添加微信（max_0928）进行沟通，备注共建。
 
