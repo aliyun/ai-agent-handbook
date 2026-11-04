@@ -13,7 +13,7 @@ export const levels = [
     id: "02-resume",
     number: "02",
     version: "v1",
-    title: "断线中断，如何优化？",
+    title: "任务中断，如何优化？",
     description: "任务中途断线，恢复之后，从哪里继续？",
     status: "planned",
   },

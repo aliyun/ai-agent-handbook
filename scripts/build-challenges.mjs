@@ -5,6 +5,13 @@ import { levels } from "../challenges/levels.mjs";
 
 const source = new URL("../challenges/", import.meta.url);
 const output = new URL("../public/challenges/", import.meta.url);
+// Pages 不运行后端。部署时显式指定公开 API；未配置时不生成假榜单。
+const apiUrl = (process.env.LEADERBOARD_API_URL || "").trim();
+if (apiUrl && apiUrl !== "/api/leaderboard") {
+  const url = new URL(apiUrl);
+  assert.ok(url.protocol === "https:" || (url.protocol === "http:" && ["127.0.0.1", "localhost"].includes(url.hostname)), "排行榜 API 必须为 HTTPS，或本地 HTTP 地址");
+  assert.ok(!url.username && !url.password && !url.search && !url.hash, "排行榜 API 地址不能包含凭据、查询参数或片段");
+}
 const escape = (text) => String(text).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const ids = new Set();
 for (const level of levels) {
@@ -60,6 +67,9 @@ root.RefundSim = { ${names.join(", ")} };
   assert.ok(!/__LEVEL_[A-Z_]+__/.test(html), `未替换的关卡占位符：${level.id}`);
   writeFileSync(new URL("index.html", dest), html);
   for (const file of ["app.js", "worker.js", "logo.svg"]) copyFileSync(new URL(file, folder), new URL(file, dest));
+  copyFileSync(new URL("leaderboard/client.js", source), new URL("leaderboard.js", dest));
+  copyFileSync(new URL("leaderboard/style.css", source), new URL("leaderboard.css", dest));
+  writeFileSync(new URL("leaderboard-config.js", dest), `window.ChallengeLeaderboardConfig = Object.freeze(${JSON.stringify({ apiUrl })});\n`);
   copyFileSync(new URL("vendor/sval.min.js", folder), new URL("sval.min.js", dest));
   copyFileSync(new URL("vendor/sval.LICENSE", folder), new URL("sval.LICENSE.txt", dest));
 }

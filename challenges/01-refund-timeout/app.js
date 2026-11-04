@@ -42,6 +42,10 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const ta = $('code');
 const hl = $('hl');
 const gutter = $('gutter');
+const leaderboard = window.createChallengeLeaderboard?.({
+  getResult: () => !running && !demo && summary?.passed && ta.value === testedCode ? { score: summary.score } : null,
+  onOpen: () => { stopPlayback(); if (curRun) showFinalStage(curRun); },
+});
 const KW = new Set('async await function return const let var if else while for of in new try catch finally throw break continue typeof true false null undefined export default class this'.split(' '));
 function highlight(src) {
   const re = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`)|\b(\d+(?:\.\d+)?)\b|([A-Za-z_$][\w$]*)(?=\s*\()|([A-Za-z_$][\w$]*)/g;
@@ -68,6 +72,7 @@ function markStale() {
   $('staleNote').hidden = !stale;
   $('feedback').classList.toggle('stale', stale);
   $('shareBtn').disabled = !summary || demo || stale || running;
+  leaderboard?.sync();
 }
 function onCodeChange() {
   renderEditor();
@@ -146,6 +151,7 @@ function setBusy(busy, isDemo) {
   $('runBtn').textContent = busy && !isDemo ? '正在测试…' : '运行全部场景 →';
   $('feedbackPanel').setAttribute('aria-busy', String(busy));
   $('shareBtn').disabled = true;
+  leaderboard?.sync();
 }
 function improvementText(s) {
   const handedOff = s.runs.filter((r) => r.expected === 'COMPLETED' && r.state !== 'COMPLETED').length;

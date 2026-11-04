@@ -11,3 +11,4 @@ node_modules/
 public/challenges/
 test-results/
 playwright-report/
+.local/
