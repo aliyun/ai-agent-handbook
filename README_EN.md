@@ -6,9 +6,11 @@ Organized around the Agent application lifecycle (architecture, building, operat
 
 We dedicate this project to everyone contributing to the development of AI.
 
-Read the [online edition](https://aliyun.github.io/ai-agent-handbook/) with chapter navigation, search, diagrams, and reading preferences. The chapters are currently in Chinese. To preview locally with Node.js 22, run `npm ci` and `npm run dev`. See the [website maintenance guide](https://github.com/aliyun/ai-agent-handbook/blob/main/WEBSITE.md) for GitHub Pages deployment.
+[Read online](https://aliyun.github.io/ai-agent-handbook/)
 
-We welcome universities and other educational institutions to co-build an enterprise-grade Agent curriculum with us. If you are interested, please reach out on WeChat (max_0928).
+[Play the online challenges](https://aliyun.github.io/ai-agent-handbook/challenges/) — we've designed a few mini-games. How high can you score?
+
+We welcome universities and other educational institutions to co-build an enterprise-grade Agent curriculum with us. If you are interested, please reach out on WeChat (max_0928) and mention "curriculum co-building" in your friend request.
 
 ---
 
