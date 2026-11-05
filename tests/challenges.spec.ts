@@ -24,7 +24,7 @@ async function captureClipboard(page) {
   });
 }
 
-test("home and nav open a static level hub, only level 01 is playable", async ({ page }) => {
+test("home and nav open a static level hub, levels 01 and 02 are playable", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("./");
@@ -36,11 +36,12 @@ test("home and nav open a static level hub, only level 01 is playable", async ({
   await challenge.click();
   await expect(page.getByRole("heading", { name: "Agent 闯关游戏", exact: true })).toBeVisible();
   await expect(page.locator(".level")).toHaveCount(4);
-  await expect(page.locator(".enter")).toHaveCount(1);
+  await expect(page.locator(".enter")).toHaveCount(2);
+  await expect(page.locator(".level.available h2")).toHaveText(["Agent 退款超时，如何优化？", "任务中断，如何优化？"]);
   await expect(page.locator(".level.planned a")).toHaveCount(0);
-  await expect(page.locator(".level.planned .state")).toHaveText(["筹备中", "筹备中", "筹备中"]);
-  await expect(page.locator(".level.planned h2")).toHaveText(["任务中断，如何优化？", "记忆错了，如何优化？", "调用成本高，如何优化？"]);
-  await expect(page.locator(".planned-note")).toHaveText(["敬请期待", "敬请期待", "敬请期待"]);
+  await expect(page.locator(".level.planned .state")).toHaveText(["筹备中", "筹备中"]);
+  await expect(page.locator(".level.planned h2")).toHaveText(["记忆错了，如何优化？", "调用成本高，如何优化？"]);
+  await expect(page.locator(".planned-note")).toHaveText(["敬请期待", "敬请期待"]);
   await expect(page.locator(".intro > p:last-child")).toHaveText("你来优化这些场景下 Agent 的处理逻辑，看看能拿多少分。");
   await expect(page.locator(".footer p")).toHaveCount(0);
   await page.screenshot({ path: "test-results/challenge-hub-desktop.png", fullPage: true });
@@ -147,7 +148,7 @@ for (const width of [320, 390]) {
     await page.goto("challenges/");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: `test-results/challenge-hub-mobile-${width}.png`, fullPage: true });
-    await page.locator(".enter").click();
+    await page.getByRole("link", { name: "进入第 01 关：Agent 退款超时，如何优化？" }).click();
     await expect(page.locator("#code")).toBeEditable();
     await expect(page.locator("#chapterLink")).toBeVisible();
     await expect(page.getByRole("link", { name: "返回关卡目录" })).toBeVisible();

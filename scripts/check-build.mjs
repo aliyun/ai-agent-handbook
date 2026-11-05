@@ -65,8 +65,11 @@ for (const level of levels) {
     const $ = document(path.join(dir, "index.html"));
     assert.equal($("body").attr("data-level"), level.id);
     assert.equal($("body").attr("data-version"), level.version);
-    for (const file of ["worker.js", "sim.js", "sval.min.js", "sval.LICENSE.txt"]) {
+    for (const file of ["app.js", "worker.js", "sim.js", "sval.min.js", "sval.LICENSE.txt"]) {
       assert.ok(existsSync(path.join(dir, file)), `缺少关卡运行资源：${level.id}/${file}`);
+    }
+    for (const file of ["reference.js", "tests"]) {
+      assert.ok(!existsSync(path.join(dir, file)), `本地参考代码与测试不应复制到站点：${level.id}/${file}`);
     }
   }
 }

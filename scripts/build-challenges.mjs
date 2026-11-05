@@ -51,7 +51,8 @@ for (const level of levels.filter(level => level.status === "available")) {
 "use strict";
 ${parts.map(part => part.body).join("\n")}
 const STARTER = ${JSON.stringify(STARTER)};
-root.RefundSim = { ${names.join(", ")} };
+root.ChallengeSim = { ${names.join(", ")} };
+root.RefundSim = root.ChallengeSim; // 保留第一关的既有脚本接口。
 })(typeof self !== 'undefined' ? self : this);
 `);
   const html = readFileSync(new URL("index.html", folder), "utf8")
@@ -60,7 +61,9 @@ root.RefundSim = { ${names.join(", ")} };
   assert.ok(!/__LEVEL_[A-Z_]+__/.test(html), `未替换的关卡占位符：${level.id}`);
   writeFileSync(new URL("index.html", dest), html);
   for (const file of ["app.js", "worker.js", "logo.svg"]) copyFileSync(new URL(file, folder), new URL(file, dest));
-  copyFileSync(new URL("vendor/sval.min.js", folder), new URL("sval.min.js", dest));
-  copyFileSync(new URL("vendor/sval.LICENSE", folder), new URL("sval.LICENSE.txt", dest));
+  // 共用同一份已固定版本的解释器与许可证，避免各关卡重复维护第三方源码。
+  const vendor = new URL("01-refund-timeout/vendor/", source);
+  copyFileSync(new URL("sval.min.js", vendor), new URL("sval.min.js", dest));
+  copyFileSync(new URL("sval.LICENSE", vendor), new URL("sval.LICENSE.txt", dest));
 }
 console.log(`工程闯关已生成：${levels.filter(level => level.status === "available").length} 关开放，${levels.filter(level => level.status === "planned").length} 关筹备中。`);
