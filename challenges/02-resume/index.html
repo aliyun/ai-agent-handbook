@@ -176,7 +176,7 @@
 <p><b>运行限制：</b>每组最多 180 秒模拟时间、60 次工具调用（包括保存与交人工）。浏览器会终止 6 秒仍未跑完的代码，此时显示运行错误，不生成成绩。模拟时间不等于现实等待时间或回放时长。</p>
 <p><b>关于真实性：</b>这是本地模拟任务，不会真的发布报告或通知他人。生产系统还需要校验工具权限、处理并发，并尽量用事务或幂等机制减少重复执行风险。</p>
 </div></details>
-<h3>6. 能不能反复尝试？</h3><p>可以无限次重试。代码和成绩只保存在本机，不会上传。各关卡的代码和最好成绩独立保存。测试使用固定公开种子 2026，尚未启用隐藏测试；通过本关不代表通过生产环境验收。</p>
+<h3>6. 能不能反复尝试？</h3><p>可以无限次重试。代码和成绩只保存在本机，不会上传。</p>
 </div>
 </dialog>
 <dialog class="dialog" id="shareDialog" aria-labelledby="shareTitle"><div class="dialog-head"><h2 id="shareTitle">分享这次闯关成绩</h2><button class="btn" type="button" data-close="shareDialog" aria-label="关闭成绩卡">关闭</button></div><div class="dialog-content"><div id="card"></div><div class="card-actions" id="cardActions" hidden><button class="btn" id="copyBtn" type="button">复制成绩文字</button><span class="copied" id="copied" role="status"></span></div><p class="parts">可截图分享。卡片上的引文来自手册原文；只代表本关测试结果。</p></div></dialog>
