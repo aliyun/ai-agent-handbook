@@ -18,6 +18,11 @@ const KEY_RUNS = `${STORAGE}:runs`;
 const KEY_BEST = `${STORAGE}:best`;
 const REPO = 'https://github.com/aliyun/ai-agent-handbook';
 const CH4 = new URL('../../build/chapter-04.html', location.href).href;
+function chapterUrl(section) {
+  const anchors = { '4.1.2': '_4-1-2-用权威状态驱动任务', '4.4.1': '_4-4-1-让任务脱离当前连接持续存在', '4.6.1': '_4-6-1-针对失败类型选择恢复策略', '4.6.2': '_4-6-2-让完成由证据决定' };
+  const key = Object.keys(anchors).find((key) => section.includes(key));
+  return CH4 + (key ? '#' + anchors[key] : '');
+}
 const TITLE = 'Agent 退款超时，如何优化？';
 const TOTAL_RUNS = 22;
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -29,6 +34,7 @@ let testedCode = null;
 let curScenario = 'lost';
 let curRun = null;
 let running = false;
+let lastAttempt = null, previousScored = null, runFocus = null;
 let token = 0;
 let playing = false;
 let speed = 1;
@@ -64,10 +70,12 @@ function setStatus(text, kind = '') {
   $('status').textContent = text;
 }
 function markStale() {
-  const stale = !!summary && !demo && testedCode !== ta.value;
+  const stale = !!lastAttempt && !demo && lastAttempt.code !== ta.value;
   $('staleNote').hidden = !stale;
   $('feedback').classList.toggle('stale', stale);
   $('shareBtn').disabled = !summary || demo || stale || running;
+  $('copyResult').disabled = !lastAttempt || demo || running;
+  $('resultCopyNote').textContent = stale ? '代码已改，复制时会分别标明上次测试代码与当前未测试代码。' : '';
 }
 function onCodeChange() {
   renderEditor();
@@ -147,6 +155,56 @@ function setBusy(busy, isDemo) {
   $('feedbackPanel').setAttribute('aria-busy', String(busy));
   $('shareBtn').disabled = true;
 }
+// 处理合适还需守住底线；模拟任务的 COMPLETED 不等于测试通过。
+function appropriate(s) { return s.runs.filter((r) => !r.failed && r.correct).length; }
+function verdict(s) { return !s.passed ? '未通过' : appropriate(s) === s.runs.length ? '本关通过' : '安全底线通过'; }
+function updateProgress(s) {
+  const note = $('progressNote');
+  if (previousScored) {
+    const before = previousScored;
+    const fixed = s.runs.filter((r, i) => !r.failed && before.runs[i].failed).length;
+    const regressed = s.runs.filter((r, i) => r.failed && !before.runs[i].failed).length;
+    note.textContent = `与本页上次有效测试相比：${before.score} → ${s.score} 分；违反底线 ${before.runs.filter((r) => r.failed).length} → ${s.runs.filter((r) => r.failed).length} 组；处理合适 ${appropriate(before)} → ${appropriate(s)} 组。修好 ${fixed} 组，新增违规 ${regressed} 组。`;
+    note.hidden = false;
+  }
+  previousScored = s;
+}
+function revealResult() {
+  $('resultTools').hidden = demo;
+  markStale();
+  // 禁用运行按钮后，浏览器可能把焦点退回 body；其他新焦点与弹窗都不能打断。
+  const stillAtRun = document.activeElement === runFocus || (document.activeElement === document.body && ['runBtn', 'demoBtn'].includes(runFocus?.id));
+  if (window.matchMedia('(max-width: 820px)').matches && !document.querySelector('dialog[open]') && stillAtRun) {
+    const panel = $('feedbackPanel');
+    panel.focus({ preventScroll: true });
+    panel.scrollIntoView({ block: 'start', behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+  }
+}
+function resultText() {
+  if (!lastAttempt || demo) return '';
+  const stale = lastAttempt.code !== ta.value;
+  const out = ['# 本次运行诊断', `公开种子 ${PUBLIC_SEED}；评分版本 ${document.body.dataset.version}。${stale ? '下面是上次测试结果，不代表当前未测试代码。' : '结果对应上面的当前代码。'}`];
+  if (stale) out.push('# 上次测试代码（仅此代码对应下面结果）', '```js\n' + lastAttempt.code + '\n```');
+  if (lastAttempt.error) out.push('运行未完成，没有成绩：' + lastAttempt.error);
+  else {
+    const s = lastAttempt.summary;
+    out.push(`${verdict(s)}；${s.score}/100；违反底线 ${s.runs.filter((r) => r.failed).length}/${s.runs.length} 组；处理合适 ${appropriate(s)}/${s.runs.length} 组。`, '## 全部测试概览');
+    const rows = ['| 场景 / 组 | 种子 | 预期终态 | 实际终态 | 诊断 |', '| --- | --- | --- | --- | --- |'];
+    for (const r of s.runs) rows.push(`| ${SCENARIO_NAMES[r.scenario]} / ${r.index + 1} | ${r.seed} | ${r.expected} | ${r.state} | ${describeRun(r).replace(/\|/g, '／').replace(/\s+/g, ' ')} |`);
+    out.push(rows.join('\n'));
+    if (curRun) {
+      out.push(`## 当前查看组：${SCENARIO_NAMES[curRun.scenario]} / ${curRun.index + 1}`, `种子：${curRun.seed}；违规项：${JSON.stringify(curRun.gates)}`, '完整日志（标记为实际状态的行只供排错，玩家代码不能直接读取）：');
+      out.push(...curRun.trace.map((ev) => `${ev.t}s [${ev.phase}]${ev.world ? ' [实际状态]' : ''}${ev.after ? ' [任务结束后]' : ''} ${ev.text}`));
+    }
+  }
+  return out.join('\n\n');
+}
+$('copyResult').addEventListener('click', async () => {
+  if (!lastAttempt || demo || running) return;
+  const text = agentPackage();
+  try { await navigator.clipboard.writeText(text); $('resultCopyNote').textContent = '已复制题目、代码、全部测试结论与当前组日志。'; }
+  catch { window.prompt('复制下面这段文字：', text); }
+});
 function improvementText(s) {
   const handedOff = s.runs.filter((r) => r.expected === 'COMPLETED' && r.state !== 'COMPLETED').length;
   if (handedOff) return `${handedOff} 组本可自动完成，却转了人工；可以继续优化。`;
@@ -158,8 +216,8 @@ function renderOverview() {
   if (demo) {
     setFeedback('wait', '示范', '起始代码没有守住底线', '超时后直接再退，导致重复退款。这是示范，不是你的成绩；左侧代码没有变化。', '不计成绩');
   } else if (summary.passed) {
-    setFeedback('ok', summary.score, '本关通过',
-      `所有 ${summary.stats.runs} 组都没有重复退款或无证据报成功，任务也有明确收尾。${improvementText(summary)}`, '/ 100');
+    setFeedback(appropriate(summary) === summary.runs.length ? 'ok' : 'wait', summary.score, verdict(summary),
+      `所有 ${summary.stats.runs} 组都守住安全底线，${appropriate(summary)} 组处理合适。${improvementText(summary)}`, '/ 100');
   } else {
     const first = summary.runs.find((r) => r.failed);
     const reason = first.gates.duplicate ? '发生重复退款' : first.gates.falseClaim ? '没有证据就说退款成功' : '任务没有正常收尾';
@@ -178,12 +236,18 @@ async function run(isDemo = false) {
   summary = null;
   curRun = null;
   testedCode = null;
+  lastAttempt = null;
   demo = isDemo;
+  $('resultTools').hidden = true;
+  $('copyResult').disabled = true;
+  $('progressNote').hidden = true;
+  $('resultCopyNote').textContent = '';
   $('inspect').hidden = true;
   $('emptyInspect').hidden = true;
   renderEmptyCard();
   setBusy(true, isDemo);
   setFeedback('loading', '…', isDemo ? '正在准备错误示范' : '正在运行全部场景', `用公开考题测试 ${TOTAL_RUNS} 组，请稍候。`, '运行中');
+  runFocus = document.activeElement;
   const res = await runInWorker(code);
   setBusy(false, isDemo);
   if (!res || !res.ok) {
@@ -198,12 +262,16 @@ async function run(isDemo = false) {
     setFeedback('bad', '—', '这次运行未能完成', message, '没有成绩');
     setStatus('代码保留在左侧，修正后可重新运行。');
     $('emptyInspect').hidden = false;
+    lastAttempt = { code, error: message };
+    revealResult();
     return;
   }
   summary = res.summary;
   testedCode = code;
+  lastAttempt = { code, summary };
   renderOverview();
   if (!isDemo) {
+    updateProgress(summary);
     let n = 1, best = summary.score;
     try {
       n = (Number(localStorage.getItem(KEY_RUNS)) || 0) + 1;
@@ -216,7 +284,7 @@ async function run(isDemo = false) {
   const firstBad = SCENARIOS.find((s) => summary.byScenario[s.id].failed > 0);
   const firstMeh = SCENARIOS.find((s) => summary.byScenario[s.id].correct < summary.byScenario[s.id].total);
   selectScenario((firstBad || firstMeh || SCENARIOS[0]).id);
-  markStale();
+  revealResult();
 }
 $('runBtn').addEventListener('click', () => run());
 $('demoBtn').addEventListener('click', () => run(true));
@@ -229,7 +297,7 @@ function renderScenarios() {
     const option = document.createElement('option');
     option.value = s.id;
     const st = summary.byScenario[s.id];
-    const result = st.failed ? `${st.failed} 组未通过` : st.correct < st.total ? `全部过关，${st.total - st.correct} 组可改进` : `${st.total}/${st.total} 通过`;
+    const result = st.failed ? `${st.failed} 组未通过` : st.correct < st.total ? `底线通过，${st.total - st.correct} 组可改进` : `${st.total}/${st.total} 通过`;
     option.textContent = `${s.no} ${SCENARIO_NAMES[s.id]} · ${result}`;
     select.appendChild(option);
   }
@@ -262,7 +330,7 @@ function showRun(r) {
   const finding = $('caseFinding');
   finding.textContent = describeRun(r);
   finding.className = 'case-finding ' + (r.failed ? 'bad' : r.correct ? 'ok' : 'wait');
-  $('runInfo').textContent = `${demo ? '起始代码示范 · ' : ''}第 ${r.index + 1} 组 · ${STATE_LABEL[r.state]}`;
+  $('runInfo').textContent = `${demo ? '起始代码示范 · ' : ''}第 ${r.index + 1} 组 · ${r.failed ? '未通过 · 模拟终态：' : ''}${STATE_LABEL[r.state]}`;
   $('caseMeta').textContent = `订单 ${r.order.id} · ¥${r.order.amount} · 种子 ${r.seed} · 任务结束 ${r.endAt}s · 业务调用 ${r.businessCalls} 次`;
   $('dots').innerHTML = '';
   for (const x of summary.runs.filter((x) => x.scenario === r.scenario)) {
@@ -420,9 +488,10 @@ function bubble(text, color) {
 function showFinalStage(r) {
   resetStage(r);
   for (const ev of r.trace) if (ev.anim?.type === 'credit') addLedger(ev.anim.refundId, ev.after);
-  if (r.state === 'COMPLETED') bubble(`已为您退款 ¥${amount}`, r.gates.falseClaim ? '#f09c89' : '#75c8a3');
-  else setText('agentStatus', STATE_LABEL[r.state], r.state === 'ABORTED' ? '#f09c89' : '#e6bd6e');
-  $('playState').textContent = '当前显示最终状态';
+  if (r.state === 'COMPLETED') bubble(`Agent 回复：已退款 ¥${amount}`, r.failed ? '#f09c89' : '#75c8a3');
+  if (r.failed) setText('agentStatus', '测试未通过', '#f09c89');
+  else if (r.state !== 'COMPLETED') setText('agentStatus', STATE_LABEL[r.state], '#e6bd6e');
+  $('playState').textContent = r.failed ? '最终状态 · 测试未通过' : '当前显示最终状态';
 }
 async function move(el, dx, dy, ms) {
   el.setAttribute('opacity', 1);
@@ -512,7 +581,7 @@ const NO = Object.fromEntries(SCENARIOS.map((s) => [s.id, s.no]));
 const nos = (ids) => ids.map((id) => NO[id]).join('');
 function pitHTML(what, key) {
   const q = QUOTES[key];
-  return `<li><div>${esc(what)}</div><blockquote>${q.q}<cite><a href="${CH4}" target="_blank" rel="noopener">${q.src}</a></cite></blockquote></li>`;
+  return `<li><div>${esc(what)}</div><blockquote>${q.q}<cite><a href="${chapterUrl(q.src)}" target="_blank" rel="noopener">${q.src}</a></cite></blockquote></li>`;
 }
 function failReasons(s) {
   const out = [];
@@ -534,14 +603,14 @@ function renderCard(n, best) {
     if (s.failedBy.duplicate.includes('restart')) pits.push(pitHTML('中途重启的场景发生了重复退款（场景 ④）', 'restart'));
     if (s.failedBy.falseClaim.length) pits.push(pitHTML(`没有退款证据，就告诉客户已退款（场景 ${nos(s.failedBy.falseClaim)}）`, 'falseClaim'));
     if (s.failedBy.aborted.length) pits.push(pitHTML(`任务没有正常收尾（场景 ${nos(s.failedBy.aborted)}）`, 'aborted'));
-    body = `<div class="stamp bad">未通过</div><h3>${TITLE}</h3>${sub}<div class="score"><div class="n">0<small>/100</small></div><div class="verdict bad">有测试违反安全底线<span>${esc(failReasons(s).join(' · '))}</span></div></div><p class="parts">任一测试违反底线，本次总分为 0。先修复下面的问题，再争取更高分。</p><ul class="pits">${pits.join('')}</ul>`;
+    body = `<div class="stamp bad">未通过</div><h3>${TITLE}</h3>${sub}<div class="score"><div class="n">0<small>/100</small></div><div class="verdict bad">有测试违反安全底线<span>${esc(failReasons(s).join(' · '))}</span></div></div><p class="parts">${appropriate(s)}/${s.stats.runs} 组处理合适；仍有测试违反底线，本次总分为 0。先修复下面的问题，再争取更高分。</p><ul class="pits">${pits.join('')}</ul>`;
   } else {
     const better = [];
     const handedOff = s.runs.filter((r) => r.expected === 'COMPLETED' && r.state !== 'COMPLETED');
     if (handedOff.length) better.push(`${handedOff.length} 组本可自动完成，却转了人工`);
     if (s.stats.avgExtra > 0) better.push(`平均每组还有 ${s.stats.avgExtra} 次多余的查询或退款请求`);
     if (!handedOff.length && s.stats.avgLate > 0) better.push('银行处理完后，还可以更及时地确认结果');
-    body = `<div class="stamp">通过</div><h3>${TITLE}</h3>${sub}<div class="score"><div class="n">${s.score}<small>/100</small></div><div class="verdict ok">本关通过<span>所有 ${s.stats.runs} 组都不多退钱、不乱报成功，任务有明确收尾。</span></div></div><div class="stats"><div><b>0</b><span>重复退款</span></div><div><b>0</b><span>无证据报成功</span></div><div><b>${s.stats.avgExtra}</b><span>每组多余调用</span></div><div><b>${s.stats.avgTime}s</b><span>平均模拟耗时</span></div></div><table class="score-table card-breakdown"><thead><tr><th scope="col">评分项</th><th scope="col">本次得分</th></tr></thead><tbody><tr><th scope="row">安全底线</th><td>${s.parts.base} / 60</td></tr><tr><th scope="row">处理是否合适</th><td>${s.parts.outcome} / 25</td></tr><tr><th scope="row">调用是否精简</th><td>${s.parts.calls} / 10</td></tr><tr><th scope="row">确认是否及时</th><td>${s.parts.timely} / 5</td></tr></tbody></table><p class="parts">${s.stats.correct}/${s.stats.runs} 组处理合适。分项保留一位小数，总分取整。</p>${better.length ? `<p class="better">还能更好：${esc(better.join('；'))}。</p>` : ''}<p class="motto">“超时不等于失败。先查清楚，再动钱。”</p><p class="used">用到的章节：<a href="${CH4}" target="_blank" rel="noopener">4.6.1 恢复策略 · 4.6.2 完成由证据决定</a></p>`;
+    body = `<div class="stamp">${appropriate(s) === s.runs.length ? '通过' : '底线通过'}</div><h3>${TITLE}</h3>${sub}<div class="score"><div class="n">${s.score}<small>/100</small></div><div class="verdict ${appropriate(s) === s.runs.length ? 'ok' : 'wait'}">${verdict(s)}<span>所有 ${s.stats.runs} 组都不多退钱、不乱报成功，任务有明确收尾。</span></div></div><div class="stats"><div><b>0</b><span>重复退款</span></div><div><b>0</b><span>无证据报成功</span></div><div><b>${s.stats.avgExtra}</b><span>每组多余调用</span></div><div><b>${s.stats.avgTime}s</b><span>平均模拟耗时</span></div></div><table class="score-table card-breakdown"><thead><tr><th scope="col">评分项</th><th scope="col">本次得分</th></tr></thead><tbody><tr><th scope="row">安全底线</th><td>${s.parts.base} / 60</td></tr><tr><th scope="row">处理是否合适</th><td>${s.parts.outcome} / 25</td></tr><tr><th scope="row">调用是否精简</th><td>${s.parts.calls} / 10</td></tr><tr><th scope="row">确认是否及时</th><td>${s.parts.timely} / 5</td></tr></tbody></table><p class="parts">${s.stats.correct}/${s.stats.runs} 组处理合适。分项保留一位小数，总分取整。</p>${better.length ? `<p class="better">还能更好：${esc(better.join('；'))}。</p>` : ''}<p class="motto">“超时不等于失败。先查清楚，再动钱。”</p><p class="used">用到的章节：<a href="${chapterUrl('4.6.1')}" target="_blank" rel="noopener">4.6.1 恢复策略</a> · <a href="${chapterUrl('4.6.2')}" target="_blank" rel="noopener">4.6.2 完成由证据决定</a></p>`;
   }
   $('card').className = 'card';
   $('card').innerHTML = top + body + foot;
@@ -559,8 +628,8 @@ $('copyBtn').addEventListener('click', async () => {
   const head = `AI Agent Handbook「Agent 工程闯关」第 01 关「${TITLE}」`;
   const url = pageUrl();
   const text = s.passed
-    ? `我在${head}通过了全部 ${s.stats.runs} 组测试，拿到 ${s.score}/100：没有重复退款、没有无证据报成功，任务都有明确收尾。超时之后，你的 Agent 会不会再退一次钱？来试试：${url}`
-    : `我在${head}还没过关：${failReasons(s).join('，')}。超时之后，你的 Agent 会不会再退一次钱？来试试：${url}`;
+    ? `我在${head}${verdict(s)}，拿到 ${s.score}/100：${s.stats.runs} 组守住安全底线，${appropriate(s)}/${s.stats.runs} 组处理合适。超时之后，你的 Agent 会不会再退一次钱？来试试：${url}`
+    : `我在${head}未通过，${s.score}/100，${appropriate(s)}/${s.stats.runs} 组处理合适：${failReasons(s).join('，')}。超时之后，你的 Agent 会不会再退一次钱？来试试：${url}`;
   try { await navigator.clipboard.writeText(text); $('copied').textContent = '已复制，可以粘贴分享。'; }
   catch { window.prompt('复制下面这段文字：', text); }
 });
@@ -616,16 +685,17 @@ function agentPackage() {
     copyHeader(),
     '## 请你帮我做的事',
     `请阅读下面的闯关说明、接口速查和当前代码，修改 harness.js 里的 \`onRefundTimeout\` 和 \`canComplete\` 两个函数，让全部 ${TOTAL_RUNS} 组测试守住三条底线，并尽量拿高分。`,
-    '- 只使用接口速查里列出的字段和工具；需要等待时用 `ctx.tools.wait`，不要用 setTimeout。\n- 保留两个函数的 export 写法，不要引入其他模块。\n- 直接返回完整的 harness.js 代码，我会整段粘贴回编辑器替换。\n- 代码在网页里运行，你看不到结果；我运行后会把页面上的反馈告诉你。',
+    '- 只使用接口速查里列出的字段和工具；需要等待时用 `ctx.tools.wait`，不要用 setTimeout。\n- 保留两个函数的 export 写法，不要引入其他模块。\n- 直接返回完整的 harness.js 代码，我会整段粘贴回编辑器替换。\n- 代码由我在网页里运行。若附有运行诊断，请先确认它对应哪份代码，再结合失败组和日志修复；不要把实际状态日志当作代码可读字段。',
     '# 闯关说明',
     blockText($('rulesContent')),
     '# 接口速查',
     apiText(),
-    '# 当前代码（harness.js）',
+    lastAttempt && !demo && lastAttempt.code !== ta.value ? '# 当前代码（未测试，harness.js）' : '# 当前代码（harness.js）',
     '```js\n' + code + '\n```',
-  ].join('\n\n');
+    resultText(),
+  ].filter(Boolean).join('\n\n');
 }
-const COPIED_HINT = '已复制：闯关说明、接口速查和当前代码。拿到 Agent 改好的代码后，点进编辑器按 ⌘ / Ctrl + A 全选，再粘贴即可替换。';
+const COPIED_HINT = '已复制闯关说明、接口速查和代码；如有本次测试，也附上诊断。拿到 Agent 改好的代码后，点进编辑器按 ⌘ / Ctrl + A 全选，再粘贴即可替换。';
 let rulesCopyTimer = 0, rulesNoteTimer = 0;
 $('copyRules').addEventListener('click', async () => {
   await copyText(agentPackage(), $('rulesCopied'), COPIED_HINT);

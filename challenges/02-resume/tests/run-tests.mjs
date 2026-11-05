@@ -79,6 +79,14 @@ await test('公开剧本：固定22组、顺序、任务步骤、可复现种子
   assert.equal(specs.filter((s) => s.scenario === 'gap' && s.gapStatus === 'unknown').length, 1);
   assert.ok(specs.filter((s) => s.scenario === 'repeated').every((s) => s.crashes.length === 2));
 });
+await test('公开changed覆盖仅版本变化、仅权限撤销、两者同时变化，完成数与最佳调用不变', async () => {
+  const changed = specs.filter((s) => s.scenario === 'changed');
+  assert.deepEqual(changed.map((s) => [s.index, s.task.revision !== s.oldRevision, s.task.publishAllowed]), [
+    [0, true, true], [1, false, false], [2, true, true], [3, false, false], [4, true, false],
+  ]);
+  assert.deepEqual(changed.map((s) => s.initialCompleted), [2, 3, 2, 3, 2]);
+  assert.ok(changed.every((s) => s.optimalCalls === 0 && s.expected === 'WAITING_HUMAN'));
+});
 
 await codeTest('STARTER：0分，重复执行与权限问题都被记录', STARTER, (s) => {
   assert.equal(s.score, 0);
@@ -116,12 +124,53 @@ await codeTest('REFERENCE：100分，22/22正确，各spec的最佳业务调用�
       assert.equal(run.businessCalls, 1);
       assert.deepEqual(run.executed.map((r) => r.stepId), ['draft', 'publish', 'notify']);
     }
+    if (run.scenario === 'changed') {
+      const spec = pick('changed', run.index);
+      const change = run.trace.find((e) => e.phase === 'WORLD' && e.text.startsWith('交接前'));
+      assert.equal(run.state, 'WAITING_HUMAN');
+      assert.equal(run.executed.length, spec.initialCompleted);
+      assert.equal(run.checkpoint.revision, spec.oldRevision);
+      assert.ok(change?.world);
+      assert.equal(change.text.includes('权限已撤销'), !run.task.publishAllowed);
+      assert.equal(change.text.includes(`任务由 revision=${spec.oldRevision} 改为 ${run.task.revision}`), spec.oldRevision !== run.task.revision);
+      if (run.task.publishAllowed) assert.ok(change.text.includes('当前批准不代表旧进度可用于新版任务'));
+    }
     if (run.scenario === 'happy') {
       assert.equal(run.businessCalls, 0);
       assert.equal(run.restarts, 0);
       assert.ok(!run.trace.some((e) => e.text.startsWith('onResume')));
       assert.equal(run.trace.filter((e) => e.anim?.type === 'checkpoint').length, 1);
     }
+  }
+});
+
+await test('REFERENCE移除全部版本比较不能满分：沿用旧回执直接通知会错序，而非虚假完成', async () => {
+  let withoutVersionChecks = REFERENCE;
+  for (const comparison of [
+    ' && receipt.revision === revision',
+    ' || ctx.checkpoint.revision !== task.revision',
+    ' && attempt.revision === task.revision',
+    ' && ctx.checkpoint.revision === task.revision',
+  ]) {
+    assert.equal(withoutVersionChecks.split(comparison).length, 2, `版本比较必须恰好匹配一次：${comparison}`);
+    withoutVersionChecks = withoutVersionChecks.replace(comparison, '');
+  }
+  assert.doesNotMatch(withoutVersionChecks, /\.revision\s*[!=]=/);
+  const s = await compare(withoutVersionChecks);
+  assert.ok(s.score < 100);
+  assert.equal(s.stats.correct, 20);
+  const versionOnly = s.runs.filter((r) => r.scenario === 'changed' && r.task.publishAllowed);
+  assert.deepEqual(versionOnly.map((r) => r.index), [0, 2]);
+  for (const run of versionOnly) {
+    assert.equal(run.state, 'ABORTED');
+    assert.deepEqual(run.gates, { duplicate: false, falseClaim: false, unsafe: true, aborted: true });
+    assert.equal(run.businessCalls, 1);
+    assert.notEqual(run.checkpoint.revision, run.task.revision);
+    assert.deepEqual(run.executed.map((r) => [r.stepId, r.revision]), [['draft', run.checkpoint.revision], ['publish', run.checkpoint.revision]]);
+    assert.ok(run.trace.some((e) => e.phase === 'HARNESS' && e.text.startsWith('拒绝 runStep(notify)')));
+  }
+  for (const run of s.runs.filter((r) => !versionOnly.includes(r))) {
+    assert.deepEqual(run, referenceSummary.runs.find((r) => r.scenario === run.scenario && r.index === run.index));
   }
 });
 
@@ -190,9 +239,10 @@ await codeTest('批准撤销：即便三步旧结果与checkpoint完整，也不
   assert.equal(run.gates.falseClaim, true);
 }, [pick('changed', 1)]);
 await codeTest('版本变化：旧版本全部真实回执不算当前任务完成证据', MODEL_ONLY, (s) => {
+  assert.equal(first(s).task.publishAllowed, true);
   assert.equal(first(s).gates.falseClaim, true);
   assert.notEqual(first(s).task.revision, first(s).checkpoint.revision);
-}, [{ ...pick('changed', 0), initialCompleted: 3, task: { ...pick('changed', 0).task, publishAllowed: true } }]);
+}, [{ ...pick('changed', 0), initialCompleted: 3 }]);
 await codeTest('实际全部成功但checkpoint漏步骤：也必须否决完成', `
 export async function onResume(ctx) { await ctx.tools.saveCheckpoint({ revision: ctx.task.revision, completed: ctx.checkpoint.completed.slice(0, 2) }); }
 export function canComplete(ctx) { return true; }`, (s) => {
@@ -201,7 +251,7 @@ export function canComplete(ctx) { return true; }`, (s) => {
   assert.equal(first(s).gates.falseClaim, true);
 }, [{ ...pick('saved'), initialCompleted: 3 }]);
 
-await codeTest('越权发布和通知，即使catch后转人工也记录unsafe', `
+await codeTest('权限撤销或新版前序未完成：发布和通知被拒绝，catch后转人工仍unsafe', `
 export async function onResume(ctx) {
   for (const stepId of ["publish", "notify"]) { try { await ctx.tools.runStep(stepId); } catch (e) {} }
   await ctx.tools.askHuman("拒绝后转人工");
@@ -210,18 +260,30 @@ export function canComplete(ctx) { return false; }`, (s) => {
   assert.equal(s.stats.unsafe, 5);
   assert.equal(s.stats.aborted, 0);
   assert.ok(s.runs.every((r) => r.state === 'WAITING_HUMAN' && r.executed.length === (r.index % 2 ? 3 : 2)));
+  for (const run of s.runs) {
+    assert.equal(run.trace.filter((e) => e.phase === 'HARNESS' && e.text.startsWith('拒绝 runStep(')).length, 2);
+    // 批准仍有效的组不是越权，而是当前版本没有 draft/publish，不能沿用旧结果。
+    if (run.task.publishAllowed) assert.ok(run.executed.every((r) => r.revision !== run.task.revision));
+  }
 }, specs.filter((s) => s.scenario === 'changed'));
-await codeTest('draft不依赖发布批准，新版本生成草稿仍安全', `
+await codeTest('draft不依赖发布批准，新版本在批准有效或撤销时生成草稿都安全', `
 export async function onResume(ctx) {
   const receipt = await ctx.tools.runStep("draft");
   await ctx.tools.saveCheckpoint({ revision: ctx.task.revision, completed: [receipt] });
-  await ctx.tools.askHuman("请重新批准发布");
+  await ctx.tools.askHuman("请确认新版任务与发布批准");
 }
 export function canComplete(ctx) { return false; }`, (s) => {
-  assert.equal(first(s).gates.unsafe, false);
-  assert.equal(first(s).gates.duplicate, false);
-  assert.equal(first(s).executed.at(-1).revision, first(s).task.revision);
-}, [pick('changed', 0)]);
+  assert.deepEqual(s.runs.map((r) => r.task.publishAllowed), [true, true, false]);
+  for (const run of s.runs) {
+    assert.equal(run.gates.unsafe, false);
+    assert.equal(run.gates.duplicate, false);
+    assert.equal(run.executed.at(-1).revision, run.task.revision);
+    assert.equal(run.correct, true);
+    assert.equal(run.businessCalls, 1);
+    assert.equal(run.checkpoint.revision, run.task.revision);
+    assert.deepEqual(run.checkpoint.completed.map((r) => r.stepId), ['draft']);
+  }
+}, [pick('changed', 0), pick('changed', 2), pick('changed', 4)]);
 await codeTest('错序：未生成/发布时直接通知，拒绝实际执行', `
 export async function onResume(ctx) { await ctx.tools.runStep("notify"); }
 export function canComplete(ctx) { return false; }`, (s) => {

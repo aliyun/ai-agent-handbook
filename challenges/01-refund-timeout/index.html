@@ -15,13 +15,25 @@
 @media(max-width:820px){.wrap{padding:0 20px}.nav{height:56px}.brand{font-size:17px}.nav-links{gap:14px}.nav-links .nav-label{display:none}.intro{padding:20px 0 14px}h1{font-size:30px}.bench-body{grid-template-columns:1fr}.editor{border-bottom:1px solid var(--bench-line)}.stage{border-left:0}.ed{height:330px}.mobile-jump{display:flex;gap:8px;margin:0 0 12px}.mobile-jump a{flex:1;text-align:center;font-size:13px;min-height:36px;border:1px solid var(--line);border-radius:5px;padding:6px}.feedback{min-height:102px}.underbench{font-size:11px;padding-bottom:24px}}
 @media(max-width:520px){.wrap{padding:0 12px}.brand{font-size:16px;gap:8px}.brand img{width:24px;height:24px}.nav{height:auto;min-height:56px;padding:12px 0;flex-wrap:wrap;gap:6px}.nav-links{width:100%;justify-content:flex-end;gap:10px;font-size:12px}.nav-links .nav-read{display:inline}h1{font-size:26px}.intro{padding:18px 4px 12px}.dialog-head .btn{padding:8px 10px}.panel-heading{padding:14px 16px}.editor-caption{padding:8px 16px;font-size:11px;flex-wrap:wrap;row-gap:4px}.editor-caption>span{flex-basis:100%}.editor-reference{margin:0 16px}.ed{font-size:12px}.gutter{width:36px;padding-right:10px}.edit-bottom{padding:14px 16px}.feedback{padding:16px;gap:14px}.feedback-score{font-size:38px;min-width:56px}.feedback-title{font-size:15px}.inspect{padding:12px 16px 16px}.flow svg{display:none}.mobile-flow{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:18px 4px;font-size:12px}.mobile-flow span{border:1px solid #536a5b;padding:8px 6px;border-radius:4px}.flow-head{flex-wrap:wrap}.play-controls #playState{max-width:130px;overflow-wrap:anywhere}.dialog-content{padding:16px}.dialog-head{padding:12px 16px}.card{padding:18px}.card-top .b{font-size:12px}.card-top>span:last-child{display:none}.stamp{right:18px;top:74px}.card h3{font-size:24px}.score .n{font-size:62px}.score{gap:12px}.stats{grid-template-columns:repeat(2,1fr)}.case-detail{gap:8px}.case-select{gap:8px}.case-select label{font-size:11px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+.result-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-width:0;padding:12px 24px;border-bottom:1px solid var(--line);background:var(--cream);overflow-wrap:anywhere}
+.progress-note{flex-basis:100%;min-width:0;font-size:12px;color:var(--muted)}
+.result-tools .btn{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.result-copy-note{min-width:0;font-size:12px;color:var(--brand)}
+#productionHelp>summary{gap:12px;overflow-wrap:anywhere}
+#productionHelp>summary:after{flex:none}
+.production-content{min-width:0;padding:2px 0 12px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.production-intro{font-size:12px}
+.production-content ul{margin:10px 0;padding-left:20px}
+.production-content li+li{margin-top:8px}
+.production-next{margin-top:12px}
+@media(max-width:520px){.result-tools{padding:12px 16px}}
 </style>
 </head>
 <body data-level="__LEVEL_ID__" data-version="__LEVEL_VERSION__">
 <div class="wrap">
 <nav class="nav" aria-label="手册导航">
 <a class="brand" href="../../"><img src="logo.svg" alt="">AI Agent Handbook</a>
-<div class="nav-links"><a href="../" aria-label="返回关卡目录">关卡目录</a><a class="nav-read" id="chapterLink" href="../../build/chapter-04.html" target="_blank" rel="noopener">这关对应手册第 4 章 ↗</a><a href="https://github.com/aliyun/ai-agent-handbook" target="_blank" rel="noopener">GitHub ↗</a></div>
+<div class="nav-links"><a href="../" aria-label="返回关卡目录">关卡目录</a><a class="nav-read" id="chapterLink" href="../../build/chapter-04.html#_4-6-1-针对失败类型选择恢复策略" target="_blank" rel="noopener">这关对应手册第 4 章 ↗</a><a href="https://github.com/aliyun/ai-agent-handbook" target="_blank" rel="noopener">GitHub ↗</a></div>
 </nav>
 <header class="intro">
 <div class="eyebrow">AGENT 工程闯关 · 第 01 关</div>
@@ -36,7 +48,7 @@
 <div class="editor-caption"><span>模型是固定剧本，你来补上 Harness。</span><div class="caption-actions"><button class="copy-agent" id="copyEditor" type="button" title="复制闯关说明、接口速查和当前代码" data-boot disabled>复制给 Agent</button><button class="linkbtn" id="resetCode" type="button" data-boot disabled>恢复起始代码</button></div></div>
 <details class="editor-reference" id="apiHelp">
 <summary>接口速查：ctx 里有哪些数据、能调用哪些工具</summary>
-<div class="quick-body" id="apiBody">
+<div class="quick-body" id="apiBody" tabindex="0" role="region" aria-label="接口数据与工具说明">
 <dl>
 <dt>onRefundTimeout(ctx)</dt><dd>第一次退款超时，或新实例接手任务时调用。可以调用工具。</dd>
 <dt>canComplete(ctx) → true / false</dt><dd>模型申请完成时调用。返回 true 才告诉客户已退款；否则转人工。这里只做判定，不能调用工具。</dd>
@@ -59,11 +71,16 @@
 <div class="ed-status" id="status" role="status">正在载入编辑器…</div>
 </div>
 </section>
-<section class="stage" id="feedbackPanel" aria-labelledby="feedbackTitle">
+<section class="stage" id="feedbackPanel" aria-labelledby="feedbackTitle" tabindex="-1">
 <div class="panel-heading"><h2 id="feedbackTitle"><span class="step-no">02</span> 运行反馈</h2><button class="linkbtn" id="shareBtn" type="button" disabled>分享成绩 ↗</button></div>
 <div class="feedback empty" id="feedback" role="status" aria-live="polite">
 <div class="feedback-score" id="feedbackScore">—<small>等待运行</small></div>
-<div><p class="feedback-title" id="verdictTitle">先运行一次，看看哪里出问题</p><p class="feedback-desc" id="scoreline">结果会出现在这里，不用翻到下一屏。</p><p class="stale-note" id="staleNote" hidden>代码已修改。下面是上次运行的结果，请重新运行。</p></div>
+<div><p class="feedback-title" id="verdictTitle">先运行一次，看看哪里出问题</p><p class="feedback-desc" id="scoreline">运行后会显示结论、场景和改进建议。</p><p class="stale-note" id="staleNote" hidden>代码已修改。下面是上次运行的结果，请重新运行。</p></div>
+</div>
+<div class="result-tools" id="resultTools" hidden>
+<p id="progressNote" class="progress-note" hidden></p>
+<button class="btn" id="copyResult" type="button" disabled>复制本次结果给 Agent</button>
+<span id="resultCopyNote" role="status" class="result-copy-note"></span>
 </div>
 <div class="empty-inspect" id="emptyInspect">
 <ol><li><strong>先看左侧的两个函数</strong>一个处理退款超时，一个决定能否确认完成。</li><li><strong>运行后，在这里找原因</strong>先看结论，再看失败场景和关键事件。</li><li><strong>改好再运行</strong>接口就在代码上方，提示就在问题旁边。</li></ol>
@@ -96,7 +113,20 @@
 </div>
 <div class="events"><h3>关键事件 <span>· 按发生顺序</span></h3><ol class="event-list" id="keyEvents"></ol></div>
 <details class="feedback-help" id="hintHelp"><summary>需要一点提示？<span id="hintLabel">本场景提示</span></summary><div class="hint-text"><div id="hintText"></div><div class="more-hints"><button class="btn" id="nextHint" type="button">再看一条</button><span id="hintProgress"></span></div></div></details>
-<details class="feedback-help" id="fullLog"><summary>查看完整日志<span id="traceCount"></span></summary><p class="trace-caption">银行与账户行是上帝视角；Agent 只能看到回执和查询结果。含任务结束后的到账事件。</p><div class="log" id="log"></div></details>
+<details class="feedback-help" id="fullLog"><summary>查看完整日志<span id="traceCount"></span></summary><p class="trace-caption">银行与账户行是上帝视角；Agent 只能看到回执和查询结果。含任务结束后的到账事件。</p><div class="log" id="log" tabindex="0" role="region" aria-label="本组退款完整执行日志"></div></details>
+<details class="feedback-help" id="productionHelp">
+<summary>用到实际项目，还要补什么？</summary>
+<div class="production-content">
+<p class="production-intro">本关使用固定模型和模拟接口，只验证本关原则，不验证真实模型能力或生产可靠性。迁移时还需补齐：</p>
+<ul>
+<li>核实退款接口的幂等有效期、同键参数约束与作用域，明确过期或跨商户、账户时的处理方式。</li>
+<li>把请求、幂等键和回执存到进程之外，按任务关联，确保重启后仍可追溯。参见 <a href="../../build/chapter-04.html#_4-4-1-让任务脱离当前连接持续存在" target="_blank" rel="noopener">任务持久化</a>。</li>
+<li>跨实例共用统一期限，设置有限重试与退避；期限内查不清就停止自动执行。参见 <a href="../../build/chapter-04.html#_4-6-1-针对失败类型选择恢复策略" target="_blank" rel="noopener">按失败类型恢复</a>。</li>
+<li>为人工交接指定负责人，附上请求、查询和回执证据，约定接单确认及核验后的恢复入口。参见 <a href="../../build/chapter-04.html#_4-6-2-让完成由证据决定" target="_blank" rel="noopener">由证据决定完成</a>。</li>
+</ul>
+<p class="production-next"><a id="nextLevel" href="../02-resume/">下一关：任务中断，如何优化？ →</a></p>
+</div>
+</details>
 </div>
 </section>
 </div>
@@ -110,12 +140,12 @@
 <div id="challengeBackground"><p>你让 Agent 给客户退款。等了 <b>10 秒，接口没有回应</b>。钱可能已经退了，只是消息没传回来；也可能根本没退。直接再退，可能退两笔；直接说成功，又可能骗了客户。</p><p>这道题请你补上 Agent 的处理逻辑，<b>让它在拿不准的时候，也能把事情办妥。</b></p></div>
 <div class="rule-learning" id="learningGoals"><p><b>这关能学到什么：</b>没收到回应不等于失败；重试不能重复动钱；告诉客户“完成了”，必须有证据。</p><p>这些原则也适用于付款、下单、发券等操作。</p></div>
 <h3>2. 怎么参与？</h3><p>我们提供 Agent，模型按固定剧本行动。你只改两个函数：<code>onRefundTimeout</code> 处理退款超时和中途重启；<code>canComplete</code> 决定能不能告诉客户已退款。</p><p>改好后点“运行全部场景”，看反馈，再修改。浏览器里直接跑，不用 API Key，可以无限次重试。工具用法可在代码上方的“接口速查”中查看。</p>
-<h3>3. 怎样算过关？</h3><ul><li><b>不多退钱：</b>同一笔退款，不能让客户收到两次。</li><li><b>不乱报成功：</b>没有退款成功的证据，就不能告诉客户已经退了。</li><li><b>有明确收尾：</b>确认退款完成，或交给人工继续处理；程序报错、一直卡着、超过时间或调用次数限制，都不算正常收尾。</li></ul><p><b>转人工不等于失败。</b>全部 22 组都满足三条底线，就算过关。只要一组违反底线，本次总分就是 0，不是只扣掉这一项。</p>
+<h3>3. 怎样算过关？</h3><ul><li><b>不多退钱：</b>同一笔退款，不能让客户收到两次。</li><li><b>不乱报成功：</b>没有退款成功的证据，就不能告诉客户已经退了。</li><li><b>有明确收尾：</b>确认退款完成，或交给人工继续处理；程序报错、一直卡着、超过时间或调用次数限制，都不算正常收尾。</li></ul><p><b>转人工不等于失败。</b>全部 22 组都满足三条底线，代表“安全底线通过”；还要 22 组全部处理合适，才显示“本关通过”。只要一组违反底线，本次总分就是 0，不是只扣掉这一项。</p>
 <h3>4. 系统会检查哪些情况？</h3><p>每次点击“运行全部场景”，系统都会用你的同一份代码检查下面五个场景，共 22 组测试。每个场景中的几组测试，会改变订单、退款金额或处理时间，避免代码只应付某一个例子。</p>
 <table><thead><tr><th scope="col">场景</th><th scope="col">实际发生了什么</th><th scope="col">测试数</th></tr></thead><tbody>
 <tr><td>① 钱退了，回应丢了</td><td>钱已经退给客户，但成功消息没传回来。</td><td>5</td></tr><tr><td>② 请求没到银行</td><td>退款请求已经发出，但没到银行，钱还没退。</td><td>5</td></tr><tr><td>③ 银行还在处理</td><td>暂时查不到结果；有的测试到期限内也查不清。</td><td>5</td></tr><tr><td>④ Agent 中途重启</td><td>处理到一半进程中断，新实例需要接着办。</td><td>5</td></tr><tr><td>⑤ 一切正常</td><td>第一次退款就成功，用来检查代码有没有把正常情况改坏。</td><td>2</td></tr>
 </tbody></table><p>表中是你能看到的测试背景。运行时，Agent 只能从退款回应和查询结果中了解情况，不能直接读取银行的真实状态。</p>
-<h3 id="scoreGuideTitle">5. 过关后，怎样拿更高分？</h3><p>先守住底线，再看处理得好不好。能完成的有没有完成、有没有多余调用、确认是否及时，都会影响分数。</p><table class="score-table" id="scoreGuide"><thead><tr><th scope="col">评分项</th><th scope="col">看什么</th><th scope="col">分值</th></tr></thead><tbody><tr><th scope="row">安全底线</th><td>所有测试都满足上面三条</td><td>60</td></tr><tr><th scope="row">处理是否合适</th><td>能完成的完成，确实查不清的交人工</td><td>最多 25</td></tr><tr><th scope="row">调用是否精简</th><td>少做不必要的查询和退款请求</td><td>最多 10</td></tr><tr><th scope="row">确认是否及时</th><td>银行处理完后，及时确认退款结果</td><td>最多 5</td></tr></tbody></table><p>例如，一律转人工可能守住安全底线，但能自动完成的事情没有完成，“处理是否合适”这一项就拿不到高分。过关与拿高分，是两件事。</p>
+<h3 id="scoreGuideTitle">5. 底线通过后，怎样拿更高分？</h3><p>先守住底线，再看处理得好不好。能完成的有没有完成、有没有多余调用、确认是否及时，都会影响分数。</p><table class="score-table" id="scoreGuide"><thead><tr><th scope="col">评分项</th><th scope="col">看什么</th><th scope="col">分值</th></tr></thead><tbody><tr><th scope="row">安全底线</th><td>所有测试都满足上面三条</td><td>60</td></tr><tr><th scope="row">处理是否合适</th><td>能完成的完成，确实查不清的交人工</td><td>最多 25</td></tr><tr><th scope="row">调用是否精简</th><td>少做不必要的查询和退款请求</td><td>最多 10</td></tr><tr><th scope="row">确认是否及时</th><td>银行处理完后，及时确认退款结果</td><td>最多 5</td></tr></tbody></table><p>例如，一律转人工可能只达到“安全底线通过”：能自动完成的事情没有完成，不能算“本关通过”。22 组全部处理合适后，调用是否精简、确认是否及时仍会影响分数。</p>
 <details class="rule-detail" id="exactScoring"><summary>精确计分方法与运行限制</summary><div><p>下面的公式只在全部底线通过时使用，最终总分四舍五入取整。</p><div class="formula">总分 = 60<br>+ 25 × 处理合适的测试数 / 22<br>+ 10 × max(0, 1 − 平均多余调用数 / 2)<br>+ 5 × max(0, 1 − 平均确认延迟秒数 / 30)</div><p><b>多余调用：</b>只统计你写的代码发起的查询与退款请求，不含 Agent 最开始发出的那笔退款。每组的次数减去该场景设定的基准次数（场景①至⑤依次为 1、1、2、2、0），少于基准按 0 计算，再对 22 组取平均。不是所有工具调用都扣分。</p><p><b>确认延迟：</b>只看场景③中期限内能处理完的测试，银行处理完到 Agent 确认完成之间的秒数；若转人工而没有确认完成，这组按 30 秒计。</p><p><b>运行限制：</b>每组任务最多 180 秒模拟时间、40 次工具调用。等待请使用 <code>ctx.tools.wait</code>；模拟时间不等于现实等待时间或动画时长。浏览器会终止 6 秒仍未跑完的代码，此时显示运行错误，不生成成绩。</p></div></details>
 <h3>6. 能不能反复尝试？</h3><p>可以无限次重试。代码和成绩只保存在本机，不会上传。目前测试固定（公开种子 2026），相同代码得到相同结果，方便比较；尚未启用隐藏测试。通过本关不代表通过真实生产环境验收。</p>
 </div>

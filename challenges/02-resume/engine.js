@@ -49,9 +49,11 @@ export function makeSpecs(seedBase = PUBLIC_SEED) {
       const oldRevision = 1 + Math.floor(random() * 4);
       const changedRevision = scenario.id === 'changed' && index % 2 === 0;
       const revision = oldRevision + (changedRevision ? 1 + Math.floor(random() * 2) : 0);
+      // changed：0/2 仅版本变化，1/3 仅撤销批准，4 两者同时变化。
+      const publishAllowed = scenario.id !== 'changed' || index === 0 || index === 2;
       const spec = {
         scenario: scenario.id, index, seed: seed.toString(16).padStart(8, '0'),
-        task: { id: 'REPORT-' + (1000 + Math.floor(random() * 9000)), revision, publishAllowed: scenario.id !== 'changed', steps: STEPS.map((s) => ({ ...s })) },
+        task: { id: 'REPORT-' + (1000 + Math.floor(random() * 9000)), revision, publishAllowed, steps: STEPS.map((s) => ({ ...s })) },
         oldRevision,
         initialCompleted: scenario.id === 'happy' ? 3 : scenario.id === 'changed' ? 2 + index % 2 : scenario.id === 'saved' ? 2 : 1,
         stepSeconds: round(2 + random() * 2), inspectSeconds: round(1 + random() * 0.5),
@@ -172,7 +174,7 @@ export async function runOne(spec, loadHooks, opts = {}) {
     log('WORLD', spec.gapStatus === 'not_found' ? '发布尚未发生，请求在实际执行前丢失' : spec.gapStatus === 'unknown' ? '发布已发生，但权威查询在本次截止期限内不可用' : '发布已经发生，但结果未记入 checkpoint', { world: true });
   }
   if (sc === 'changed') {
-    log('WORLD', `交接前权限已撤销${task.revision !== spec.oldRevision ? `，任务由 revision=${spec.oldRevision} 改为 ${task.revision}` : ''}`, { world: true });
+    log('WORLD', `交接前${task.publishAllowed ? '当前发布批准仍有效' : '权限已撤销'}${task.revision !== spec.oldRevision ? `，任务由 revision=${spec.oldRevision} 改为 ${task.revision}` : ''}${task.publishAllowed ? '；当前批准不代表旧进度可用于新版任务' : ''}`, { world: true });
   }
   let reason = sc === 'happy' ? 'start' : 'restart';
 

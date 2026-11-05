@@ -4,7 +4,7 @@
 export const LEVEL = { id: '01-refund-timeout', version: 1 };
 export const DEADLINE = 180;      // 任务期限（模拟秒）
 export const CALL_BUDGET = 40;    // 单次任务里 Harness 最多调用工具次数
-export const PUBLIC_SEED = 2026;  // 页面上用的公开种子；正式榜单用隐藏种子
+export const PUBLIC_SEED = 2026;  // 页面和默认测试共用的固定种子
 
 export const SCENARIOS = [
   { id: 'lost', no: '①', name: '响应丢失', hint: '钱已退，回执没回来' },
@@ -127,6 +127,20 @@ export async function runOne(spec, loadHooks, opts = {}) {
   let aborted = null;
   let escalated = null;
 
+  // 只容忍浮点累加误差，不对正常时间取整；所有耗时都必须在副作用前检查。
+  const timeEpsilon = Number.EPSILON * DEADLINE * (CALL_BUDGET + 10);
+  function advanceTime(seconds) {
+    if (aborted) throw new Abort(aborted.kind, aborted.msg);
+    const next = now + seconds;
+    if (next - DEADLINE > timeEpsilon) {
+      now = DEADLINE;
+      aborted = { kind: 'deadline', msg: `超过 ${DEADLINE}s 期限仍没有结论` };
+      log('HARNESS', aborted.msg, { chip: 'bad', chipText: '超期' });
+      throw new Abort('deadline', aborted.msg);
+    }
+    now = Math.abs(next - DEADLINE) <= timeEpsilon ? DEADLINE : next;
+  }
+
   const snapshot = () => ({
     order: { ...order },
     attempts: attempts.map((a) => ({ ...a, result: a.result ? { ...a.result } : null })),
@@ -137,7 +151,7 @@ export async function runOne(spec, loadHooks, opts = {}) {
   // 第一次退款由 Agent 发出（不在玩家代码里）
   log('PREPARE', `订单 ${order.id} 申请退款 ${money(order.amount)}`);
   log('MODEL', '模型：调用 refund 给客户退款', { model: true });
-  now = 0.4;
+  advanceTime(0.4);
   const firstKey = newKey();
   attempts.push({ idempotencyKey: firstKey, sentAt: now, by: 'agent', result: null });
   log('ACT', `refund(${order.id}, ${money(order.amount)}) · key=${firstKey}`, { chip: 'sent', chipText: '已发出', anim: { type: 'send' } });
@@ -146,13 +160,13 @@ export async function runOne(spec, loadHooks, opts = {}) {
   let reason = 'timeout';
   if (sc === 'happy') {
     const res = bankReceive(firstKey);
-    now = 0.8;
+    advanceTime(0.4);
     attempts[0].result = { status: res.status, refundId: res.refundId };
     evidence.push({ at: now, source: 'refund', status: res.status, refundId: res.refundId });
     log('OBSERVE', `200 OK · ${res.refundId}`, { chip: 'ok', chipText: '已确认', anim: { type: 'ack', status: 'succeeded' } });
   } else if (sc === 'lost') {
     bankReceive(firstKey);
-    now = 1.0;
+    advanceTime(0.6);
     log('WORLD', '回执在网络上丢了（Agent 看不到这一行）', { world: true, anim: { type: 'lost' } });
   } else if (sc === 'dropped') {
     log('WORLD', '请求没到达银行（Agent 看不到这一行）', { world: true, anim: { type: 'drop' } });
@@ -161,7 +175,7 @@ export async function runOne(spec, loadHooks, opts = {}) {
   } else if (sc === 'restart') {
     if (spec.firstLanded) {
       bankReceive(firstKey);
-      now = 1.0;
+      advanceTime(0.6);
       log('WORLD', '回执在网络上丢了（Agent 看不到这一行）', { world: true, anim: { type: 'lost' } });
     } else {
       log('WORLD', '请求没到达银行（Agent 看不到这一行）', { world: true, anim: { type: 'drop' } });
@@ -202,8 +216,8 @@ export async function runOne(spec, loadHooks, opts = {}) {
         pre('refund');
         if (orderId !== order.id) throw new Error(`只能退本单 ${order.id}`);
         if (amount !== order.amount) throw new Error(`金额必须与订单一致（${order.amount}）`);
+        advanceTime(0.4);
         const key = options && options.idempotencyKey ? String(options.idempotencyKey) : newKey();
-        now += 0.4;
         businessCalls++;
         const reused = attempts.some((a) => a.idempotencyKey === key);
         const unresolved = attempts.some((a) => !a.result || a.result.status === 'processing');
@@ -224,7 +238,7 @@ export async function runOne(spec, loadHooks, opts = {}) {
       async queryRefund(orderId) {
         pre('queryRefund');
         if (orderId !== order.id) throw new Error(`只能查本单 ${order.id}`);
-        now += 0.3;
+        advanceTime(0.3);
         businessCalls++;
         log('ACT', `queryRefund(${orderId})`, { chip: 'sent', chipText: '查询', anim: { type: 'query' } });
         const res = bankQuery();
@@ -239,14 +253,9 @@ export async function runOne(spec, loadHooks, opts = {}) {
         const s = Number(seconds);
         if (!(s > 0)) throw new Error('wait(seconds) 需要正数');
         maybeCrash();
-        if (now + s > DEADLINE) {
-          now = DEADLINE;
-          aborted = { kind: 'deadline', msg: `超过 ${DEADLINE}s 期限仍没有结论` };
-          log('WAIT', `等待 ${r1(s)}s → 超过任务期限`, { chip: 'bad', chipText: '超期', anim: { type: 'wait', seconds: s } });
-          throw new Abort('deadline', aborted.msg);
-        }
-        log('WAIT', `等待 ${r1(s)}s`, { anim: { type: 'wait', seconds: s } });
-        now += s;
+        const at = now;
+        advanceTime(s);
+        log('WAIT', `等待 ${r1(s)}s`, { at, anim: { type: 'wait', seconds: s } });
       },
       async askHuman(reasonText) {
         pre('askHuman');
@@ -291,10 +300,10 @@ export async function runOne(spec, loadHooks, opts = {}) {
 
   // ---------- 超时 / 重启后交给玩家的 Harness ----------
   if (sc !== 'happy') {
-    now = Math.max(now, 10.4);
+    advanceTime(Math.max(0, 10.4 - now));
     log('OBSERVE', '10 秒没有回执 · timeout', { chip: 'wait', chipText: '结果未知', anim: { type: 'timeout' } });
     const instA = { hooks: await loadHooks(), dead: false, crashOnFirstCall: sc === 'restart' };
-    now += 0.1;
+    advanceTime(0.1);
     log('HARNESS', 'onRefundTimeout(ctx) · reason=timeout', { harness: true });
     const ctxA = { ...snapshot(), reason, model: { message: '退款可能没成功，要不要再试一次？' }, now: () => r1(now), tools: makeTools(instA) };
     await runHook(instA, 'onRefundTimeout', ctxA);
@@ -304,15 +313,21 @@ export async function runOne(spec, loadHooks, opts = {}) {
       log('WORLD', '实例崩溃，还没来得及保存结果', { world: true, anim: { type: 'crash' } });
     }
     if (sc === 'restart' && instA.dead && !aborted) {
-      now += spec.restartDelay;
-      reason = 'restart';
-      const pendingCount = attempts.filter((a) => !a.result).length;
-      log('RESTART', `新实例接手任务，从任务存储读到 ${attempts.length} 条请求（${pendingCount} 条没有回执）`, { anim: { type: 'restart' } });
-      log('MODEL', '模型（新实例）：我没有上一轮的对话记录，重新退一次吧', { model: true });
-      const instB = { hooks: await loadHooks(), dead: false, crashOnFirstCall: false };
-      log('HARNESS', 'onRefundTimeout(ctx) · reason=restart', { harness: true });
-      const ctxB = { ...snapshot(), reason, model: { message: '我没有上一轮的对话记录，重新退一次吧' }, now: () => r1(now), tools: makeTools(instB) };
-      await runHook(instB, 'onRefundTimeout', ctxB);
+      try {
+        advanceTime(spec.restartDelay);
+      } catch (e) {
+        if (!(e instanceof Abort)) throw e;
+      }
+      if (!aborted) {
+        reason = 'restart';
+        const pendingCount = attempts.filter((a) => !a.result).length;
+        log('RESTART', `新实例接手任务，从任务存储读到 ${attempts.length} 条请求（${pendingCount} 条没有回执）`, { anim: { type: 'restart' } });
+        log('MODEL', '模型（新实例）：我没有上一轮的对话记录，重新退一次吧', { model: true });
+        const instB = { hooks: await loadHooks(), dead: false, crashOnFirstCall: false };
+        log('HARNESS', 'onRefundTimeout(ctx) · reason=restart', { harness: true });
+        const ctxB = { ...snapshot(), reason, model: { message: '我没有上一轮的对话记录，重新退一次吧' }, now: () => r1(now), tools: makeTools(instB) };
+        await runHook(instB, 'onRefundTimeout', ctxB);
+      }
     }
   }
 
