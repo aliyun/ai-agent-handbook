@@ -65,7 +65,7 @@
 | [运行篇](./03-run/) | `03-run/` | 第 7–12 章 | 从单 Agent 稳定运行扩展到异步、多 Agent 与分布式通信。 |
 | [治理篇](./04-governance/) | `04-governance/` | 第 13–16 章 | 让运行可见、行为有边界、资产可管理、上线前可验证。 |
 | [调优篇](./05-optimization/) | `05-optimization/` | 第 17–24 章 | 从模型与 Agent 两条主线构建持续优化闭环。 |
-| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章、Jev 专题、Personal Agent 专题 | 企业实践、垂直场景、Agent Infra 前沿探索、结构化决策与 Personal Agent 观察。 |
+| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章、Jev 专题、Personal Agent 专题、FDE 专题 | 企业实践、垂直场景、Agent Infra 前沿探索、结构化决策、Personal Agent 观察与 FDE 工程实践。 |
 | [总结与展望篇](./07-conclusion/) | `07-conclusion/` | 第 30 章 | 从 Agentic Application 走向 Agentic OS。 |
 
 ### 章节导航
@@ -103,6 +103,7 @@
 | 实践篇 | [第 29 章　GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索](<./06-case-study/第 29 章 GOAI Agent Infra 赛道：多 Agent 协同的前沿实践探索.md>) | 世界人工智能开源大赛优秀作品与多领域 Agent Infra 探索。 |
 | 实践篇 | [Jev 专题](<./06-case-study/Jev 专题/>) | Jev 的模型解析、路由实践、接口示例与完整 Harness 决策流程。 |
 | 实践篇 | [Personal Agent 专题](<./06-case-study/Personal Agent 专题/>) | Personal Agent 的产品路线、技术挑战、商业化方向与 Agent as a Service 架构。 |
+| 实践篇 | [FDE 专题](<./06-case-study/FDE 专题/>) | 企业项目中的 AI Coding 全生命周期交付、规格驱动开发与工程规范。 |
 | 总结与展望篇 | [第 30 章　从 Agentic Application 到 Agentic OS](<./07-conclusion/第 30 章 从 Agentic Application 到 Agentic OS.md>) | 从单个应用走向可协作、可治理、可持续演进的智能系统。 |
 
 ### 实践案例导航
@@ -132,6 +133,7 @@
 | Jev 专题 | [Jev 模型智能路由实践](<./06-case-study/Jev 专题/Jev 模型智能路由实践.md>) |
 | Personal Agent 专题 | [Personal Agent 产品技术与商业观察](<./06-case-study/Personal Agent 专题/Personal Agent 产品技术与商业观察.md>) |
 | Personal Agent 专题 | [从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构](<./06-case-study/Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>) |
+| FDE 专题 | [AI Coding 全生命周期的企业级FDE工程实践](<./06-case-study/FDE 专题/AI Coding 全生命周期的企业级FDE工程实践.md>) |
 
 
 ## 4. 下一步规划

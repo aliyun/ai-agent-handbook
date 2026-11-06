@@ -17,3 +17,7 @@
 
 - [Personal Agent 产品技术与商业观察](<./Personal Agent 专题/Personal Agent 产品技术与商业观察.md>)
 - [从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构](<./Personal Agent 专题/从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构.md>)
+
+[FDE 专题](<./FDE 专题/>)关注企业项目中的 AI Coding 全生命周期交付，收录需求、设计、任务拆解、编码、验证与部署中的工程实践：
+
+- [AI Coding 全生命周期的企业级FDE工程实践](<./FDE 专题/AI Coding 全生命周期的企业级FDE工程实践.md>)

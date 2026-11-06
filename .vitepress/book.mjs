@@ -319,6 +319,21 @@ for (const part of parts) {
     personalAgent.sourceDirectory = "06-case-study/Personal Agent 专题";
     part.pages.push(personalAgent);
     readingOrder.push(personalAgent, ...personalAgent.children);
+
+    const fde = page("website/case-fde.md", "cases/fde/index", {
+      chapter: "fde",
+      part: part.title,
+    });
+    fde.children = [
+      page(
+        "06-case-study/FDE 专题/AI Coding 全生命周期的企业级FDE工程实践.md",
+        "cases/fde/ai-coding-lifecycle",
+        { chapter: "fde", part: part.title },
+      ),
+    ];
+    fde.sourceDirectory = "06-case-study/FDE 专题";
+    part.pages.push(fde);
+    readingOrder.push(fde, ...fde.children);
   }
 }
 
