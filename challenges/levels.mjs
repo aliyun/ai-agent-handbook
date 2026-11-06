@@ -22,8 +22,8 @@ export const levels = [
     number: "03",
     version: "v1",
     title: "记忆错了，如何优化？",
-    description: "留下哪些信息，才能帮助 Agent 做对下一步？",
-    status: "planned",
+    description: "地址过期、记错客户、临时改址，怎样这次寄对，下次也不再用错记忆？",
+    status: "available",
   },
   {
     id: "04-efficiency",

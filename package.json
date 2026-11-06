@@ -10,7 +10,7 @@
     "build": "node scripts/build-challenges.mjs && vitepress build",
     "preview": "vitepress preview --host 127.0.0.1",
     "check": "node scripts/check-book.mjs && npm run check:challenges",
-    "check:challenges": "node challenges/01-refund-timeout/tests/run-tests.mjs && node challenges/02-resume/tests/run-tests.mjs",
+    "check:challenges": "node challenges/01-refund-timeout/tests/run-tests.mjs && node challenges/02-resume/tests/run-tests.mjs && node challenges/03-memory/tests/run-tests.mjs",
     "check:build": "node scripts/check-build.mjs",
     "test": "playwright test"
   },

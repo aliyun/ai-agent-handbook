@@ -129,7 +129,7 @@ test('reference completes all recoverable cases; unknown and revoked permission 
   for (const anchor of ['_4-4-1-让任务脱离当前连接持续存在', '_4-6-1-针对失败类型选择恢复策略', '_4-6-2-让完成由证据决定']) {
     await expect(production.locator(`a[href="../../build/chapter-04.html#${anchor}"]`)).toBeVisible();
   }
-  await expect(page.locator('a[href*="03-"]')).toHaveCount(0);
+  await expect(page.locator('#nextLevel')).toHaveAttribute('href', '../03-memory/');
   await expect(page.locator('#chapterLink')).toHaveAttribute('href', '../../build/chapter-04.html#_4-4-1-让任务脱离当前连接持续存在');
   await page.screenshot({ path: 'test-results/resume-production.png', fullPage: true });
   await production.locator('summary').click();
