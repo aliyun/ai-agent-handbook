@@ -1,4 +1,4 @@
-# Kitta：领域专用 Code Review Agent
+# 智能体：增强 Code Review 的智能体实践
 
 # 摘要
 

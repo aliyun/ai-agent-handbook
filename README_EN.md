@@ -108,15 +108,13 @@ The linked chapters and case studies are currently written in Chinese; this Engl
 
 | Chapter | Case study |
 | --- | --- |
-| 25. Software engineering | [ABACI: Targeted Testing and Defect Detection for Kernel Patches](<./06-case-study/第25章 研发效能/ABACI 内核补丁定向测试与缺陷检测智能体.md>) |
-| 25. Software engineering | [Kitta: A Domain-Specific Code Review Agent](<./06-case-study/第25章 研发效能/Kitta：领域专用 Code Review Agent.md>) |
-| 25. Software engineering | [PatchPilot Agents: Orchestrated, Verifiable Kernel Patch Delivery](<./06-case-study/第25章 研发效能/PatchPilot Agents：让内核补丁交付成为可编排、可验证的工程闭环.md>) |
-| 25. Software engineering | [From Alerts to Automatic Repair: PolarDB-X Loop Engineering](<./06-case-study/第25章 研发效能/从报警到自动修复，PolarDB-X 的 Loop 工程实践.md>) |
-| 25. Software engineering | [From Coding Productivity to End-to-End Delivery: Human-Agent Collaboration in Cloud Communications](<./06-case-study/第25章 研发效能/从编码提效到端到端交付，云通信的人机协作实践.md>) |
-| 25. Software engineering | [Evaluation-Driven Delivery: AI Agent Security Product Development](<./06-case-study/第25章 研发效能/从评测驱动到端到端交付：AI Agent 安全产品研发提效实践.md>) |
-| 25. Software engineering | [Organizational Restructuring Behind the Self-Evolution of Agentic SOC Security Products](<./06-case-study/第25章 研发效能/Agentic SOC 安全产品⾃进化背后的组织重构.md>) |
-| 25. Software engineering | [A Multi-Agent Engineering Team: From Writing Code to End-to-End Delivery](<./06-case-study/第25章 研发效能/多 Agent 组成研发小队：AI 研发如何从写代码走向端到端交付.md>) |
-| 25. Software engineering | [Evaluating and Tuning an AIOps Agent: The Full Practice](<./06-case-study/第25章 研发效能/完整还原 AIOps Agent 的评测和调优实践.md>) |
+| 25. Software engineering | [Agent: Targeted Testing and Defect Detection for Kernel Patches](<./06-case-study/第25章 研发效能/智能体：面向内核补丁的定向测试与缺陷检测智能体.md>) |
+| 25. Software engineering | [Agent: Enhancing Code Review in Practice](<./06-case-study/第25章 研发效能/智能体：增强 Code Review 的智能体实践.md>) |
+| 25. Software engineering | [Agent: Improving Kernel Patch Delivery Efficiency](<./06-case-study/第25章 研发效能/智能体：提升内核补丁交付效率的实践.md>) |
+| 25. Software engineering | [Agent: Evaluation and Tuning for Operations](<./06-case-study/第25章 研发效能/智能体：运维领域的智能体评测和调优实践.md>) |
+| 25. Software engineering | [Organizational Collaboration: Restructuring Behind the Self-Evolution of Agentic SOC Security Products](<./06-case-study/第25章 研发效能/组织协作：Agentic SOC 安全产品⾃进化背后的组织重构.md>) |
+| 25. Software engineering | [Organizational Collaboration: End-to-End Database Operations, from Alerts to Automatic Repair](<./06-case-study/第25章 研发效能/组织协作：数据库领域，从报警到自动修复的端到端实践.md>) |
+| 25. Software engineering | [Organizational Collaboration: End-to-End Engineering Delivery in Cloud Communications](<./06-case-study/第25章 研发效能/组织协作：云通信领域，研发端到端的交付实践.md>) |
 | 26. Design engineering | [GenUI: From Answers to Deliverables](<./06-case-study/第26章 设计工程/GenUI：让 Agent 从给出答案走向交付结果.md>) |
 | 26. Design engineering | [Vibe Designing: An Intent-Driven AI Design Paradigm](<./06-case-study/第26章 设计工程/Vibe Designing：意图驱动的AI设计范式进化.md>) |
 | 27. Operations and IT | [Geely's Intelligent Operations Practice](<./06-case-study/第27章 运维、安全与企业IT/吉利汽车智能运维的落地实践.md>) |
