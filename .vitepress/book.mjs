@@ -113,6 +113,7 @@ const caseGroups = [
       ["agentic-soc-organization", "组织协作：Agentic SOC"],
       ["polardb-x", "组织协作：数据库领域"],
       ["cloud-communications", "组织协作：云通信领域"],
+      ["engineering-team", "组织协作：多 Agent 组成研发小队"],
     ],
   },
   {
