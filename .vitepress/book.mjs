@@ -208,7 +208,7 @@ for (const part of parts) {
       });
       const dir = exactlyOne(
         files.filter(
-          (f) => !f.endsWith(".md") && new RegExp(`^第\\s*${number}\\s*章`).test(f),
+          (f) => !f.endsWith(".md") && new RegExp(`^第\\s*0*${number}\\s*章`).test(f),
         ),
         `chapter ${number} directory`,
       );
@@ -233,7 +233,7 @@ for (const part of parts) {
         { chapter: number, part: part.title },
       );
       const dir = exactlyOne(
-        files.filter((f) => new RegExp(`^第\\s*${number}\\s*章`).test(f)),
+        files.filter((f) => new RegExp(`^第\\s*0*${number}\\s*章`).test(f)),
         `case chapter ${number}`,
       );
       const cases = readdirSync(path.join(root, part.dir, dir)).filter((f) =>

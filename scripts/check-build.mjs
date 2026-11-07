@@ -3,6 +3,7 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { load } from "cheerio";
 import { pages, root } from "../.vitepress/book.mjs";
+import { legacyHeadingIds } from "../.vitepress/markdown.mjs";
 import { levels } from "../challenges/levels.mjs";
 
 const checkedPages = [...pages, { href: "/challenges/" }, ...levels
@@ -32,6 +33,16 @@ for (const page of checkedPages) {
   assert.ok(file && existsSync(file), `Missing built page: ${page.href}`);
   const $ = document(file);
   assert.ok($("h1").length, `Missing page title: ${page.href}`);
+  if (pages.includes(page))
+    assert.equal($("h1").length, 1, `Every book page must have one H1: ${page.href}`);
+  for (const [currentId, oldId] of Object.entries(legacyHeadingIds[page.href] || {})) {
+    const current = $("h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]")
+      .toArray().filter(e => $(e).attr("id") === currentId);
+    const legacy = $("[id]").toArray().filter(e => $(e).attr("id") === oldId);
+    assert.equal(current.length, 1, `Missing current heading: ${page.href}#${currentId}`);
+    assert.equal(legacy.length, 1, `Missing or duplicated legacy anchor: ${page.href}#${oldId}`);
+    assert.equal(legacy[0].parent, current[0], `Legacy anchor must target its heading: ${page.href}#${oldId}`);
+  }
   for (const element of $(
     "a[href], img[src], script[src], link[href]",
   ).toArray()) {

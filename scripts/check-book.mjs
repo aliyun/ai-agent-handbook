@@ -15,6 +15,12 @@ import {
 const errors = [];
 const md = new MarkdownIt();
 const hrefs = new Set(pages.map((p) => p.href));
+for (const part of parts) {
+  for (const chapter of part.pages.filter(p => typeof p.chapter === "number")) {
+    const source = chapter.sourceDirectory || chapter.source;
+    assert.match(path.basename(source), /^第 \d{2} 章　/, `Chapter names must use two digits and consistent spacing: ${source}`);
+  }
+}
 assert.equal(
   new Set(pages.map((p) => p.route)).size,
   pages.length,

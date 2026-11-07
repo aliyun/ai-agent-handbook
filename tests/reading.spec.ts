@@ -15,7 +15,7 @@ test("home, contents, stable deep links and source edit link", async ({
   await page
     .locator(".contents-part")
     .filter({ hasText: "构建篇" })
-    .getByRole("link", { name: /第 3 章/ })
+    .getByRole("link", { name: /第 03 章/ })
     .click();
   await page.reload();
   await expect(page.locator(".vp-doc h1")).toContainText("Harness");
@@ -28,6 +28,25 @@ test("home, contents, stable deep links and source edit link", async ({
   );
   expect(errors).toEqual([]);
 });
+
+for (const width of [1440, 390]) {
+  for (const [href, oldId, currentId] of [
+    ["run/chapter-08.html", "本章小结", "_8-8-本章小结"],
+    ["optimization/chapter-20.html", "选来源与字段", "_20-3-1-选来源与字段"],
+    ["optimization/chapter-24.html", "四个边缘优化方向", "_24-1-1-四个边缘优化方向"],
+  ]) {
+    test(`legacy section link at ${width}px: ${href}#${oldId}`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto(`${href}#${encodeURIComponent(oldId)}`);
+      const heading = page.locator(`.vp-doc [id="${currentId}"]`);
+      await expect(heading.locator(`:scope > span[id="${oldId}"]`)).toHaveCount(1);
+      await expect.poll(async () => {
+        const rect = await heading.boundingBox();
+        return !!rect && rect.y >= 0 && rect.y < 1000;
+      }).toBe(true);
+    });
+  }
+}
 
 for (const query of ["状态恢复", "Harness", "黄金数据集"]) {
   test(`local search: ${query}`, async ({ page }) => {
