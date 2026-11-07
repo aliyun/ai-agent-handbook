@@ -18,7 +18,7 @@ onMounted(() => {
   <main class="book-home vp-raw">
     <section class="book-hero" aria-labelledby="book-title">
       <div class="hero-copy">
-        <p class="book-eyebrow"><span /> 开源白皮书 · 2026</p>
+        <p class="book-eyebrow"><span /> Agent 工程开源白皮书</p>
         <h1 id="book-title">AI Agent<br /><em>Handbook</em></h1>
         <p class="hero-subtitle">从模型能力，到可靠的 Agent 系统</p>
         <p class="hero-description">
@@ -41,9 +41,6 @@ onMounted(() => {
         >
       </div>
       <div class="book-cover" aria-hidden="true">
-        <div class="cover-top">
-          <span>阿里云 × 社区</span><span>2026 EDITION</span>
-        </div>
         <div class="cover-title">
           AI AGENT<br />HANDBOOK<span>智能体工程白皮书</span>
         </div>
@@ -51,9 +48,7 @@ onMounted(() => {
           <div class="orbit one" />
           <div class="orbit two" />
           <div class="orbit three" />
-          <span class="orbit-center">Agent</span
-          ><span class="orbit-label top">BUILD</span
-          ><span class="orbit-label bottom">RUN</span>
+          <span class="orbit-center">Agent</span>
         </div>
         <div class="cover-bottom">
           从架构到实践<br /><span>A FIELD GUIDE TO AGENT ENGINEERING</span>
@@ -74,20 +69,11 @@ onMounted(() => {
         <strong>{{ book.caseCount }}</strong
         ><span>个案例，来自一线实践</span>
       </div>
-      <a :href="withBase('/reading-guide.html')"
-        >找到适合你的阅读路径 <span>↗</span></a
-      >
     </div>
 
     <section class="book-parts" aria-labelledby="parts-title">
       <div class="section-heading">
-        <div>
-          <p class="book-eyebrow">THE BOOK</p>
-          <h2 id="parts-title">一条完整的工程主线</h2>
-        </div>
-        <p>
-          构建定义 Agent 如何工作，运行保障它持续工作。<br />治理与调优，让可靠性和效果在实践中不断提升。
-        </p>
+        <h2 id="parts-title">目录</h2>
       </div>
       <div class="parts-grid">
         <a
@@ -120,7 +106,7 @@ onMounted(() => {
       <div>
         <p class="book-eyebrow">BUILT IN THE OPEN</p>
         <h2>让实践成为下一页的答案。</h2>
-        <p>这本书由阿里云与社区共同维护，欢迎分享反馈、修订与实践经验。</p>
+        <p>开源项目由阿里云与社区共同维护，欢迎反馈修改建议和您的一线实践。</p>
       </div>
       <a
         class="book-button secondary"

@@ -1,6 +1,53 @@
 import { test, expect } from "@playwright/test";
 import { pages, readSource } from "../.vitepress/book.mjs";
 
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`simplified homepage at ${width}px in ${theme} theme`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto("./");
+      await expect(page.locator(".hero-copy .book-eyebrow")).toHaveText("Agent 工程开源白皮书");
+      await expect(page.locator("#parts-title")).toHaveText("目录");
+      await expect(page.locator(".book-invitation p").last()).toHaveText(
+        "开源项目由阿里云与社区共同维护，欢迎反馈修改建议和您的一线实践。",
+      );
+      for (const text of [
+        "开源白皮书 · 2026", "阿里云 × 社区", "2026 EDITION", "THE BOOK",
+        "找到适合你的阅读路径", "一条完整的工程主线",
+        "构建定义 Agent 如何工作，运行保障它持续工作。",
+        "治理与调优，让可靠性和效果在实践中不断提升。",
+        "这本书由阿里云与社区共同维护，欢迎分享反馈、修订与实践经验。",
+      ]) {
+        await expect(page.locator(".book-home")).not.toContainText(text);
+      }
+      await expect(page.locator(".book-cover")).not.toContainText(/BUILD|RUN/);
+      for (const name of ["全书目录", "阅读指南", "开发者调研", "关于本书"]) {
+        await expect(page.locator(".VPNav").getByRole("link", { name, exact: true })).toHaveCount(0);
+      }
+      await expect(page.getByRole("button", { name: "搜索全书" })).toBeVisible();
+      await expect(page.getByRole("link", { name: "开始阅读", exact: false })).toBeVisible();
+      await expect(page.getByRole("link", { name: "浏览全书目录" })).toBeVisible();
+      if (width < 700) await page.locator(".VPNavBarHamburger").click();
+      const nav = page.locator(width < 700 ? ".VPNavScreen" : ".VPNavBar");
+      await expect(nav.getByRole("link", { name: /闯关游戏/ })).toBeVisible();
+      await expect(nav.getByRole("link", { name: "GitHub 仓库" })).toBeVisible();
+      await expect(nav.getByRole("switch")).toBeVisible();
+      if (width < 700) {
+        await page.locator(".VPNavBarHamburger").click();
+        await expect(page.locator(".VPNavScreen")).toHaveCount(0);
+      }
+      expect(await page.locator("html").evaluate((el) => el.classList.contains("dark"))).toBe(theme === "dark");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.evaluate(() => document.fonts.ready);
+      await page.screenshot({ path: `test-results/home-simplified-${width}-${theme}.png`, fullPage: true });
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
 test("home, contents, stable deep links and source edit link", async ({
   page,
 }) => {

@@ -78,15 +78,11 @@ export default defineConfig({
     logo: "/favicon.svg",
     siteTitle: "AI Agent Handbook",
     nav: [
-      { text: "全书目录", link: "/contents.html", activeMatch: "/contents" },
-      { text: "阅读指南", link: "/reading-guide.html" },
       {
         text: '<span class="nav-challenge-label">闯关游戏 <span class="challenge-beta">Beta</span></span>',
         link: "/challenges/",
         target: "_self",
       },
-      { text: "开发者调研", link: "/survey.html" },
-      { text: "关于本书", link: "/about.html" },
     ],
     sidebar,
     outline: { level: [2, 3], label: "本章内容" },

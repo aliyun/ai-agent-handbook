@@ -248,15 +248,6 @@ html[data-reading-size="large"] {
     20px 26px 45px -24px #163e3560;
   transform: rotate(3deg);
 }
-.cover-top {
-  display: flex;
-  justify-content: space-between;
-  font-size: 9px;
-  letter-spacing: 1px;
-  opacity: 0.7;
-  border-bottom: 1px solid #a4c6ac50;
-  padding-bottom: 17px;
-}
 .cover-title {
   font-family: Georgia, serif;
   font-size: 33px;
@@ -308,22 +299,6 @@ html[data-reading-size="large"] {
   font-size: 22px;
   font-style: italic;
 }
-.orbit-label {
-  position: absolute;
-  font-size: 8px;
-  letter-spacing: 3px;
-  background: #204f40;
-  padding: 0 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #c5d8b8;
-}
-.orbit-label.top {
-  top: 11px;
-}
-.orbit-label.bottom {
-  bottom: 13px;
-}
 .cover-bottom {
   border-top: 1px solid #a4c6ac50;
   padding-top: 15px;
@@ -358,16 +333,6 @@ html[data-reading-size="large"] {
   font-size: 12px;
   color: var(--vp-c-text-2);
 }
-.book-facts > a {
-  font-size: 12px;
-  color: var(--vp-c-brand-1);
-  margin-left: auto;
-  white-space: nowrap;
-}
-.book-facts > a > span {
-  color: inherit;
-  margin-left: 8px;
-}
 .book-parts {
   padding: 62px 0;
 }
@@ -378,21 +343,12 @@ html[data-reading-size="large"] {
   gap: 24px;
   margin-bottom: 30px;
 }
-.section-heading .book-eyebrow {
-  margin-bottom: 12px;
-}
 .section-heading h2,
 .book-invitation h2 {
   font-size: 25px;
   letter-spacing: -0.4px;
   line-height: 1.5;
   font-weight: 550;
-}
-.section-heading > p {
-  font-size: 13px;
-  line-height: 1.9;
-  color: var(--vp-c-text-2);
-  margin: 0;
 }
 .parts-grid {
   display: grid;
@@ -758,12 +714,6 @@ html[data-reading-size="large"] {
   }
   .book-facts span {
     font-size: 10px;
-  }
-  .book-facts > a {
-    grid-column: 1 / -1;
-    width: 100%;
-    margin: 0;
-    padding-top: 5px;
   }
   .book-parts {
     padding: 40px 0;
