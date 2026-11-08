@@ -15,7 +15,7 @@
     "test": "playwright test"
   },
   "overrides": {
-    "vite": "6.4.4",
+    "vite": "6.4.5",
     "esbuild": "0.25.12",
     "katex": "0.18.2"
   },
