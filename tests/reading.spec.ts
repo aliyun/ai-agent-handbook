@@ -30,6 +30,17 @@ for (const width of [1440, 390]) {
       await expect(page.getByRole("button", { name: "搜索全书" })).toBeVisible();
       await expect(page.getByRole("link", { name: "开始阅读", exact: false })).toBeVisible();
       await expect(page.getByRole("link", { name: "浏览全书目录" })).toBeVisible();
+      const heroGithub = page.locator(".hero-copy").getByRole("link", { name: /在 GitHub 上 Star 或参与共建/ });
+      await expect(heroGithub).toBeVisible();
+      await expect(heroGithub).toHaveAttribute("href", "https://github.com/aliyun/ai-agent-handbook");
+      await expect(heroGithub).toHaveAttribute("target", "_blank");
+      await expect(heroGithub).toHaveAttribute("rel", /noopener/);
+      const [actionsBox, githubBox] = await Promise.all([
+        page.locator(".hero-actions").boundingBox(),
+        heroGithub.boundingBox(),
+      ]);
+      expect(githubBox!.y).toBeGreaterThan(actionsBox!.y + actionsBox!.height);
+      expect(githubBox!.x + githubBox!.width).toBeLessThanOrEqual(width);
       if (width < 700) await page.locator(".VPNavBarHamburger").click();
       const nav = page.locator(width < 700 ? ".VPNavScreen" : ".VPNavBar");
       await expect(nav.getByRole("link", { name: /闯关游戏/ })).toBeVisible();
@@ -131,6 +142,12 @@ test("reading controls, literal templates, image viewer and resume", async ({
     .toContain("#");
   await page.goto("./");
   await expect(page.locator(".continue-reading")).toBeVisible();
+  const [resumeBox, resumeGithubBox] = await Promise.all([
+    page.locator(".continue-reading").boundingBox(),
+    page.locator(".hero-github").boundingBox(),
+  ]);
+  expect(resumeGithubBox!.y).toBeGreaterThanOrEqual(resumeBox!.y + resumeBox!.height);
+  await page.screenshot({ path: "test-results/home-resume-github.png" });
   await page.locator(".continue-reading").click();
   await expect(page.locator(".vp-doc h1")).toContainText("20");
   await expect(page.getByRole("button", { name: "大号字" })).toHaveAttribute(

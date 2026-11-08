@@ -230,6 +230,37 @@ html[data-reading-size="large"] {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.hero-github {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+  transition: color 0.2s;
+}
+.hero-github svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+.hero-github-arrow {
+  color: var(--vp-c-brand-1);
+}
+.hero-github:hover {
+  color: var(--vp-c-brand-1);
+}
+.hero-github:hover > span:not(.hero-github-arrow) {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.continue-reading + .hero-github {
+  margin-top: 10px;
+}
 .book-cover {
   position: relative;
   width: 100%;
