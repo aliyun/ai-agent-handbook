@@ -30,7 +30,7 @@ export const levels = [
     number: "04",
     version: "v1",
     title: "调用成本高，如何优化？",
-    description: "减少调用时，怎样守住任务效果？",
-    status: "planned",
+    description: "同一批售后工单，怎样分工、验证和修正，在守住效果的同时减少调用成本？",
+    status: "available",
   },
 ];

@@ -147,7 +147,7 @@ test('reference passes both conversations and retains correct long-term memory',
   await expect(page.locator('#productionHelp')).toContainText('缓存');
   await expect(page.locator('#productionHelp')).toContainText('负责人');
   await expect(page.locator('#chapterLink')).toHaveAttribute('href', '../../build/chapter-05.html#memory-的写入与使用');
-  await expect(page.locator('a[href*="04-efficiency"]')).toHaveCount(0);
+  await expect(page.locator('#nextLevel')).toHaveAttribute('href', '../04-efficiency/');
   await page.screenshot({ path: 'test-results/memory-production.png', fullPage: true });
   expect(await share(page, '本关通过', 22)).toContain('100/100');
 });
