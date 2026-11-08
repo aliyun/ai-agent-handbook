@@ -364,6 +364,17 @@ html[data-reading-size="large"] {
   font-size: 12px;
   color: var(--vp-c-text-2);
 }
+.book-facts .facts-update {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
 .book-parts {
   padding: 62px 0;
 }
@@ -745,6 +756,12 @@ html[data-reading-size="large"] {
   }
   .book-facts span {
     font-size: 10px;
+  }
+  .book-facts .facts-update {
+    margin-top: 4px;
+    padding: 1px 6px;
+    font-size: 10px;
+    line-height: 16px;
   }
   .book-parts {
     padding: 40px 0;

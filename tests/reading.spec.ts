@@ -30,7 +30,15 @@ for (const width of [1440, 390]) {
       await expect(page.getByRole("button", { name: "搜索全书" })).toBeVisible();
       await expect(page.getByRole("link", { name: "开始阅读", exact: false })).toBeVisible();
       await expect(page.getByRole("link", { name: "浏览全书目录" })).toBeVisible();
-      const heroGithub = page.locator(".hero-copy").getByRole("link", { name: /在 GitHub 上 Star 或参与共建/ });
+      const heroGithub = page.locator(".hero-copy").getByRole("link", { name: /在 GitHub 上参与共建/ });
+      await expect(page.locator(".hero-copy")).not.toContainText("Star");
+      const facts = page.locator(".book-facts");
+      await expect(facts).toContainText("个章节，涵盖 Agent 全生命周期");
+      await expect(facts).not.toContainText("贯穿工程全程");
+      const caseFact = facts.locator("> div").last();
+      await expect(caseFact.locator(".facts-update")).toHaveText("每周新增最新实践");
+      const [factsBox, updateBox] = await Promise.all([facts.boundingBox(), caseFact.locator(".facts-update").boundingBox()]);
+      expect(updateBox!.x + updateBox!.width).toBeLessThanOrEqual(factsBox!.x + factsBox!.width + 1);
       await expect(heroGithub).toBeVisible();
       await expect(heroGithub).toHaveAttribute("href", "https://github.com/aliyun/ai-agent-handbook");
       await expect(heroGithub).toHaveAttribute("target", "_blank");
