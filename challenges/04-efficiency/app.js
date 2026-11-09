@@ -21,6 +21,16 @@ const COSTS = { query: '订单查询', rules: '规则计算', economy: '经济�
 const FACTS = { unqueried: '未查询 · 不能猜事实', confirmed: 'confirmed · 已查到事实', unknown: 'unknown · 缺关键事实' };
 const VERIFY = { accepted: 'accepted · 有有效回执', rejected: 'rejected · 需修正，不能提交', unknown: 'unknown · 无自动回执' };
 const KNOWN_ANIMS = new Set(['query', 'route', 'verify', 'human', 'report']);
+const LEARNING_ORDER = ['rules', 'happy', 'mixed', 'confidence', 'partial'];
+const LESSONS = {
+  rules: '先练规则能判断的单：字段齐全，先别用强模型；规则建议也要独立验证。',
+  happy: '再试普通文本：经济模型就能处理的单，验证通过后不必再问强模型。',
+  mixed: '接着看一批里有难有易：规则处理字段，经济模型处理普通文本，复杂条件才用强模型。',
+  confidence: '进阶一：便宜模型很有把握也会错。独立验证未通过，只修对应单，不重做整批。',
+  partial: '进阶二：批量回复可能漏单或混入错误编号。按工单编号补缺；订单事实确实查不到，才交给人工等待核实。',
+};
+// 仅保存当前页面的独立演示快照，不写入玩家成绩，也不使用静态成本冒充运行结果。
+const teachingRuns = new Map();
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const ta = $('code'), hl = $('hl'), gutter = $('gutter');
 let summary = null, mode = 'player', lastAttempt = null, previousScored = null, curRun = null;
@@ -109,7 +119,7 @@ function setBusy(busy) {
   $('scenarioSelect').disabled = busy || !initialized;
   ta.readOnly = busy || !initialized;
   $('replay').disabled = busy || !curRun; $('speed').disabled = busy || !curRun;
-  $('runBtn').textContent = busy && mode === 'player' ? '正在测试全部 22 批…' : '运行我的代码 · 全部 22 批 →';
+  $('runBtn').textContent = busy && mode === 'player' ? '正在检查效果与成本…' : '运行我的代码 →';
   $('feedbackPanel').setAttribute('aria-busy', String(busy));
   for (const button of $('dots').querySelectorAll('button')) button.disabled = busy;
   markStale();
@@ -132,12 +142,41 @@ function improvementText(s) {
   if (!s.optimized) return '效果完整；可以合并查询，按项分工，仅修缺项或被拒项，避免验证通过后重复强模型复核。';
   return '效果完整且优化达标。100 分不是生产最优；更省的合法规则路径仍被接受。';
 }
+function teachingBatch(s) {
+  return s.runs.find((r) => r.scenario === 'rules' && r.index === 0);
+}
+function rememberTeachingRun(s) {
+  if (mode === 'player') return;
+  const batch = teachingBatch(s);
+  const prefix = mode === 'baseline' ? 'learnBaseline' : 'learnReference';
+  if (!effectAligned(s) || !batch?.correct) {
+    $(prefix + 'Effect').textContent = '演示效果未对齐';
+    $(prefix + 'Route').textContent = '不用于省钱比较';
+    $('comparisonNote').textContent = '演示没有通过完整效果检查，暂不比较节省率；请查看下方诊断。';
+    return;
+  }
+  teachingRuns.set(mode, batch);
+  $(prefix + 'Cost').textContent = number(batch.cost.total);
+  $(prefix + 'Effect').textContent = '6/6 处理合适 · 完整报告已保存';
+  const calls = (tool) => batch.cost.ledger.filter((entry) => entry.tool === tool).length;
+  const ruleItems = batch.cost.ledger.filter((entry) => entry.tool === 'applyRules').reduce((sum, entry) => sum + entry.items, 0);
+  const verifiedItems = batch.cost.ledger.filter((entry) => entry.tool === 'verify').reduce((sum, entry) => sum + entry.items, 0);
+  $(prefix + 'Route').textContent = `查询 ${calls('queryOrders')} 次 · ${ruleItems ? `规则 ${ruleItems} 单 · ` : ''}强模型 ${calls('infer:strong')} 次 · 验证 ${verifiedItems} 单`;
+  const baseline = teachingRuns.get('baseline'), reference = teachingRuns.get('reference');
+  if (baseline && reference && baseline.seed === reference.seed && baseline.task.id === reference.task.id) {
+    const savings = baseline.cost.total > 0 ? number(100 * (baseline.cost.total - reference.cost.total) / baseline.cost.total, 1) : null;
+    $('comparisonNote').textContent = `同一批字段齐全的六单，两种做法都处理合适。本批 ${number(baseline.cost.total)} → ${number(reference.cost.total)} 成本点${savings !== null ? `，节省 ${savings}%` : ''}；少查重复订单、少问强模型，但六单验证都保留。只是本批模拟对比，不是真实价格，也不是你的成绩。`;
+  } else {
+    $('comparisonNote').textContent = `${mode === 'baseline' ? '原流程' : '分流策略'}已演示这批字段齐全的六单。再点“${mode === 'baseline' ? '看分流策略' : '看原流程'}”，对比同一批工单的账单；不是把两种不同效果的任务拿来比便宜。`;
+  }
+}
 function renderOverview() {
   const s = summary;
   const description = `安全底线${s.passed ? '通过' : '未通过'}；处理合适 ${s.stats.appropriate}/132，自动正确 ${s.stats.autoCorrect} 单，等待人工 ${s.stats.human} 单；完整报告 ${s.stats.reports}/22。`;
   if (mode !== 'player') {
     setFeedback(s.passed ? 'wait' : 'bad', '示范', `${mode === 'reference' ? '参考策略' : '保守对照'}演示 · ${verdict(s)}`, `${description} 本次模拟 ${s.score}/100，仅演示，不改代码、不计成绩。`, '不计成绩');
   } else setFeedback(!s.passed ? 'bad' : s.optimized ? 'ok' : 'wait', s.score, verdict(s), `${description} ${improvementText(s)}`, '/ 100');
+  $('evaluationSummary').textContent = `全部评测 · ${s.stats.appropriate}/132 单处理合适 · ${s.stats.reports}/22 份报告`;
   $('summaryStats').hidden = false; $('allCosts').hidden = false;
   $('appropriateTotal').textContent = s.stats.appropriate; $('autoCorrectTotal').textContent = s.stats.autoCorrect;
   $('humanTotal').textContent = s.stats.human; $('reportsTotal').textContent = s.stats.reports;
@@ -159,7 +198,11 @@ function updateProgress(s) {
 function revealResult() {
   $('resultTools').hidden = !lastAttempt; markStale();
   const stillAtRun = document.activeElement === runFocus || (document.activeElement === document.body && ['runBtn', 'demoBtn', 'baselineBtn'].includes(runFocus?.id));
-  if (window.matchMedia('(max-width: 900px)').matches && !document.querySelector('dialog[open]') && stillAtRun) {
+  if (mode !== 'player' && !document.querySelector('dialog[open]') && stillAtRun) {
+    $('comparisonNote').focus({ preventScroll: true });
+    return;
+  }
+  if (window.matchMedia('(max-width: 820px)').matches && !document.querySelector('dialog[open]') && stillAtRun) {
     $('feedbackPanel').focus({ preventScroll: true });
     $('feedbackPanel').scrollIntoView({ block: 'start', behavior: reducedMotion.matches ? 'auto' : 'smooth' });
   }
@@ -167,13 +210,22 @@ function revealResult() {
 async function run(nextMode = 'player') {
   if (!initialized || running) return;
   stopPlayback(); mode = nextMode;
+  if (mode !== 'player') {
+    teachingRuns.delete(mode);
+    const prefix = mode === 'baseline' ? 'learnBaseline' : 'learnReference';
+    $(prefix + 'Cost').textContent = '—';
+    $(prefix + 'Effect').textContent = '正在演示…';
+    $(prefix + 'Route').textContent = '等待实际调用结果';
+    $('comparisonNote').textContent = '正在用公开脚本运行演示；结果来自独立模拟器，不计玩家成绩。';
+  }
+  $('evaluationSummary').textContent = '全部评测结果（运行中）';
   const code = mode === 'reference' ? sim.REFERENCE : mode === 'baseline' ? sim.BASELINE : ta.value;
   runFocus = document.activeElement;
   summary = null; curRun = null; lastAttempt = null;
   $('resultTools').hidden = true; $('progressNote').hidden = true; $('summaryStats').hidden = true; $('allCosts').hidden = true;
   $('events').hidden = true; $('log').textContent = '正在运行…'; $('traceCount').textContent = '运行中'; $('resultSnapshot').textContent = '正在运行…';
   renderEmptyCard(); showPreview(specs[0]); setBusy(true);
-  setFeedback('loading', '…', mode === 'player' ? '正在运行全部 22 批' : `正在准备${mode === 'reference' ? '参考策略' : '保守对照'}演示`, '同一公开种子；每批六单，订单、政策、成本和模型脚本一致。', '运行中');
+  setFeedback('loading', '…', mode === 'player' ? '正在检查是否做对、是否省钱' : `正在准备${mode === 'reference' ? '分流策略' : '原流程'}演示`, '系统自动检查全部公开场景；不会修改业务规则或跳过验证。', '运行中');
   let result;
   try { result = await runInWorker(code); } catch (error) { result = { ok: false, kind: 'runtime', message: String(error.message || error) }; }
   const valid = result?.ok && result.summary?.runs?.length === TOTAL_RUNS && result.summary?.stats?.tickets === TOTAL_TICKETS && typeof result.summary?.optimized === 'boolean';
@@ -183,13 +235,20 @@ async function run(nextMode = 'player') {
       : result?.kind === 'worker' ? `独立模拟器未能启动，请刷新重试。${result.message || ''}`
       : `运行未完成或结果不完整：${result?.message || '没有收到全部 22 批的有效结果'}`;
     lastAttempt = mode === 'player' ? { mode, code, error: message } : null;
+    if (mode !== 'player') {
+      const prefix = mode === 'baseline' ? 'learnBaseline' : 'learnReference';
+      $(prefix + 'Effect').textContent = '本次演示未完成';
+      $(prefix + 'Route').textContent = '没有完整有效账单';
+      $('comparisonNote').textContent = '本次演示未完成，不生成成本对比或成绩。下面的诊断说明了失败原因。';
+    }
+    $('evaluationSummary').textContent = '全部评测结果（本次未完成）';
     setBusy(false); setFeedback('bad', '—', '这次运行未能完成', message, '没有成绩');
     setStatus('代码保留在编辑器，可以复制完整诊断后修正。', 'err');
     $('log').textContent = message; $('traceCount').textContent = '未生成批次日志'; $('resultSnapshot').textContent = message;
     $('caseFinding').textContent = '运行失败，下面仅为公开六单输入，不是执行结果。';
     revealResult(); return;
   }
-  summary = result.summary; lastAttempt = mode === 'player' ? { mode, code, summary } : null; setBusy(false); renderOverview();
+  summary = result.summary; lastAttempt = mode === 'player' ? { mode, code, summary } : null; setBusy(false); renderOverview(); rememberTeachingRun(summary);
   if (mode === 'player') {
     updateProgress(summary);
     let count = 1, best = summary.score;
@@ -200,7 +259,7 @@ async function run(nextMode = 'player') {
     } catch { setStatus('测试已完成，但成绩未能保存到本机；不影响本次结果。', 'err'); }
     renderCard(count, best);
   }
-  const first = summary.runs.find((r) => r.failed) || summary.runs.find((r) => !r.correct) || summary.runs[0];
+  const first = summary.runs.find((r) => r.failed) || summary.runs.find((r) => !r.correct) || (mode !== 'player' ? teachingBatch(summary) : null) || summary.runs[0];
   selectScenario(first.scenario, first); revealResult();
 }
 $('runBtn').addEventListener('click', () => run('player'));
@@ -211,13 +270,15 @@ $('baselineBtn').addEventListener('click', () => run('baseline'));
 function sceneName(id) { return sim?.SCENARIOS.find((s) => s.id === id)?.name || id; }
 function populateScenarios(id) {
   $('scenarioSelect').innerHTML = '';
-  for (const scene of sim.SCENARIOS) {
+  for (const [index, sceneId] of LEARNING_ORDER.entries()) {
+    const scene = sim.SCENARIOS.find((item) => item.id === sceneId);
     const option = document.createElement('option'); option.value = scene.id;
     const st = summary?.byScenario[scene.id];
-    option.textContent = `${scene.no} ${scene.name}${st ? ` · ${st.failed ? `${st.failed} 批违规` : `${st.correct}/${st.total} 批效果齐`}` : ' · 输入预览'}`;
+    option.textContent = `${['①', '②', '③', '④', '⑤'][index]} ${scene.name}${st ? ` · ${st.failed ? `${st.failed} 批违规` : `${st.correct}/${st.total} 批效果齐`}` : ' · 输入预览'}`;
     $('scenarioSelect').appendChild(option);
   }
   $('scenarioSelect').value = id;
+  $('lessonNote').textContent = LESSONS[id] || '';
 }
 function selectScenario(id, preferred) {
   if (!initialized || running) return;
@@ -339,8 +400,11 @@ function factText(view) {
   return `confirmed · 签收日 ${evidence.deliveredDay}\n${detail}\n${evidence.evidenceRef} · 订单版本 ${evidence.orderRevision}`;
 }
 function renderStage(final) {
+  const focusedTicket = $('ticketsBoard').contains(document.activeElement) ? document.activeElement.closest('[data-ticket-id]')?.dataset.ticketId : null;
+  const expanded = new Set(Array.from($('ticketsBoard').querySelectorAll('.ticket-evidence[open]'), (detail) => detail.closest('[data-ticket-id]').dataset.ticketId));
   $('ticketsBoard').innerHTML = '';
   const counts = { rules: 0, economy: 0, strong: 0, human: 0 };
+  let ticketNumber = 0;
   for (const view of views.values()) {
     if (Object.prototype.hasOwnProperty.call(counts, view.route)) counts[view.route]++;
     const row = final ? curRun?.results.find((r) => r.ticketId === view.ticket.ticketId) : null;
@@ -350,11 +414,15 @@ function renderStage(final) {
     const state = DECISIONS[view.state] || view.state;
     const ticket = document.createElement('article'); ticket.className = `ticket${view.active ? ' active' : ''}${final && row ? row.appropriate ? ' good' : ' bad' : ''}`;
     ticket.setAttribute('data-ticket-id', view.ticket.ticketId); ticket.setAttribute('data-state', view.state); ticket.setAttribute('data-route', view.route || 'pending');
-    ticket.innerHTML = `<h3>${esc(view.ticket.ticketId)}</h3><p class="body">${esc(view.ticket.orderId)}<br>${esc(view.ticket.body)}</p><dl><dt>路线</dt><dd>${esc(routeText(view))}</dd><dt>事实</dt><dd>${esc(factText(view))}</dd><dt>建议</dt><dd class="decision">${esc(suggestion)}</dd><dt>验证</dt><dd${view.verification?.status === 'rejected' ? ' class="bad-text"' : ''}>${esc(verification)}</dd><dt>人工</dt><dd${view.handoff || view.state === 'WAITING_HUMAN' ? ' class="human"' : ''}>${esc(human)}</dd><dt>状态</dt><dd>${esc(state)}${final && row ? `\n${row.appropriate ? '处理合适' : '处理不齐或不合适'} · 预期：${esc(DECISIONS[row.expected] || row.expected)}` : ''}</dd></dl>`;
+    ticket.innerHTML = `<h3>工单 ${++ticketNumber}</h3><dl class="ticket-overview"><dt>路线</dt><dd>${esc(routeText(view))}</dd><dt>建议</dt><dd class="decision">${esc(suggestion)}</dd><dt>状态</dt><dd>${esc(state)}${final && row ? `\n${row.appropriate ? '处理合适' : '处理不齐或不合适'}` : ''}</dd></dl><details class="ticket-evidence"${expanded.has(view.ticket.ticketId) ? ' open' : ''}><summary>订单事实与验证凭据</summary><p class="body">${esc(view.ticket.ticketId)} · ${esc(view.ticket.orderId)}<br>${esc(view.ticket.body)}</p><dl><dt>事实</dt><dd>${esc(factText(view))}</dd><dt>验证</dt><dd${view.verification?.status === 'rejected' ? ' class="bad-text"' : ''}>${esc(verification)}</dd><dt>人工</dt><dd${view.handoff || view.state === 'WAITING_HUMAN' ? ' class="human"' : ''}>${esc(human)}</dd>${final && row ? `<dt>预期</dt><dd>${esc(DECISIONS[row.expected] || row.expected)}</dd>` : ''}</dl></details>`;
     $('ticketsBoard').appendChild(ticket);
   }
   $('routeRules').textContent = counts.rules; $('routeEconomy').textContent = counts.economy;
   $('routeStrong').textContent = counts.strong; $('routeHuman').textContent = counts.human;
+  if (focusedTicket) {
+    const ticket = Array.from($('ticketsBoard').children).find((element) => element.dataset.ticketId === focusedTicket);
+    ticket?.querySelector('.ticket-evidence > summary')?.focus({ preventScroll: true });
+  }
 }
 function applyEvent(event) {
   const a = event.anim;
@@ -549,7 +617,8 @@ function agentPackage() {
   return [
     `# AI Agent Handbook · 第04关：${TITLE}\n页面：${pageUrl()}`,
     '## 请帮我完成',
-    '请按下面完整合同修改 onOptimize 和 canComplete，返回可直接整段粘贴的完整 harness.js。保留两个函数；不能引入模块、使用评分器字段或按预期硬编码。目标是全部22批132单业务效果合适，保留事实与独立验证，减少整个任务的全部实际成本。只做建议分流报告，不做真实退款。',
+    '简单订单别都问强模型：做对同一批任务，又少花钱。先考虑合并查询、规则或经济模型处理简单单，再处理复杂单、补缺项或修正未通过项；已验证的单不重做。事实和独立验证不能省。',
+    '请按下面完整合同修改 onOptimize（组织调用）和 canComplete（确认当前报告），返回可直接整段粘贴的完整 harness.js。保留两个函数；不能引入模块、使用评分器字段或按预期硬编码。系统会自动检查全部22批132单，不只检查入门示例；目标是全部业务效果合适，并减少整个任务的全部实际成本。只做建议分流报告，不做真实退款。',
     '# 完整工具、错误、成本、评分与本机运行合同', CONTRACT,
     '# 当前公开政策 POLICY（原样）', '```json\n' + json(sim.POLICY) + '\n```',
     `# 全部公开输入、预期与模型脚本：makeSpecs(${sim.PUBLIC_SEED})（完整22批，无省略）`, '```json\n' + json(specs) + '\n```',
@@ -617,7 +686,7 @@ try {
   $('toolContract').textContent = CONTRACT; $('policySpecs').textContent = json(sim.POLICY); $('publicSpecs').textContent = json(specs);
   $('starterSource').textContent = sim.STARTER; $('baselineSource').textContent = sim.BASELINE; $('referenceSource').textContent = sim.REFERENCE;
   initialized = true; showPreview(specs[0]); setBusy(false);
-  setStatus(saved !== null ? '已载入上次的玩家代码。编辑后运行全部22批。' : '起始代码故意缺少独立验证。可先运行、复制给Agent，或查看两个独立演示。');
+  setStatus(saved !== null ? '已载入上次的玩家代码。可先看策略对比，再修改并运行。' : '起始代码把模型的把握当成验证结果。先保留事实与独立验证，再减少重复查询和不必要的强模型调用。');
 } catch (error) {
   ta.readOnly = true;
   setFeedback('bad', '—', '模拟器没有加载成功', `${String(error.message || error)}。请刷新重试；已保存代码保留，不会在主线程执行。`, '不可运行');

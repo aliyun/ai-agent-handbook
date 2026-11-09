@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { REFERENCE, BASELINE } from '../challenges/04-efficiency/reference.js';
 
 const levelPath = 'challenges/04-efficiency/';
@@ -76,6 +76,230 @@ async function workerRun(page, code, seedBase = 2026) {
     worker.postMessage({ code, seedBase });
   }), { code, seedBase });
 }
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test(`fourth level keeps the shared visual template under ${colorScheme} system preference`, async ({ page, context }) => {
+    test.setTimeout(90_000);
+    const referencePage = await context.newPage();
+    const errors: string[] = [];
+    for (const current of [page, referencePage]) current.on('pageerror', error => errors.push(error.message));
+    const sharedStyles: Record<string, string[]> = {
+      'body': ['backgroundColor', 'color', 'fontSize', 'fontFamily', 'lineHeight'],
+      '.wrap': ['maxWidth', 'paddingLeft', 'paddingRight'],
+      '.nav': ['minHeight', 'padding', 'gap', 'borderBottomColor'],
+      '.brand': ['fontSize', 'fontFamily', 'gap', 'color'],
+      '.nav-links': ['fontSize', 'gap'],
+      '.eyebrow': ['fontSize', 'letterSpacing', 'color', 'display', 'gap'],
+      'h1': ['fontSize', 'fontFamily', 'lineHeight', 'letterSpacing', 'margin'],
+      '.intro .rules-trigger': ['backgroundColor', 'borderColor', 'padding', 'minHeight', 'fontSize'],
+      '.bench': ['borderRadius', 'borderColor', 'boxShadow', 'scrollMarginTop'],
+      '.bench-body': ['display', 'gridTemplateColumns', 'alignItems'],
+      '.editor': ['backgroundColor', 'color', 'display', 'position'],
+      '.editor .panel-heading': ['padding', 'gap', 'borderBottomColor'],
+      '.panel-heading h2': ['fontSize', 'fontWeight', 'display', 'gap'],
+      '.editor-caption': ['padding', 'fontSize', 'color', 'gap', 'flexWrap'],
+      '.copy-agent': ['borderColor', 'color', 'padding', 'minHeight', 'fontSize'],
+      '.editor-reference': ['margin', 'borderBottomColor'],
+      '.editor-reference summary': ['minHeight', 'fontSize', 'display', 'listStyleType'],
+      '.ed': ['height', 'fontSize', 'fontFamily', 'lineHeight', 'paddingTop', 'colorScheme'],
+      '.gutter': ['width', 'padding', 'color'],
+      '.hl': ['color', 'fontSize', 'fontFamily', 'lineHeight', 'padding'],
+      '#code': ['color', 'caretColor', 'fontSize', 'fontFamily', 'lineHeight', 'padding'],
+      '.editor .linkbtn': ['color', 'padding', 'minHeight', 'fontSize'],
+      '.edit-bottom': ['padding', 'borderTopColor'],
+      '.go': ['backgroundColor', 'color', 'borderColor', 'padding', 'minHeight', 'fontSize', 'borderRadius'],
+      '.stage': ['backgroundColor', 'display', 'borderLeftWidth', 'borderLeftColor'],
+      '.feedback': ['padding', 'gap', 'minHeight'],
+      '.feedback-score': ['fontSize', 'fontFamily', 'minWidth', 'textAlign'],
+      '.case-select select': ['fontSize', 'minHeight', 'padding', 'backgroundColor', 'borderColor'],
+      '#rulesDialog': ['width', 'maxHeight', 'borderRadius', 'backgroundColor'],
+      '#rulesDialog .dialog-head': ['padding', 'backgroundColor', 'gap'],
+      '#rulesDialog .dialog-content': ['padding'],
+      '.log': ['fontSize', 'maxHeight', 'padding', 'backgroundColor'],
+      '.underbench': ['padding', 'fontSize', 'color', 'gap'],
+    };
+    const tokens = ['--bg', '--paper', '--text', '--muted', '--line', '--brand', '--brand-deep', '--cream', '--bench', '--bench-2', '--bench-line', '--bench-text', '--bench-muted', '--ok', '--wait', '--bad', '--serif', '--sans', '--mono'];
+    try {
+      for (const current of [page, referencePage]) await current.emulateMedia({ colorScheme, reducedMotion: 'reduce' });
+      await referencePage.goto('challenges/03-memory/');
+      await page.goto(levelPath);
+      await expect(page.locator('#code')).toBeEditable();
+      await expect(referencePage.locator('#code')).toBeEditable();
+      for (const width of [1600, 1440, 1000, 900, 820, 390, 320]) {
+        for (const current of [page, referencePage]) await current.setViewportSize({ width, height: 1000 });
+        const capture = async (current: Page) => current.evaluate(({ sharedStyles, tokens }) => {
+          const root = getComputedStyle(document.documentElement);
+          const styles = Object.fromEntries(Object.entries(sharedStyles).map(([selector, properties]) => {
+            const style = getComputedStyle(document.querySelector(selector)!);
+            return [selector, Object.fromEntries(properties.map(property => [property, style.getPropertyValue(property.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`))]))];
+          }));
+          return {
+            styles,
+            tokens: Object.fromEntries(tokens.map(token => [token, root.getPropertyValue(token).trim()])),
+            eyebrowDot: getComputedStyle(document.querySelector('.eyebrow')!, '::before').content,
+          };
+        }, { sharedStyles, tokens });
+        expect(await capture(page), `shared template at ${width}px / ${colorScheme}`).toEqual(await capture(referencePage));
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `no horizontal overflow at ${width}px`).toBe(true);
+        if (width === 1440 || width === 390) await page.screenshot({ path: `test-results/efficiency-shared-style-${width}-${colorScheme}.png`, fullPage: true });
+      }
+      for (const current of [page, referencePage]) {
+        await current.locator('#rulesBtn').click();
+        await expect(current.locator('#rulesDialog')).toBeVisible();
+        expect(await current.locator('#rulesDialog').evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+      }
+      const openDialog = async (current: Page) => current.locator('#rulesDialog').evaluate(el => {
+        const bounds = el.getBoundingClientRect();
+        return { x: bounds.x, width: bounds.width, backdrop: getComputedStyle(el, '::backdrop').backgroundColor };
+      });
+      expect(await openDialog(page)).toEqual(await openDialog(referencePage));
+      expect(errors).toEqual([]);
+    } finally {
+      await referencePage.close();
+    }
+  });
+}
+
+test('beginner structure introduces the comparison before code without running a worker automatically', async ({ page }) => {
+  await captureClipboard(page);
+  await page.addInitScript(() => {
+    window['workerStarts'] = 0;
+    const OriginalWorker = window.Worker;
+    window.Worker = class extends OriginalWorker {
+      constructor(url: string | URL, options?: WorkerOptions) { super(url, options); window['workerStarts']++; }
+    };
+  });
+  await page.goto(levelPath);
+  await expect(page.locator('#code')).toBeEditable();
+  expect(await page.evaluate(() => window['workerStarts'])).toBe(0);
+  expect(await page.locator('#strategyIntro').evaluate(el => !!(el.compareDocumentPosition(document.querySelector('#bench')!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  await expect(page.locator('#strategyTitle')).toHaveText('简单订单别都问强模型');
+  await expect(page.locator('#learnBaselineCost')).toHaveText('—');
+  await expect(page.locator('#learnReferenceCost')).toHaveText('—');
+  expect(await page.locator('#strategyIntro').innerText()).not.toMatch(/22|132|verificationReceiptId|policyRevision/);
+  expect(await page.locator('#apiHelp').getAttribute('open')).toBeNull();
+  expect(await page.locator('#evaluationDetails').getAttribute('open')).toBeNull();
+  expect(await page.locator('#scenarioSelect option').evaluateAll(options => options.map(option => (option as HTMLOptionElement).value))).toEqual(['rules', 'happy', 'mixed', 'confidence', 'partial']);
+  await expect(page.locator('#ticketsBoard .ticket-evidence')).toHaveCount(6);
+  const evidence = page.locator('#ticketsBoard .ticket-evidence').first();
+  await expect(evidence.locator('dl')).toBeHidden();
+  await evidence.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(evidence.locator('dl')).toBeVisible();
+  await expect(evidence).toContainText('未查询');
+  await page.locator('#scenarioSelect').selectOption('partial');
+  await expect(page.locator('#lessonNote')).toContainText('按工单编号补缺');
+  await page.locator('#scenarioSelect').selectOption('rules');
+  await page.locator('#rulesBtn').click();
+  expect(await page.locator('#advancedRules').getAttribute('open')).toBeNull();
+  const beginner = await page.locator('#rulesContent').innerText();
+  expect(beginner).toContain('怎样算过关');
+  expect(beginner).not.toMatch(/132|policyRevision|160 成本点/);
+  await page.locator('#advancedRules > summary').click();
+  await expect(page.locator('#advancedRules')).toContainText('22 批 × 6 单 = 132 单');
+  await expect(page.locator('#advancedRules')).toContainText('160 成本点');
+  expect(await copy(page, '#copyRules')).toContain('完整22批，无省略');
+  await page.keyboard.press('Escape');
+  expect(await page.evaluate(key => localStorage.getItem(key + ':runs'), storage)).toBeNull();
+  await page.screenshot({ path: 'test-results/efficiency-beginner-desktop.png', fullPage: true });
+});
+
+for (const width of [1440, 390]) {
+  test(`beginner demos compare actual same-batch bills without becoming personal results at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+    await page.addInitScript(({ storage }) => {
+      localStorage.setItem(storage + ':code', '// 保存的玩家代码，不自动运行');
+      localStorage.setItem('agent-challenge:03-memory:v1:code', 'third-level-code');
+    }, { storage });
+    await page.goto(levelPath);
+    const code = await page.locator('#code').inputValue();
+    const reference = (await workerRun(page, REFERENCE)).summary;
+    const baseline = (await workerRun(page, BASELINE)).summary;
+    const refBatch = reference.runs.find(r => r.scenario === 'rules' && r.index === 0);
+    const baseBatch = baseline.runs.find(r => r.scenario === 'rules' && r.index === 0);
+    expect(refBatch.seed).toBe(baseBatch.seed);
+    expect(refBatch.results.map(r => r.state)).toEqual(baseBatch.results.map(r => r.state));
+    const demos = width === 1440 ? [['#baselineBtn', '#learnBaselineCost', baseBatch], ['#demoBtn', '#learnReferenceCost', refBatch]] : [['#demoBtn', '#learnReferenceCost', refBatch], ['#baselineBtn', '#learnBaselineCost', baseBatch]];
+    for (const [button, cost, batch] of demos) {
+      await page.locator(button).click();
+      await expect(page.locator(cost)).toHaveText(String(batch.cost.total));
+      await expect(page.locator('#comparisonNote')).toBeFocused();
+      await expect(page.locator('#code')).toHaveValue(code);
+      await expect(page.locator('#feedbackScore')).toContainText('示范');
+      await expect(page.locator('#shareBtn')).toBeDisabled();
+      await expect(page.locator('#copyResult')).toBeDisabled();
+      expect(await page.locator('#evaluationDetails').getAttribute('open')).toBeNull();
+    }
+    await expect(page.locator('#learnBaselineEffect')).toContainText('6/6');
+    await expect(page.locator('#learnReferenceEffect')).toContainText('6/6');
+    await expect(page.locator('#learnBaselineRoute')).toHaveText('查询 6 次 · 强模型 6 次 · 验证 6 单');
+    await expect(page.locator('#learnReferenceRoute')).toHaveText('查询 1 次 · 规则 6 单 · 强模型 0 次 · 验证 6 单');
+    await expect(page.locator('#comparisonNote')).toContainText(`${baseBatch.cost.total} → ${refBatch.cost.total}`);
+    await expect(page.locator('#comparisonNote')).toContainText(`${Number((100 * (baseBatch.cost.total - refBatch.cost.total) / baseBatch.cost.total).toFixed(1))}%`);
+    await expect(page.locator('#comparisonNote')).toContainText('不是你的成绩');
+    expect(await page.evaluate(key => localStorage.getItem(key + ':runs'), storage)).toBeNull();
+    expect(await page.evaluate(key => localStorage.getItem(key + ':best'), storage)).toBeNull();
+    expect(await page.evaluate(() => localStorage.getItem('agent-challenge:03-memory:v1:code'))).toBe('third-level-code');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.locator('#strategyIntro').screenshot({ path: `test-results/efficiency-beginner-comparison-${width}.png` });
+    await page.locator('#strategyIntro a[href="#editor"]').click();
+    await pass(page);
+    await expect(page.locator('#evaluationSummary')).toContainText('132/132');
+    await page.locator('#evaluationDetails > summary').click();
+    await expect(page.locator('#totalCost')).toHaveText(String(reference.stats.totalCost));
+    await expect(page.locator('#allCosts')).toContainText('全部批次');
+    expect(await page.evaluate(key => localStorage.getItem(key + ':runs'), storage)).toBe('1');
+    await page.screenshot({ path: `test-results/efficiency-beginner-results-${width}.png`, fullPage: true });
+  });
+}
+
+test('failed demo clears its previous bill and never fabricates a cheaper comparison', async ({ page }) => {
+  await page.goto(levelPath);
+  await page.locator('#baselineBtn').click();
+  await expect(page.locator('#learnBaselineCost')).not.toHaveText('—');
+  await page.evaluate(() => { window.Worker = class { constructor() { throw new Error('Worker unavailable'); } } as any; });
+  await page.locator('#baselineBtn').click();
+  await expect(page.locator('#learnBaselineCost')).toHaveText('—');
+  await expect(page.locator('#learnReferenceCost')).toHaveText('—');
+  await expect(page.locator('#comparisonNote')).toContainText('不生成成本对比');
+  await expect(page.locator('#comparisonNote')).not.toContainText('节省');
+  await expect(page.locator('#learnBaselineEffect')).toHaveText('本次演示未完成');
+  expect(await page.evaluate(key => localStorage.getItem(key + ':runs'), storage)).toBeNull();
+});
+
+test('ticket evidence keeps keyboard focus and expanded state while actual replay events refresh it', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto(levelPath);
+  await run(page, BASELINE);
+  await page.locator('#replay').click();
+  await expect(page.locator('#replay')).toHaveText('停止播放');
+  const detail = page.locator('#ticketsBoard .ticket-evidence').first();
+  const toggle = detail.locator('summary');
+  await toggle.focus();
+  await page.keyboard.press('Enter');
+  await expect(detail).toHaveAttribute('open', '');
+  await page.evaluate(() => {
+    window['ticketRefreshes'] = 0;
+    new MutationObserver(records => {
+      window['ticketRefreshes'] += records.filter(record => record.type === 'childList').length;
+    }).observe(document.querySelector('#ticketsBoard')!, { childList: true });
+  });
+  await expect.poll(() => page.evaluate(() => window['ticketRefreshes'])).toBeGreaterThan(0);
+  await expect(toggle).toBeFocused();
+  await expect(detail).toHaveAttribute('open', '');
+  await page.keyboard.press('Enter');
+  expect(await detail.getAttribute('open')).toBeNull();
+  const before = await page.evaluate(() => window['ticketRefreshes']);
+  await expect.poll(() => page.evaluate(() => window['ticketRefreshes'])).toBeGreaterThan(before);
+  await expect(toggle).toBeFocused();
+  expect(await detail.getAttribute('open')).toBeNull();
+  await page.locator('#replay').click();
+  await expect(page.locator('#playState')).toContainText('真实最终快照');
+  await page.locator('#rulesBtn').click();
+  await page.locator('#copyRules').focus();
+  await expect(page.locator('#copyRules')).toBeFocused();
+});
 
 test('fourth level opens with six tickets and a complete copyable public contract', async ({ page }) => {
   const errors: string[] = [], missing: string[] = [];
@@ -381,6 +605,10 @@ test('slow loading keeps controls disabled until fourth-level initialization', a
   try {
     await expect(page.locator('#runBtn')).toBeDisabled();
     await expect(page.locator('#rulesBtn')).toBeDisabled();
+    await expect(page.locator('#baselineBtn')).toBeDisabled();
+    await expect(page.locator('#demoBtn')).toBeDisabled();
+    await expect(page.locator('#learnBaselineCost')).toHaveText('—');
+    await expect(page.locator('#learnReferenceCost')).toHaveText('—');
     await expect(page.locator('#code')).not.toBeEditable();
   } finally { release(); }
   await navigation;
