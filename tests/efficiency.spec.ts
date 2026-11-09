@@ -173,7 +173,7 @@ test('beginner structure introduces the comparison before code without running a
   await expect(page.locator('#code')).toBeEditable();
   expect(await page.evaluate(() => window['workerStarts'])).toBe(0);
   expect(await page.locator('#strategyIntro').evaluate(el => !!(el.compareDocumentPosition(document.querySelector('#bench')!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
-  await expect(page.locator('#strategyTitle')).toHaveText('简单订单别都问强模型');
+  await expect(page.locator('#strategyTitle')).toHaveText('不是所有订单查询都要使用极致模型');
   await expect(page.locator('#learnBaselineCost')).toHaveText('—');
   await expect(page.locator('#learnReferenceCost')).toHaveText('—');
   expect(await page.locator('#strategyIntro').innerText()).not.toMatch(/22|132|verificationReceiptId|policyRevision/);
@@ -233,8 +233,8 @@ for (const width of [1440, 390]) {
     }
     await expect(page.locator('#learnBaselineEffect')).toContainText('6/6');
     await expect(page.locator('#learnReferenceEffect')).toContainText('6/6');
-    await expect(page.locator('#learnBaselineRoute')).toHaveText('查询 6 次 · 强模型 6 次 · 验证 6 单');
-    await expect(page.locator('#learnReferenceRoute')).toHaveText('查询 1 次 · 规则 6 单 · 强模型 0 次 · 验证 6 单');
+    await expect(page.locator('#learnBaselineRoute')).toHaveText('查询 6 次 · 极致模型 6 次 · 验证 6 单');
+    await expect(page.locator('#learnReferenceRoute')).toHaveText('查询 1 次 · 规则 6 单 · 极致模型 0 次 · 验证 6 单');
     await expect(page.locator('#comparisonNote')).toContainText(`${baseBatch.cost.total} → ${refBatch.cost.total}`);
     await expect(page.locator('#comparisonNote')).toContainText(`${Number((100 * (baseBatch.cost.total - refBatch.cost.total) / baseBatch.cost.total).toFixed(1))}%`);
     await expect(page.locator('#comparisonNote')).toContainText('不是你的成绩');

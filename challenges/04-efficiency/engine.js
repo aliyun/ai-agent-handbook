@@ -7,7 +7,7 @@ export const SCENARIOS = [
   { id: 'mixed', no: '②', name: '一批里有难有易', hint: '批量查事实，规则、普通文本和组合条款分别处理' },
   { id: 'confidence', no: '③', name: '很有把握也会错', hint: 'confidence 不是证据；验证后只修被拒项' },
   { id: 'partial', no: '④', name: '批量结果不齐', hint: '按 ticketId 核对覆盖，只补缺项；unknown 必须真实交接' },
-  { id: 'happy', no: '⑤', name: '简单路别走贵', hint: '经济模型验证通过后停止，不重复强模型复核' },
+  { id: 'happy', no: '⑤', name: '简单路别走贵', hint: '经济模型验证通过后停止，不重复极致模型复核' },
 ];
 export const POLICY = {
   revision: 'P1', windowDays: 14,
@@ -438,7 +438,7 @@ async function efficiencyBaseline(ctx) {
   const rows = [];
   for (const ticket of ctx.task.tickets) {
     const queried = await ctx.tools.queryOrders([ticket.orderId]);
-    // 保守对照每单均调用强模型，包括 unknown；事实缺失不会被模型补齐。
+    // 保守对照每单均调用极致模型，包括 unknown；事实缺失不会被模型补齐。
     const inferred = await ctx.tools.infer('strong', [ticket.ticketId]);
     const item = inferred.items.find((x) => x.ticketId === ticket.ticketId);
     if (queried.items[0].status !== 'confirmed') {
@@ -498,7 +498,7 @@ async function efficiencyReference(ctx) {
   }
   if (strong.length) {
     const retry = await accept(await ctx.tools.infer('strong', strong), strong);
-    if (retry.length) throw new Error('强模型也不能替代缺失或无效事实');
+    if (retry.length) throw new Error('极致模型也不能替代缺失或无效事实');
   }
   await ctx.tools.saveReport(rows);
 }

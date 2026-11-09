@@ -220,7 +220,7 @@ for(const tool of ['queryOrders','applyRules','infer','verify','askHuman','saveR
   const r=s.runs[0]; assert.equal(r.gates.scope,true); assert.equal(r.gates.aborted,false); assert.equal(r.gates.unsafe,tool==='saveReport'); bill(r);
   assert.equal(r.cost.total,tool==='queryOrders'?3:tool==='infer'||tool==='saveReport'?1:0);
 });
-await codeTest('verify 错候选可修正而不踩 gate，强模型修复并保存', ECONOMY,s=>{
+await codeTest('verify 错候选可修正而不踩 gate，极致模型修复并保存', ECONOMY,s=>{
   const r=s.runs[0]; assert.equal(r.correct,true); assert.ok(r.trace.some(e=>e.anim?.type==='verify' && e.anim.items.some(x=>x.status==='rejected')));
   assert.equal(r.cost.byType.strong,17); assert.equal(r.cost.total,42);
 },[pick('mixed')]);
@@ -248,7 +248,7 @@ await codeTest('未查询是MISSING_EVIDENCE，unknown是FACT_UNKNOWN且不能�
   const unknown=a.items.find(o=>o.status==='unknown');
   const u=ctx.task.tickets.find(t=>t.orderId===unknown.orderId);
   const again=await ctx.tools.queryOrders([u.orderId]); if(again.items[0].status!=='unknown') throw new Error('unknown不稳定');
-  const m=await ctx.tools.infer('strong',[u.ticketId]); if(m.items[0].status!=='unknown') throw new Error('强模型补了事实');
+  const m=await ctx.tools.infer('strong',[u.ticketId]); if(m.items[0].status!=='unknown') throw new Error('极致模型补了事实');
   c.ticketId=u.ticketId;
   const v=await ctx.tools.verify([c]); if(v.items[0].reason!=='FACT_UNKNOWN' || v.items[0].receiptId!==null) throw new Error('unknown伪造回执');
 }\n${FALSE}`,s=>{assert.equal(s.runs[0].failed,false); bill(s.runs[0]);},[pick('partial',1)]);
@@ -275,7 +275,7 @@ await codeTest('参考partial只补覆盖缺项，不重做已接受项；单项
   assert.deepEqual(r.cost.ledger.filter(a=>a.tool==='infer:economy').map(a=>[a.items,a.cost]),[[6,13],[1,3]]);
   assert.equal(r.cost.byType.verify,6); assert.equal(r.cost.byType.strong,0);
 },[pick('partial')]);
-await codeTest('happy不再强模型复核；真实分步快照先UNHANDLED再自动分流',REFERENCE,s=>{
+await codeTest('happy不再极致模型复核；真实分步快照先UNHANDLED再自动分流',REFERENCE,s=>{
   const r=s.runs[0]; assert.equal(r.cost.byType.strong,0); assert.equal(r.cost.total,23);
   const queried=r.trace.find(e=>e.anim?.type==='query'); assert.ok(queried.anim.results.every(x=>x.state==='UNHANDLED' && x.evidenceStatus==='confirmed'));
   assert.ok(r.trace.find(e=>e.anim?.type==='verify').anim.results.every(x=>x.verified && x.state==='UNHANDLED'));

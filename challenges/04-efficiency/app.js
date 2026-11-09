@@ -16,16 +16,16 @@ const CH17 = new URL('../../optimization/chapter-17/overview.html', location.hre
 const CH9 = new URL('../../run/chapter-09/overview.html', location.href).href;
 const GATES = { scope: '作用域违规', unsafe: '不安全提交', falseClaim: '虚假完成', aborted: '未正常收尾' };
 const DECISIONS = { UNHANDLED: '尚未处理', RETURN_OK: '建议：符合退货条件', RETURN_NO: '建议：不符合退货条件', WAITING_HUMAN: '等待人工核实' };
-const ROUTES = { rules: '确定性规则', economy: '经济模型', strong: '强模型', human: '人工交接' };
-const COSTS = { query: '订单查询', rules: '规则计算', economy: '经济模型', strong: '强模型', verify: '独立验证', human: '人工交接', save: '报告保存' };
+const ROUTES = { rules: '确定性规则', economy: '经济模型', strong: '极致模型', human: '人工交接' };
+const COSTS = { query: '订单查询', rules: '规则计算', economy: '经济模型', strong: '极致模型', verify: '独立验证', human: '人工交接', save: '报告保存' };
 const FACTS = { unqueried: '未查询 · 不能猜事实', confirmed: 'confirmed · 已查到事实', unknown: 'unknown · 缺关键事实' };
 const VERIFY = { accepted: 'accepted · 有有效回执', rejected: 'rejected · 需修正，不能提交', unknown: 'unknown · 无自动回执' };
 const KNOWN_ANIMS = new Set(['query', 'route', 'verify', 'human', 'report']);
 const LEARNING_ORDER = ['rules', 'happy', 'mixed', 'confidence', 'partial'];
 const LESSONS = {
-  rules: '先练规则能判断的单：字段齐全，先别用强模型；规则建议也要独立验证。',
-  happy: '再试普通文本：经济模型就能处理的单，验证通过后不必再问强模型。',
-  mixed: '接着看一批里有难有易：规则处理字段，经济模型处理普通文本，复杂条件才用强模型。',
+  rules: '先练规则能判断的单：字段齐全，先别用极致模型；规则建议也要独立验证。',
+  happy: '再试普通文本：经济模型就能处理的单，验证通过后不必再问极致模型。',
+  mixed: '接着看一批里有难有易：规则处理字段，经济模型处理普通文本，复杂条件才用极致模型。',
   confidence: '进阶一：便宜模型很有把握也会错。独立验证未通过，只修对应单，不重做整批。',
   partial: '进阶二：批量回复可能漏单或混入错误编号。按工单编号补缺；订单事实确实查不到，才交给人工等待核实。',
 };
@@ -139,7 +139,7 @@ function savingText(s) {
 function improvementText(s) {
   if (!s.passed) return '先修复底线；verify 被拒可以改，但不能把无效候选保存为可信结果。';
   if (!effectAligned(s)) return '核对每单覆盖、当前事实与独立回执；只交接真正缺事实的单，不能用人工掩盖可自动完成的难例。';
-  if (!s.optimized) return '效果完整；可以合并查询，按项分工，仅修缺项或被拒项，避免验证通过后重复强模型复核。';
+  if (!s.optimized) return '效果完整；可以合并查询，按项分工，仅修缺项或被拒项，避免验证通过后重复极致模型复核。';
   return '效果完整且优化达标。100 分不是生产最优；更省的合法规则路径仍被接受。';
 }
 function teachingBatch(s) {
@@ -161,11 +161,11 @@ function rememberTeachingRun(s) {
   const calls = (tool) => batch.cost.ledger.filter((entry) => entry.tool === tool).length;
   const ruleItems = batch.cost.ledger.filter((entry) => entry.tool === 'applyRules').reduce((sum, entry) => sum + entry.items, 0);
   const verifiedItems = batch.cost.ledger.filter((entry) => entry.tool === 'verify').reduce((sum, entry) => sum + entry.items, 0);
-  $(prefix + 'Route').textContent = `查询 ${calls('queryOrders')} 次 · ${ruleItems ? `规则 ${ruleItems} 单 · ` : ''}强模型 ${calls('infer:strong')} 次 · 验证 ${verifiedItems} 单`;
+  $(prefix + 'Route').textContent = `查询 ${calls('queryOrders')} 次 · ${ruleItems ? `规则 ${ruleItems} 单 · ` : ''}极致模型 ${calls('infer:strong')} 次 · 验证 ${verifiedItems} 单`;
   const baseline = teachingRuns.get('baseline'), reference = teachingRuns.get('reference');
   if (baseline && reference && baseline.seed === reference.seed && baseline.task.id === reference.task.id) {
     const savings = baseline.cost.total > 0 ? number(100 * (baseline.cost.total - reference.cost.total) / baseline.cost.total, 1) : null;
-    $('comparisonNote').textContent = `同一批字段齐全的六单，两种做法都处理合适。本批 ${number(baseline.cost.total)} → ${number(reference.cost.total)} 成本点${savings !== null ? `，节省 ${savings}%` : ''}；少查重复订单、少问强模型，但六单验证都保留。只是本批模拟对比，不是真实价格，也不是你的成绩。`;
+    $('comparisonNote').textContent = `同一批字段齐全的六单，两种做法都处理合适。本批 ${number(baseline.cost.total)} → ${number(reference.cost.total)} 成本点${savings !== null ? `，节省 ${savings}%` : ''}；少查重复订单、少问极致模型，但六单验证都保留。只是本批模拟对比，不是真实价格，也不是你的成绩。`;
   } else {
     $('comparisonNote').textContent = `${mode === 'baseline' ? '原流程' : '分流策略'}已演示这批字段齐全的六单。再点“${mode === 'baseline' ? '看分流策略' : '看原流程'}”，对比同一批工单的账单；不是把两种不同效果的任务拿来比便宜。`;
   }
@@ -365,7 +365,7 @@ const HINTS = [
   'applyRules 的 unsupported 不是否定建议；文本中的“非”“未”和例外优先级不能略过。自己的合法确定性候选也可以验证，不强制用模型。',
   'infer 的 confidence 再高也不是证据。把候选交 verify，保留 accepted 项；只修 rejected 或缺项，不要让已通过项全批重做。',
   '批量结果可能长度没变，却有重复或错误 ID。按授权 ticketId 覆盖集合识别缺项，丢弃坏 ID，再补对应单；错误 ID 不要送入后续工具。',
-  'MISSING_EVIDENCE 先查询；FACT_UNKNOWN 是整批稳定的缺事实，换强模型也不能补齐。askHuman 获取真实回执，报告写 WAITING_HUMAN；不要把可自动处理的单全交人工。',
+  'MISSING_EVIDENCE 先查询；FACT_UNKNOWN 是整批稳定的缺事实，换极致模型也不能补齐。askHuman 获取真实回执，报告写 WAITING_HUMAN；不要把可自动处理的单全交人工。',
   '自动报告行必须带原 candidate 与对应 verificationReceiptId；人工行必须带 handoffReceiptId。指纹由宿主绑定。canComplete 是新实例、tools=null，只确认当前 report 的状态、覆盖与 task/policy 标识。',
   '验证通过就停止升级。看整个任务的全部尝试成本，而不是单次模型价格。全部 132 单效果齐且 22 份报告完整，效率分和节省率才有意义。',
 ];
@@ -563,7 +563,7 @@ canComplete 的 tools=null，且为全新实例，只用 report.status==='saved'
 facts structured={format:'structured',category:'standard'|'custom'|'consumable',opened:boolean,exceptionApproved:boolean}
 facts text={format:'text',note:已核实公开语法文本}，不是用户 body。
 unknown={orderId,tenantId,orderRevision,policyRevision,status:'unknown',reason:'SERVICE_UNAVAILABLE',evidenceRef:null,deliveredDay:null,facts:null}。
-只能查询本批授权 orderIds。未查询订单不在 evidence 中；未查询是 MISSING_EVIDENCE，已 unknown 是 FACT_UNKNOWN，后者本批稳定，重复查和强模型不补事实。
+只能查询本批授权 orderIds。未查询订单不在 evidence 中；未查询是 MISSING_EVIDENCE，已 unknown 是 FACT_UNKNOWN，后者本批稳定，重复查和极致模型不补事实。
 2. applyRules(ticketIds) -> {items:[{ticketId,status:'candidate',candidate} | {ticketId,status:'unsupported'|'unknown',reason}]}
 仅结构化确定性路径；不返回 confidence；unsupported 不是否定结果。自写合法解析候选允许，仍须查询与验证。
 3. infer(model,ticketIds)，model='economy'|'strong' -> {items:[{ticketId,status:'candidate',candidate,confidence} | {ticketId,status:'unsupported'|'unknown'|'error',reason}]}
@@ -617,7 +617,7 @@ function agentPackage() {
   return [
     `# AI Agent Handbook · 第04关：${TITLE}\n页面：${pageUrl()}`,
     '## 请帮我完成',
-    '简单订单别都问强模型：做对同一批任务，又少花钱。先考虑合并查询、规则或经济模型处理简单单，再处理复杂单、补缺项或修正未通过项；已验证的单不重做。事实和独立验证不能省。',
+    '不是所有订单查询都要使用极致模型：做对同一批任务，又少花钱。先考虑合并查询、规则或经济模型处理简单单，再处理复杂单、补缺项或修正未通过项；已验证的单不重做。事实和独立验证不能省。',
     '请按下面完整合同修改 onOptimize（组织调用）和 canComplete（确认当前报告），返回可直接整段粘贴的完整 harness.js。保留两个函数；不能引入模块、使用评分器字段或按预期硬编码。系统会自动检查全部22批132单，不只检查入门示例；目标是全部业务效果合适，并减少整个任务的全部实际成本。只做建议分流报告，不做真实退款。',
     '# 完整工具、错误、成本、评分与本机运行合同', CONTRACT,
     '# 当前公开政策 POLICY（原样）', '```json\n' + json(sim.POLICY) + '\n```',
@@ -686,7 +686,7 @@ try {
   $('toolContract').textContent = CONTRACT; $('policySpecs').textContent = json(sim.POLICY); $('publicSpecs').textContent = json(specs);
   $('starterSource').textContent = sim.STARTER; $('baselineSource').textContent = sim.BASELINE; $('referenceSource').textContent = sim.REFERENCE;
   initialized = true; showPreview(specs[0]); setBusy(false);
-  setStatus(saved !== null ? '已载入上次的玩家代码。可先看策略对比，再修改并运行。' : '起始代码把模型的把握当成验证结果。先保留事实与独立验证，再减少重复查询和不必要的强模型调用。');
+  setStatus(saved !== null ? '已载入上次的玩家代码。可先看策略对比，再修改并运行。' : '起始代码把模型的把握当成验证结果。先保留事实与独立验证，再减少重复查询和不必要的极致模型调用。');
 } catch (error) {
   ta.readOnly = true;
   setFeedback('bad', '—', '模拟器没有加载成功', `${String(error.message || error)}。请刷新重试；已保存代码保留，不会在主线程执行。`, '不可运行');

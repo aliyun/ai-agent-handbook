@@ -52,11 +52,11 @@
 <button class="btn rules-trigger" id="rulesBtn" type="button" aria-haspopup="dialog" aria-controls="rulesDialog" data-boot disabled>闯关说明</button>
 </header>
 <section id="strategyIntro" class="strategy-intro" aria-labelledby="strategyTitle">
-<h2 id="strategyTitle">简单订单别都问强模型</h2>
+<h2 id="strategyTitle">不是所有订单查询都要使用极致模型</h2>
 <p class="strategy-description">先用字段齐全的六张售后工单比较：同样做对，怎样少花钱？这里只生成建议报告，不执行退款。</p>
 <div class="strategy-grid">
-<article class="strategy-card"><h3>原流程：每单都问强模型</h3><p class="strategy-path">逐单查订单 → 每单问强模型 → 独立验证 → 保存报告</p><p class="strategy-cost"><span id="learnBaselineCost">—</span><small>本批模拟成本点</small></p><p class="strategy-meta" id="learnBaselineEffect">尚未演示</p><p class="strategy-meta" id="learnBaselineRoute">点击后查看这批的实际调用</p><button class="btn" id="baselineBtn" type="button" data-boot disabled>看原流程</button></article>
-<article class="strategy-card"><h3>分流策略：简单的先走便宜路</h3><p class="strategy-path">合并查订单 → 简单单走便宜路，复杂单用强模型 → 独立验证，只修缺项或未通过项 → 保存报告</p><p class="strategy-cost"><span id="learnReferenceCost">—</span><small>本批模拟成本点</small></p><p class="strategy-meta" id="learnReferenceEffect">尚未演示</p><p class="strategy-meta" id="learnReferenceRoute">点击后查看这批的实际调用</p><button class="btn" id="demoBtn" type="button" data-boot disabled>看分流策略</button></article>
+<article class="strategy-card"><h3>原流程：每单都问极致模型</h3><p class="strategy-path">逐单查订单 → 每单问极致模型 → 独立验证 → 保存报告</p><p class="strategy-cost"><span id="learnBaselineCost">—</span><small>本批模拟成本点</small></p><p class="strategy-meta" id="learnBaselineEffect">尚未演示</p><p class="strategy-meta" id="learnBaselineRoute">点击后查看这批的实际调用</p><button class="btn" id="baselineBtn" type="button" data-boot disabled>看原流程</button></article>
+<article class="strategy-card"><h3>分流策略：简单的先走便宜路</h3><p class="strategy-path">合并查订单 → 简单单走便宜路，复杂单用极致模型 → 独立验证，只修缺项或未通过项 → 保存报告</p><p class="strategy-cost"><span id="learnReferenceCost">—</span><small>本批模拟成本点</small></p><p class="strategy-meta" id="learnReferenceEffect">尚未演示</p><p class="strategy-meta" id="learnReferenceRoute">点击后查看这批的实际调用</p><button class="btn" id="demoBtn" type="button" data-boot disabled>看分流策略</button></article>
 </div>
 <p class="strategy-note" id="comparisonNote" role="status" aria-live="polite" tabindex="-1">先看原流程，再看分流策略。两次演示用同一批工单，不改你的代码、不计本机成绩。</p>
 <div class="strategy-links"><a href="#editor">现在改代码 →</a><a href="#feedbackPanel">看本批执行细节 →</a></div>
@@ -89,14 +89,14 @@
 <div class="feedback empty" id="feedback" role="status" aria-live="polite"><div><p class="feedback-title" id="verdictTitle">做对六单，再减少花费</p><p class="feedback-desc" id="scoreline">六单都有据处理或交接核实；建议须独立验证，报告不能漏单。</p><p class="stale-note" id="staleNote" hidden>代码已修改。下面是上次测试结果，不代表当前未测试代码。</p></div><div class="feedback-score" id="feedbackScore">—<small>等待运行</small></div></div>
 <div class="result-tools" id="resultTools" hidden><p id="progressNote" class="progress-note" hidden></p><button class="btn" id="copyResult" type="button" disabled>复制完整诊断给 Agent</button><span id="resultCopyNote" role="status" class="result-copy-note"></span></div>
 <div class="inspect" id="inspect">
-<p id="lessonNote" class="lesson-note">先练规则能判断的单：字段齐全，先别用强模型；规则建议也要独立验证。</p>
+<p id="lessonNote" class="lesson-note">先练规则能判断的单：字段齐全，先别用极致模型；规则建议也要独立验证。</p>
 <div class="case-select"><label for="scenarioSelect">查看场景</label><select id="scenarioSelect" aria-label="选择公开测试场景" disabled></select></div>
 <div id="caseFinding" class="case-finding">首次展示真实六单输入；订单事实需要查询，不能从工单正文猜。</div>
 <div class="case-detail"><span id="runInfo">公开输入预览 · 尚未运行</span><div class="dots" id="dots" role="group" aria-label="选择本场景的一批测试"></div></div>
 <details class="case-meta"><summary>批次 / 版本 / 种子信息</summary><div id="caseMeta"></div></details>
 <div class="flow" id="efficiencyFlow">
 <div class="flow-head"><span>六单建议分流 · <span id="taskSub">正在读取公开输入</span></span><span>人工 = 等待核实，不是自动解决</span></div>
-<div class="route-legend" id="routeLegend" aria-label="各路线工单数"><span class="route-chip">规则 <b id="routeRules">0</b></span><span class="route-chip">经济模型 <b id="routeEconomy">0</b></span><span class="route-chip">强模型 <b id="routeStrong">0</b></span><span class="route-chip">人工 <b id="routeHuman">0</b></span></div>
+<div class="route-legend" id="routeLegend" aria-label="各路线工单数"><span class="route-chip">规则 <b id="routeRules">0</b></span><span class="route-chip">经济模型 <b id="routeEconomy">0</b></span><span class="route-chip">极致模型 <b id="routeStrong">0</b></span><span class="route-chip">人工 <b id="routeHuman">0</b></span></div>
 <div class="business-grid"><div class="tickets-board" id="ticketsBoard" role="group" aria-label="本批六张工单的事实、建议、验证和交接状态"></div>
 <aside class="cost-panel" aria-labelledby="costTitle"><h3 id="costTitle">本批账单 · 全部实际尝试</h3><div class="cost-total"><span id="costTotal">0</span> <small>模拟成本点</small></div><table class="cost-table" aria-label="本批成本分类"><tbody id="costByType"></tbody></table><div class="cost-compare"><p>原流程 / 保守对照 <b id="baselineCost">—</b></p><p>参考策略 <b id="referenceCost">—</b></p><p id="costTime">模拟时长 —</p></div><p class="savings" id="batchSavings">尚未运行，不比较节省率。</p><details class="ledger" id="ledgerDetails"><summary>逐次成本账本 <span id="ledgerCount">0 笔</span></summary><div class="ledger-list" id="costLedger" tabindex="0" role="region" aria-label="当前批次完整成本账本"></div></details></aside></div>
 <p class="flow-note" id="reportState">尚无报告。每项的建议、验证与保存是不同步骤。</p><div class="play-controls"><button id="replay" type="button" disabled>播放过程</button><span id="playState">公开输入预览 · 尚未运行</span><button id="speed" type="button" title="改变回放速度" aria-label="回放速度 1 倍" disabled>1×</button></div>
@@ -114,7 +114,7 @@
 <footer class="underbench"><a href="../">← 返回关卡目录</a><span>只在本机保存代码与成绩 · 无需 API Key · 全部测试公开</span></footer>
 </div>
 <dialog class="dialog" id="rulesDialog" aria-labelledby="rulesTitle"><div class="dialog-head"><h2 id="rulesTitle">闯关说明</h2><div class="dialog-actions"><button class="btn" id="copyRules" type="button" data-boot disabled>复制给 Agent</button><button class="btn" type="button" data-close="rulesDialog" aria-label="关闭闯关说明" autofocus>关闭</button></div><p class="dialog-note" id="rulesCopied" role="status"></p></div><div class="dialog-content rules" id="rulesContent">
-<h3>1. 要解决什么？</h3><p>商店要为同一批六张售后工单生成建议报告，不执行退款。原流程每单都问强模型，很贵。你不改退货政策，只省重复查询和不必要的模型调用，不能省事实查询与独立验证。</p>
+<h3>1. 要解决什么？</h3><p>商店要为同一批六张售后工单生成建议报告，不执行退款。原流程每单都问极致模型，很贵。你不改退货政策，只省重复查询和不必要的模型调用，不能省事实查询与独立验证。</p>
 <h3>2. 怎么开始？</h3><p>先看“原流程”和“分流策略”两个演示，再复制任务给 Agent 修改，或自己改两个 hook：<code>onOptimize(ctx)</code> 组织查询、建议、验证与保存的调用；<code>canComplete(ctx)</code> 确认当前报告是否完整可信。点“运行我的代码”，系统自动检查全部公开场景。起始代码故意缺少独立验证，不等于原流程对照；演示不改你的代码、不计本机成绩。</p>
 <h3>3. 怎样算过关？</h3><p>每单都有据处理，真正缺事实的才交接等待核实；报告齐全、安全，且最终分数 ≥ 90。人工只表示等待核实，不是已解决；漏单、错判不能用便宜抵扣。</p>
 <details id="advancedRules" class="rule-detail"><summary>进阶：业务规则、异常场景、评分与费用</summary><div>
@@ -123,7 +123,7 @@
 <p>可以复制完整任务给自己的 Agent，拿到完整 harness.js 后全选粘贴回编辑器。所有输入、预期与模型脚本公开，但不能依据场景名、index、评分器预期或硬编码答案分流；这些字段不进入玩家 ctx。</p>
 <h3>同一规则与事实标准</h3><p>本批 task.at 是固定整数 businessDay。订单和 policy 版本在本批钉扎，与从 0 开始的模拟秒数无关。期限边界 <b>0 ≤ at − deliveredDay ≤ 14</b>；未来签收时间无效。</p><p>P1：standard 普通商品期限内可退；custom 定制不可退；consumable 耗材未拆封可退、已拆封不可退。exceptionApproved=true 可覆盖品类与拆封限制，但<b>不延长期限</b>。关键事实缺失不能把 null 当 false。用户正文不是权威事实；订单已核实文本包含否定、例外和优先级，规则工具可能 unsupported。</p>
 <h3>五类公开场景：从简单单到局部修正</h3><p>系统每次仍会检查全部 22 批 × 6 单 = 132 单。下面按学习顺序查看，不是只测试入门示例。</p><table><thead><tr><th scope="col">场景</th><th scope="col">需要处理的情况</th><th scope="col">批数</th></tr></thead><tbody><tr><td>① 规则就能判断</td><td>字段齐全、期限边界；规则产生建议，仍保留验证。</td><td>5</td></tr><tr><td>② 简单路别走贵</td><td>普通文本一次经济模型建议均正确；验证通过就停止。</td><td>2</td></tr><tr><td>③ 一批里有难有易</td><td>规则、普通文本与多条件文本混合；按项分工。</td><td>5</td></tr><tr><td>④ 很有把握也会错</td><td>经济模型固定高置信错误，重复调用不会纠正；验证后修正或升级。</td><td>5</td></tr><tr><td>⑤ 批量结果不齐</td><td>按 ticketId 查漏补缺，两个批次各有一单稳定 unknown，只有这两单应人工。</td><td>5</td></tr></tbody></table>
-<p>批量故障按 batchSeed + ticketId + economy 钉扎，首次包含该单且输入项数 ≥ 2 时注入一次并原子消耗；换顺序或子集不重置。“很有把握也会错”的经济模型错误固定；“批量结果不齐”的 unknown 整批稳定。未查询先补查询；已 unknown 不能靠强模型补事实。</p>
+<p>批量故障按 batchSeed + ticketId + economy 钉扎，首次包含该单且输入项数 ≥ 2 时注入一次并原子消耗；换顺序或子集不重置。“很有把握也会错”的经济模型错误固定；“批量结果不齐”的 unknown 整批稳定。未查询先补查询；已 unknown 不能靠极致模型补事实。</p>
 <h3>安全 / 效果 / 效率，分别判定</h3><ul><li><b>scope：</b>不尝试查询或处理本批外、跨租户的订单与工单。</li><li><b>unsafe：</b>不尝试保存错误、缺项、重复、无当前回执、伪造证据或指纹不匹配的报告。</li><li><b>falseClaim：</b>没有可信完整当前报告，不返回 canComplete=true。</li><li><b>aborted：</b>不超预算、死循环、报错或缺 hook，正常收尾。</li></ul><p>底线 sticky：工具拒绝后 catch 不清除违规。verify 的逐项 rejected 可以修正，不等于不安全提交。无合法报告的正常返回不会凭空生成六张人工回执。</p><p><b>只有 optimized 表示本关通过</b>：安全、132/132 处理合适、22/22 完整报告且最终分数 ≥ 90。passed 仅表示底线安全。目标自动正确 130 单 + 应人工 2 单，总 132；应人工不是自动解决。把可自动的单全交人工，虽然可能安全，效果不齐且没有效率分。</p>
 <div class="formula">任一底线失败：0 分
 否则：round(60 + 20 × appropriate / 132 + 效率分)
