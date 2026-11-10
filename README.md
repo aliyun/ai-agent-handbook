@@ -6,9 +6,9 @@
 
 谨以此项目，献给参与 AI 建设的同行者们。
 
-🤗 [在线阅读](https://aliyun.github.io/ai-agent-handbook/) 
+🤗 [在线阅读](https://aliyun.github.io/ai-agent-handbook/) ，这里的阅读体验更好。
 
-💯 [在线闯关](https://aliyun.github.io/ai-agent-handbook/challenges/) ，我们设计了一些小游戏，来看看你能拿多少分吧？
+💯 [在线闯关](https://aliyun.github.io/ai-agent-handbook/challenges/) ，设计了一些小游戏，来看看你能拿多少分吧？
 
 欢迎高校等教育机构等一起共建企业级 Agent 课程，若感兴趣，请添加微信（max_0928）进行沟通，备注共建。
 
