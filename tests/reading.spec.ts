@@ -84,7 +84,7 @@ for (const width of [1440, 390]) {
       await expect(page.locator(".vp-doc")).toContainText("作者：陈梓康");
       await expect(page.locator(".vp-doc")).not.toContainText("**");
       for (const label of ["决策模型（Decision Models）", "置信度估计（confidence estimate）", "第二步（一维刻度校准）："]) {
-        await expect(page.locator(".vp-doc strong").filter({ hasText: label })).toHaveCount(1);
+        await expect(page.locator(".vp-doc").getByText(label, { exact: true })).toHaveJSProperty("tagName", "STRONG");
       }
       await expect(page.locator(".vp-doc h2").last()).toHaveText(/04 写在最后/);
       await expect(page.locator(".vp-doc mjx-container")).toHaveCount(278);
