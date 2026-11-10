@@ -46,6 +46,7 @@ export default defineConfig({
       process.env.SITE_URL || "https://aliyun.github.io/ai-agent-handbook/",
   },
   markdown: {
+    math: true,
     lineNumbers: false,
     languageAlias: { mysql: "sql" },
     image: { lazyLoading: true },

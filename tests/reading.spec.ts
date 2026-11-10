@@ -67,6 +67,44 @@ for (const width of [1440, 390]) {
   }
 }
 
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`Jev decision-model evals at ${width}px in ${theme} theme`, async ({ page }) => {
+      const title = "用决策模型替代传统生成式 LLM-as-a-Judge 做自动化评测/决策";
+      const errors: string[] = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto("cases/jev/");
+      const topicLink = page.locator('.vp-doc a[href$="decision-model-evals.html"]');
+      await expect(topicLink).toContainText(title);
+      await topicLink.click();
+      await expect(page).toHaveURL(/cases\/jev\/decision-model-evals\.html$/);
+      await expect(page.locator(".vp-doc h1")).toContainText(title);
+      await expect(page.locator(".vp-doc")).toContainText("作者：陈梓康");
+      await expect(page.locator(".vp-doc")).not.toContainText("**");
+      for (const label of ["决策模型（Decision Models）", "置信度估计（confidence estimate）", "第二步（一维刻度校准）："]) {
+        await expect(page.locator(".vp-doc strong").filter({ hasText: label })).toHaveCount(1);
+      }
+      await expect(page.locator(".vp-doc h2").last()).toHaveText(/04 写在最后/);
+      await expect(page.locator(".vp-doc mjx-container")).toHaveCount(278);
+      await expect(page.locator(".vp-doc mjx-container[display='true']")).toHaveCount(18);
+      await expect(page.locator(".vp-doc [data-mml-node='merror']")).toHaveCount(0);
+      await expect(page.locator(".vp-doc img")).toHaveCount(6);
+      for (const image of await page.locator(".vp-doc img").all()) {
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+      }
+      await expect(page.locator(".vp-doc table tbody tr")).toHaveCount(3);
+      const bayesHeading = page.locator(".vp-doc h3").filter({ hasText: "从贝叶斯先验与误判代价理解" });
+      await bayesHeading.scrollIntoViewIfNeeded();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.screenshot({ path: `test-results/jev-judge-${width}-${theme}.png` });
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
 test("home, contents, stable deep links and source edit link", async ({
   page,
 }) => {

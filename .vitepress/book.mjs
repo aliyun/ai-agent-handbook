@@ -294,6 +294,11 @@ for (const part of parts) {
         "cases/jev/hiroute",
         { chapter: "jev", part: part.title },
       ),
+      page(
+        "06-case-study/Jev 专题/用决策模型替代传统生成式 LLM-as-a-Judge 做自动化评测与决策.md",
+        "cases/jev/decision-model-evals",
+        { chapter: "jev", part: part.title },
+      ),
     ];
     topic.sourceDirectory = "06-case-study/Jev 专题";
     part.pages.push(topic);
