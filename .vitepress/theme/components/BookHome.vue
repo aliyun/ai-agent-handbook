@@ -53,14 +53,11 @@ onMounted(() => {
         >
       </div>
       <div class="book-cover" aria-hidden="true">
-        <div class="cover-title">
-          AI AGENT<br />HANDBOOK<span>智能体工程白皮书</span>
-        </div>
+        <div class="cover-title">智能体工程<br />白皮书</div>
         <div class="cover-orbit">
           <div class="orbit one" />
           <div class="orbit two" />
           <div class="orbit three" />
-          <span class="orbit-center">Agent</span>
         </div>
         <div class="cover-bottom">
           从架构到实践<br /><span>A FIELD GUIDE TO AGENT ENGINEERING</span>

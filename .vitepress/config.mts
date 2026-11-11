@@ -76,8 +76,8 @@ export default defineConfig({
     });
   },
   themeConfig: {
-    logo: "/favicon.svg",
-    siteTitle: "AI Agent Handbook",
+    logo: { src: "/favicon.svg", alt: "返回首页" },
+    siteTitle: false,
     nav: [
       {
         text: '<span class="nav-challenge-label">闯关游戏 <span class="challenge-beta">Beta</span></span>',

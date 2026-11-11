@@ -23,7 +23,24 @@ for (const width of [1440, 390]) {
       ]) {
         await expect(page.locator(".book-home")).not.toContainText(text);
       }
-      await expect(page.locator(".book-cover")).not.toContainText(/BUILD|RUN/);
+      const siteTitle = page.locator(".VPNavBarTitle .title");
+      await expect(siteTitle).toHaveText("");
+      await expect(siteTitle.getByRole("img", { name: "返回首页" })).toBeVisible();
+      await expect(siteTitle).toHaveAttribute("href", process.env.SITE_BASE || "/ai-agent-handbook/");
+      await expect(page.locator("#book-title")).toContainText("AI Agent");
+      await expect(page.locator("#book-title")).toContainText("Handbook");
+      const cover = page.locator(".book-cover");
+      await expect(cover).not.toContainText(/BUILD|RUN|HANDBOOK|AI AGENT/);
+      await expect(cover.locator(".cover-title")).toHaveText("智能体工程白皮书");
+      await expect(cover.locator(".cover-orbit")).toHaveText("");
+      await expect(cover.locator(".orbit-center")).toHaveCount(0);
+      if (width >= 700) {
+        await expect(cover).toBeVisible();
+        expect(await cover.locator(".cover-title").evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBe(36);
+        const [coverBox, titleBox] = await Promise.all([cover.boundingBox(), cover.locator(".cover-title").boundingBox()]);
+        expect(titleBox!.x).toBeGreaterThanOrEqual(coverBox!.x);
+        expect(titleBox!.x + titleBox!.width).toBeLessThanOrEqual(coverBox!.x + coverBox!.width);
+      }
       for (const name of ["全书目录", "阅读指南", "开发者调研", "关于本书"]) {
         await expect(page.locator(".VPNav").getByRole("link", { name, exact: true })).toHaveCount(0);
       }

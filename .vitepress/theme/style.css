@@ -280,19 +280,12 @@ html[data-reading-size="large"] {
   transform: rotate(3deg);
 }
 .cover-title {
-  font-family: Georgia, serif;
-  font-size: 33px;
-  line-height: 1.08;
-  letter-spacing: 1px;
-  margin-top: 28px;
-}
-.cover-title > span {
-  display: block;
   font-family: var(--vp-font-family-base);
-  font-size: 12px;
-  letter-spacing: 3px;
-  margin-top: 14px;
-  color: #d1dbc4;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 2px;
+  margin-top: 28px;
 }
 .cover-orbit {
   position: relative;
@@ -320,15 +313,6 @@ html[data-reading-size="large"] {
   height: 80px;
   top: 52px;
   transform: translateX(-50%) rotate(32deg);
-}
-.orbit-center {
-  position: absolute;
-  top: 79px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: Georgia, serif;
-  font-size: 22px;
-  font-style: italic;
 }
 .cover-bottom {
   border-top: 1px solid #a4c6ac50;
