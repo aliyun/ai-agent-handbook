@@ -18,7 +18,6 @@ onMounted(() => {
   <main class="book-home vp-raw">
     <section class="book-hero" aria-labelledby="book-title">
       <div class="hero-copy">
-        <p class="book-eyebrow"><span /> Agent 工程开源白皮书</p>
         <h1 id="book-title">AI Agent<br /><em>Handbook</em></h1>
         <p class="hero-subtitle">从模型能力，到可靠的 Agent 系统</p>
         <p class="hero-description">

@@ -9,7 +9,8 @@ for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.emulateMedia({ colorScheme: theme });
       await page.goto("./");
-      await expect(page.locator(".hero-copy .book-eyebrow")).toHaveText("Agent 工程开源白皮书");
+      await expect(page.locator(".hero-copy .book-eyebrow")).toHaveCount(0);
+      await expect(page.locator(".hero-copy")).not.toContainText("Agent 工程开源白皮书");
       await expect(page.locator("#parts-title")).toHaveText("目录");
       await expect(page.locator(".book-invitation p").last()).toHaveText(
         "开源项目由阿里云与社区共同维护，欢迎反馈修改建议和您的一线实践。",
