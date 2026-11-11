@@ -106,6 +106,51 @@ for (const width of [1440, 390]) {
   }
 }
 
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`Personal Agent SuperAgent article at ${width}px in ${theme} theme`, async ({ page }) => {
+      const title = "关于DeepSeek的SuperAgent，以及我们的实践";
+      const errors: string[] = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto("cases/personal-agent/");
+      const topicLink = page.locator('.vp-doc a[href$="deepseek-superagent.html"]');
+      await expect(topicLink).toContainText(title);
+      await topicLink.click();
+      await expect(page).toHaveURL(/cases\/personal-agent\/deepseek-superagent\.html$/);
+      const doc = page.locator(".vp-doc");
+      await expect(doc.locator("h1")).toHaveCount(1);
+      await expect(doc.locator("h1")).toContainText(title);
+      await expect(doc.locator("h2")).toHaveCount(6);
+      await expect(doc.locator("h2").last()).toContainText("写在最后：两个趋势");
+      await expect(doc).toContainText("2026.11.02");
+      await expect(doc).not.toContainText("**");
+      await expect(doc.locator("table")).toHaveCount(3);
+      await expect(doc.locator("table tbody tr")).toHaveCount(11);
+      await expect(doc.locator(".superagent-table")).toHaveCount(3);
+      if (width < 700) {
+        expect(await doc.locator(".superagent-table").first().evaluate(el => el.scrollWidth > el.clientWidth)).toBe(true);
+      }
+      await expect(doc.locator("img")).toHaveCount(35);
+      await expect(doc.locator("img").first()).toHaveAttribute("src", /superagent-01.*\.svg$/);
+      for (const image of await doc.locator("img").all()) {
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+        await expect(image).not.toHaveAttribute("src", /Expires=|Signature=/);
+      }
+      const lastImage = doc.locator("img").last();
+      await lastImage.click();
+      await expect(page.getByRole("dialog", { name: "图片预览" })).toBeVisible();
+      await page.keyboard.press("Escape");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await doc.locator("table").first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/personal-superagent-${width}-${theme}.png` });
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
 test("home, contents, stable deep links and source edit link", async ({
   page,
 }) => {

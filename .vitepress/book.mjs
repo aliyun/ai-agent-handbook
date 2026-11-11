@@ -320,6 +320,11 @@ for (const part of parts) {
         "cases/personal-agent/agentscope-aaas",
         { chapter: "personal-agent", part: part.title },
       ),
+      page(
+        "06-case-study/Personal Agent 专题/关于DeepSeek的SuperAgent，以及我们的实践.md",
+        "cases/personal-agent/deepseek-superagent",
+        { chapter: "personal-agent", part: part.title },
+      ),
     ];
     personalAgent.sourceDirectory = "06-case-study/Personal Agent 专题";
     part.pages.push(personalAgent);

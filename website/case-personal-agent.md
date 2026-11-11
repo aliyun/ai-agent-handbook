@@ -6,4 +6,6 @@
 
 《从 Personal Agent 到企业智能体：AgentScope 的 Agent as a Service 架构》以 AgentScope 为基础，讨论 Harness 远端托管、本地与远端执行交接、Context 与 Memory 的云端管理，以及 Brain／Hands 分离，并介绍如何通过 AgentCore 承载自建的 Agent 服务。
 
+《关于DeepSeek的SuperAgent，以及我们的实践》解析 DeepSeek SuperAgent 的 Router／Worker 架构、事件驱动与原型实现，并结合协同空间 Flock 讨论任务责任、验收、主动推进和跨会话记忆。
+
 <ChapterIndex chapter="personal-agent" />
