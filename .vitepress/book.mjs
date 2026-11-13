@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -27,6 +27,7 @@ export const parts = [
   {
     id: "run",
     dir: "03-run",
+    guideSource: "03-run/00 运行篇导读/运行篇导读.md",
     title: "运行篇",
     english: "Run",
     range: "07—12",
@@ -190,10 +191,12 @@ for (const part of parts) {
   const files = readdirSync(path.join(root, part.dir));
   const guide = files.find((f) => f === "README.md" || f.endsWith("篇导读.md"));
   part.guide = page(
-    guide ? `${part.dir}/${guide}` : "website/outlook.md",
+    part.guideSource || (guide ? `${part.dir}/${guide}` : "website/outlook.md"),
     `${part.id}/index`,
     { part: part.title, isGuide: true },
   );
+  if (part.guideSource && path.posix.dirname(part.guideSource) !== part.dir)
+    part.guide.sourceDirectory = path.posix.dirname(part.guideSource);
   part.href = part.guide.href;
   part.pages = [];
   readingOrder.push(part.guide);
@@ -253,18 +256,25 @@ for (const part of parts) {
       });
       chapter.sourceDirectory = `${part.dir}/${dir}`;
     } else {
-      const file = exactlyOne(
-        files.filter(
-          (f) =>
-            f.endsWith(".md") && new RegExp(`^第\\s*0*${number}\\s*章`).test(f),
-        ),
+      const entry = exactlyOne(
+        files.filter((f) => new RegExp(`^第\\s*0*${number}\\s*章`).test(f)),
         `chapter ${number}`,
       );
+      let source = `${part.dir}/${entry}`;
+      const isDirectory = statSync(path.join(root, source)).isDirectory();
+      if (isDirectory) {
+        const file = exactlyOne(
+          readdirSync(path.join(root, source)).filter((f) => f.endsWith(".md")),
+          `chapter ${number} article`,
+        );
+        source += `/${file}`;
+      }
       chapter = page(
-        `${part.dir}/${file}`,
+        source,
         `${part.id}/chapter-${String(number).padStart(2, "0")}`,
         { chapter: number, part: part.title },
       );
+      if (isDirectory) chapter.sourceDirectory = `${part.dir}/${entry}`;
     }
     part.pages.push(chapter);
     readingOrder.push(chapter, ...(chapter.children || []));

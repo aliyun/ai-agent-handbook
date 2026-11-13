@@ -1,5 +1,53 @@
 import { test, expect } from "@playwright/test";
-import { pages, readSource } from "../.vitepress/book.mjs";
+import { readdirSync } from "node:fs";
+import path from "node:path";
+import { pages, parts, root, readSource, resolveBookLink } from "../.vitepress/book.mjs";
+
+test("runtime repository order and stable source mappings", () => {
+  const run = parts.find(part => part.id === "run")!;
+  const entries = readdirSync(path.join(root, run.dir), { withFileTypes: true })
+    .sort((a, b) => Number(b.isDirectory()) - Number(a.isDirectory()) || Buffer.compare(Buffer.from(a.name), Buffer.from(b.name)));
+  expect(entries[0].name).toBe("00 运行篇导读");
+  expect(entries.slice(1).map(entry => Number(entry.name.match(/^第 (\d+) 章/)![1]))).toEqual([7, 8, 9, 10, 11, 12]);
+  expect(run.pages.map(chapter => chapter.chapter)).toEqual([7, 8, 9, 10, 11, 12]);
+  const migrated = [run.guide, ...run.pages.filter(chapter => [7, 8].includes(chapter.chapter))];
+  expect(migrated.map(page => page.href)).toEqual(["/run/", "/run/chapter-07.html", "/run/chapter-08.html"]);
+  for (const page of migrated) {
+    expect(page.sourceDirectory).toBe(path.posix.dirname(page.source));
+    expect(resolveBookLink(`${page.sourceDirectory}/`, "README.md")).toBe(page.href);
+    expect(resolveBookLink(page.source, "README.md")).toBe(page.href);
+  }
+});
+
+for (const width of [1440, 390]) {
+  test(`runtime guide and relocated chapters at ${width}px`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("run/");
+    await expect(page.locator(".vp-doc h1")).toContainText("运行篇导读");
+    await expect(page.locator(".VPDocFooter a.next")).toHaveAttribute("href", /\/run\/chapter-07\.html$/);
+    for (const number of [7, 8]) {
+      await page.locator(".VPDocFooter a.next").click();
+      await expect(page).toHaveURL(new RegExp(`/run/chapter-0${number}\\.html$`));
+      await expect(page.locator(".vp-doc h1")).toContainText(`第 0${number} 章`);
+      const images = page.locator(".vp-doc img");
+      await expect(images).toHaveCount(number === 7 ? 7 : 5);
+      for (const image of await images.all()) {
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+      }
+      await page.locator(".vp-doc h1").scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/runtime-chapter-0${number}-${width}.png` });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+    await expect(page.locator(".VPDocFooter a.next")).toHaveAttribute("href", /\/run\/chapter-09\.html$/);
+    await page.locator(".VPDocFooter a.next").click();
+    await expect(page.locator(".vp-doc h1")).toContainText("第 09 章");
+    await expect(page.locator(".case-index a")).toHaveCount(3);
+    expect(errors).toEqual([]);
+  });
+}
 
 for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
