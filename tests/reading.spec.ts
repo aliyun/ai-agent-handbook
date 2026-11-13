@@ -126,6 +126,58 @@ for (const width of [1440, 390]) {
 
 for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
+    test(`HiRoute coding practice article at ${width}px in ${theme} theme`, async ({ page }) => {
+      const title = "把主力模型用在刀刃上：一个月 300 亿 Token、31 万行 Rust 背后的 AI Coding 实践";
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto("run/chapter-09.html");
+      const links = page.locator(".case-index a");
+      await expect(links).toHaveCount(3);
+      await expect(links.nth(0)).toHaveAttribute("href", /chapter-09\/overview\.html$/);
+      await expect(links.nth(1)).toHaveAttribute("href", /chapter-09\/intelligent-routing\.html$/);
+      await expect(links.nth(2).locator("span")).toHaveText("03");
+      await expect(links.nth(2)).toContainText(title);
+      await expect(links.nth(2)).toHaveAttribute("href", /chapter-09\/hiroute-coding-practice\.html$/);
+      await links.nth(2).click();
+      const doc = page.locator(".vp-doc");
+      await expect(doc.locator("h1")).toHaveCount(1);
+      await expect(doc.locator("h1")).toContainText(title);
+      await expect(doc.locator("h2")).toHaveCount(6);
+      await expect(doc.locator("h3")).toHaveCount(2);
+      await expect(doc.locator("table")).toHaveCount(1);
+      await expect(doc.locator("table tr")).toHaveCount(4);
+      await expect(doc.locator("table th, table td")).toHaveCount(16);
+      await expect(doc.locator("pre")).toHaveCount(1);
+      await expect(doc.locator("pre")).toContainText("hiroute sessions list --view switches");
+      await expect(doc.locator("pre")).toContainText("hiroute value show");
+      await expect(doc).not.toContainText("**");
+      await expect(doc.locator("img")).toHaveCount(7);
+      for (const [index, image] of (await doc.locator("img").all()).entries()) {
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+        await expect(image).toHaveAttribute("src", new RegExp(`image-${String(index + 14).padStart(3, "0")}.*\\.(png|jpg)$`));
+        await expect(image).not.toHaveAttribute("src", /Expires=|Signature=/);
+      }
+      await doc.locator("img").first().click();
+      await expect(page.getByRole("dialog", { name: "图片预览" })).toBeVisible();
+      await page.keyboard.press("Escape");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      if (width < 700) {
+        expect(await doc.locator(".hiroute-practice-table").evaluate(el => el.scrollWidth > el.clientWidth)).toBe(true);
+      }
+      await doc.locator("h1").scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/hiroute-practice-top-${width}-${theme}.png` });
+      await doc.locator("table").scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/hiroute-practice-table-${width}-${theme}.png` });
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
     test(`Personal Agent SuperAgent article at ${width}px in ${theme} theme`, async ({ page }) => {
       const title = "关于DeepSeek的SuperAgent，以及我们的实践";
       const errors: string[] = [];

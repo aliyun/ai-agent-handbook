@@ -80,6 +80,7 @@ const chapterGroups = [
     articles: [
       ["overview", "01 AI 网关与统一流量治理综述"],
       ["intelligent-routing", "02 智能路由：如何利用便宜模型提升智价比"],
+      ["hiroute-coding-practice", "03 把主力模型用在刀刃上"],
     ],
   },
   {
