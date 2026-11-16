@@ -1,26 +1,27 @@
 {
-  "version": "v18",
+  "version": "v19",
   "files": {
     "index.html": {
-      "sourceSHA256": "b990aae9b4b083a95bc2833960a52efb200355694258e8431d6c0352a0d47c55",
-      "publishedSHA256": "c660eea157146a5574f66652055064f5b1a97f2ea304c00c0ec1e98b6ad40c25",
-      "bytes": 945079
+      "sourceSHA256": "c660eea157146a5574f66652055064f5b1a97f2ea304c00c0ec1e98b6ad40c25",
+      "publishedSHA256": "b077655e246db2bab3e3123aa77f7e5f9156bfb8ea265ec09e787e849cb033e0",
+      "bytes": 28869
     },
     "lighthouse.html": {
-      "sourceSHA256": "e491f00fdfa9775b9b21b517c2d336a38de43122a60b4805558c6698d30f2818",
-      "publishedSHA256": "3fe5e3830bb5cf7ffd80e556b5959f4cff42f31d431664a2c6ef6d9dc628880e",
-      "bytes": 4533072
+      "sourceSHA256": "3fe5e3830bb5cf7ffd80e556b5959f4cff42f31d431664a2c6ef6d9dc628880e",
+      "publishedSHA256": "9d61455da39fcd6b60737ffc6b28d9cf296e399444ab8d461debea2a4952068f",
+      "bytes": 11958
     },
     "audit-sea.html": {
-      "sourceSHA256": "b39d1ef21e1c17738514600a5b779895059aa3864ff0b8165b81729cacf6ae24",
-      "publishedSHA256": "29a8fa5148fe3497a9fc3fb5b406c4d84b951781df86f65a1a2c91ccc0d8bbf6",
-      "bytes": 2459750
+      "sourceSHA256": "29a8fa5148fe3497a9fc3fb5b406c4d84b951781df86f65a1a2c91ccc0d8bbf6",
+      "publishedSHA256": "db120ca30a1f147a13252b4db1a2b716e758d5c5385cca03529b7c17bf4dc4c0",
+      "bytes": 16231
     }
   },
   "music": {
     "original": true,
     "method": "程序作曲与合成，无商业歌曲采样；两关使用同一原创循环音乐。",
-    "sha256": "28a23f92cfc50736772fa276f4bdfe3fcd8a87f5689354a423a0d24c15f1df05"
+    "sha256": "28a23f92cfc50736772fa276f4bdfe3fcd8a87f5689354a423a0d24c15f1df05",
+    "staticAsset": "assets/28a23f92cfc50736772fa276.mp3"
   },
   "runtime": {
     "three": "0.180.0",
@@ -34,7 +35,8 @@
     "Three.js MIT notice retained.",
     "Embedded image/music literals line-wrapped with unchanged runtime bytes.",
     "v17: second chapter drops four unused embedded bitmaps (backdrop, kelpBackdrop, fish, turtle); map and first chapter unchanged from v16.",
-    "v18: map adds a return-to-handbook link; second chapter welcome card keeps only chapter, title and start; sample label removed."
+    "v18: map adds a return-to-handbook link; second chapter welcome card keeps only chapter, title and start; sample label removed.",
+    "v19: unchanged original images/music and classic runtime scripts served as hash-named static assets; map exposes explicit loading/retry state and sends host readiness only after both visible images have loaded."
   ],
   "defaultView": "external",
   "targets": {
@@ -49,5 +51,212 @@
     3,
     4,
     5
-  ]
+  ],
+  "assets": {
+    "assets/014856f1224fcc0e4ad5d7ac.webp": {
+      "publishedSHA256": "014856f1224fcc0e4ad5d7ac283061dbc1233262f0cf9ee68378c890fb3c9430",
+      "bytes": 12490,
+      "kind": "image"
+    },
+    "assets/030f4217677148f20740c62d.webp": {
+      "publishedSHA256": "030f4217677148f20740c62d75a93b429e54be301d0552123289dfee6bff2f74",
+      "bytes": 12164,
+      "kind": "image"
+    },
+    "assets/0bef1bb973e2f184f4714057.webp": {
+      "publishedSHA256": "0bef1bb973e2f184f471405783606ffacce8dbc5458128d5e9c1706d12ee9364",
+      "bytes": 10028,
+      "kind": "image"
+    },
+    "assets/1804b3043079d2b70bafdb02.webp": {
+      "publishedSHA256": "1804b3043079d2b70bafdb028de8031becee0584025342ffc8d2ab49d1ebbccf",
+      "bytes": 41398,
+      "kind": "image"
+    },
+    "assets/2114652f6a8d4df46d562050.webp": {
+      "publishedSHA256": "2114652f6a8d4df46d5620509ac4abaf64cfbda2d133e5e7c86ae27c20d6b0a8",
+      "bytes": 11920,
+      "kind": "image"
+    },
+    "assets/28a23f92cfc50736772fa276.mp3": {
+      "publishedSHA256": "28a23f92cfc50736772fa276f4bdfe3fcd8a87f5689354a423a0d24c15f1df05",
+      "bytes": 854351,
+      "kind": "original-music"
+    },
+    "assets/2ca3496e7bc34455eaaede80.webp": {
+      "publishedSHA256": "2ca3496e7bc34455eaaede8055716da5578d062d6cfe85618562dd72bedbbf8d",
+      "bytes": 13964,
+      "kind": "image"
+    },
+    "assets/317d33e11e017cec5b943ec1.webp": {
+      "publishedSHA256": "317d33e11e017cec5b943ec12b43d1985eaf432b237df13d7b487525104a3dc3",
+      "bytes": 55382,
+      "kind": "image"
+    },
+    "assets/36d57f0d4019159b831dd47f.png": {
+      "publishedSHA256": "36d57f0d4019159b831dd47fba3e0919566bf5f07d9ef6f93eb057ca8bd0dd8e",
+      "bytes": 137449,
+      "kind": "image"
+    },
+    "assets/38e5ed54c5373a3ec204fa10.webp": {
+      "publishedSHA256": "38e5ed54c5373a3ec204fa10467c4ae6d83f02974415b600deeb74ca67e5b9a8",
+      "bytes": 4656,
+      "kind": "image"
+    },
+    "assets/3e011722dda1800e17eca2f3.webp": {
+      "publishedSHA256": "3e011722dda1800e17eca2f3e2afdef94b5bedf1c90ab8ad5cd4838d12562f23",
+      "bytes": 19458,
+      "kind": "image"
+    },
+    "assets/3ed369e02ca906dc9f663821.webp": {
+      "publishedSHA256": "3ed369e02ca906dc9f6638210192205e929aee6d81014a991942bd5fb6c8f541",
+      "bytes": 23944,
+      "kind": "image"
+    },
+    "assets/3f783578155b114c70c0e72b.js": {
+      "publishedSHA256": "3f783578155b114c70c0e72b36e7248e8cfece80121ceafcf85545a63a292cf1",
+      "bytes": 14525,
+      "kind": "runtime"
+    },
+    "assets/409016fd8ad6f09c5371058f.webp": {
+      "publishedSHA256": "409016fd8ad6f09c5371058f5cc883bc18e99d53e39d3911ed01c6150535a357",
+      "bytes": 3562,
+      "kind": "image"
+    },
+    "assets/42f9475583762d7cd8b1124c.webp": {
+      "publishedSHA256": "42f9475583762d7cd8b1124c4de3ef8042aa3527f4fcff887ccbc5bef5d65eea",
+      "bytes": 18268,
+      "kind": "image"
+    },
+    "assets/432cffcaade9bce7b8393fa9.png": {
+      "publishedSHA256": "432cffcaade9bce7b8393fa9e8fa280ab81cf8e7254be19495c83bfb7acc5bc7",
+      "bytes": 139508,
+      "kind": "image"
+    },
+    "assets/4333a52a5760a560fa2fd0c0.webp": {
+      "publishedSHA256": "4333a52a5760a560fa2fd0c0a6d2a6fc9e6d3371ca0ae55924d86e9b24ab3d07",
+      "bytes": 337634,
+      "kind": "image"
+    },
+    "assets/4757b05faeef6963ef422b48.webp": {
+      "publishedSHA256": "4757b05faeef6963ef422b48dbc76da14abb2943501f9cfb5a8ae6a775d89a4b",
+      "bytes": 89496,
+      "kind": "image"
+    },
+    "assets/4cb24d73791d2869fa3b1051.webp": {
+      "publishedSHA256": "4cb24d73791d2869fa3b1051c48b0efa56899b7cf1a4deb1d30c80e39b98b638",
+      "bytes": 119018,
+      "kind": "image"
+    },
+    "assets/5a579d60fda6c99c79965ada.webp": {
+      "publishedSHA256": "5a579d60fda6c99c79965adae1056ae15e90088c923b9f3ba9274d1c93a14e3f",
+      "bytes": 199224,
+      "kind": "image"
+    },
+    "assets/5fda0ced59007be95a5fca57.webp": {
+      "publishedSHA256": "5fda0ced59007be95a5fca5762b9c0966423deae2314e777637e581dce411ff9",
+      "bytes": 119450,
+      "kind": "image"
+    },
+    "assets/6089652e5676066fada9e023.webp": {
+      "publishedSHA256": "6089652e5676066fada9e02318a82eb4e2bd225ae8eebb34962e98c5811dd3ab",
+      "bytes": 238994,
+      "kind": "image"
+    },
+    "assets/6113d81f5be3ebd35203b5ac.js": {
+      "publishedSHA256": "6113d81f5be3ebd35203b5ac5817b8f1b4ed50e6cc71013229f5b33d5a8b3e1b",
+      "bytes": 55472,
+      "kind": "runtime"
+    },
+    "assets/65e243c53f0db930e40b8763.js": {
+      "publishedSHA256": "65e243c53f0db930e40b87639252c6f8e2581d431413f51560133350c531dee4",
+      "bytes": 665312,
+      "kind": "runtime"
+    },
+    "assets/69b1decc93d2d224e4ce5a84.webp": {
+      "publishedSHA256": "69b1decc93d2d224e4ce5a84bbd952dccbafadf83a5011b643e6ae42dfcb1a45",
+      "bytes": 62578,
+      "kind": "image"
+    },
+    "assets/6fa33c7eef5d3ed8b380decd.webp": {
+      "publishedSHA256": "6fa33c7eef5d3ed8b380decd79bc8815ec274591058c47f827fe75ec2693eee4",
+      "bytes": 31264,
+      "kind": "image"
+    },
+    "assets/7074da49628e1ab4af3dca2d.webp": {
+      "publishedSHA256": "7074da49628e1ab4af3dca2d794bb25ab62f729cfe40e5efe4f355a6c7b95cf7",
+      "bytes": 270370,
+      "kind": "image"
+    },
+    "assets/794472830a00b05d44d31c28.webp": {
+      "publishedSHA256": "794472830a00b05d44d31c28a4436d719879694b0e216a3e3f15ef78c46b51e8",
+      "bytes": 17584,
+      "kind": "image"
+    },
+    "assets/8c16843c4110686ae4d9d419.webp": {
+      "publishedSHA256": "8c16843c4110686ae4d9d419273af55028ca20ac1cc9d85efa91ecaeb3f18444",
+      "bytes": 33252,
+      "kind": "image"
+    },
+    "assets/8e9132e139ff5e3307f69e46.webp": {
+      "publishedSHA256": "8e9132e139ff5e3307f69e4602847c127a065d0022438cd235189f528b2fdfac",
+      "bytes": 68096,
+      "kind": "image"
+    },
+    "assets/971755e660e4102186ab53d0.webp": {
+      "publishedSHA256": "971755e660e4102186ab53d0e9059603ab24b87504f86edd9c3b15023db33fca",
+      "bytes": 53916,
+      "kind": "image"
+    },
+    "assets/aa348882e09ae460fb95f3ad.webp": {
+      "publishedSHA256": "aa348882e09ae460fb95f3adb89e22b5606625d1facc90b9a8f5cb772b4de3e9",
+      "bytes": 98140,
+      "kind": "image"
+    },
+    "assets/bb9e68f41672486a78d65b7f.webp": {
+      "publishedSHA256": "bb9e68f41672486a78d65b7fd0940ee2879c48f716d2436ab5ee1777ed150147",
+      "bytes": 23228,
+      "kind": "image"
+    },
+    "assets/bedd05581d8578fbb68cb5d1.webp": {
+      "publishedSHA256": "bedd05581d8578fbb68cb5d135629ddf824f8f923713d861b7dfb0b45737e901",
+      "bytes": 15000,
+      "kind": "image"
+    },
+    "assets/c2ecda90d2e95b3949678823.webp": {
+      "publishedSHA256": "c2ecda90d2e95b39496788235df9349a5859b3e66b6f4558fdf5c5e72d4069c8",
+      "bytes": 55936,
+      "kind": "image"
+    },
+    "assets/cc5754f799ae21b913826b7f.webp": {
+      "publishedSHA256": "cc5754f799ae21b913826b7f76f5cca1f5aaafb0cfaaea924b9e35c05eb73f61",
+      "bytes": 264810,
+      "kind": "image"
+    },
+    "assets/d3d4d21758b90c0db9fccc25.webp": {
+      "publishedSHA256": "d3d4d21758b90c0db9fccc255622170ae8d33d026502567a4b23e06c2878d2b9",
+      "bytes": 89000,
+      "kind": "image"
+    },
+    "assets/db9cdbf6864ad11b15e75d20.webp": {
+      "publishedSHA256": "db9cdbf6864ad11b15e75d204329b5e49c4947d38a090cd92fdcc6faf851f7e4",
+      "bytes": 33506,
+      "kind": "image"
+    },
+    "assets/e538b877c67776fea9ef9bca.webp": {
+      "publishedSHA256": "e538b877c67776fea9ef9bcab98eb2e4a5551229e383c37e9a91b2a5d3ad7fdf",
+      "bytes": 23940,
+      "kind": "image"
+    },
+    "assets/e92748f1fffaf11b780dedf5.webp": {
+      "publishedSHA256": "e92748f1fffaf11b780dedf5cd6bae60b65428d92d832726003ecbe3555beca8",
+      "bytes": 293602,
+      "kind": "image"
+    },
+    "assets/fa4520bd5be2c859e8910a2c.webp": {
+      "publishedSHA256": "fa4520bd5be2c859e8910a2cbc402b66ceaa3bc543bf2cf969943c72e6196920",
+      "bytes": 33310,
+      "kind": "image"
+    }
+  }
 }

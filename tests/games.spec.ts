@@ -39,6 +39,12 @@ for (const width of [1440, 390]) {
     expect(Math.abs(a!.y - b!.y)).toBeLessThan(1);
     await games.click();
     await expect(page).toHaveURL(/\/games\/$/);
+    await expect(page.locator("html")).not.toHaveClass(/map-loading/, { timeout: 30_000 });
+    await expect(page.locator("#worldArt")).toHaveJSProperty("complete", true);
+    expect(await page.locator("#worldArt").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(1500);
+    await expect(page.locator("#companionImg")).toHaveJSProperty("complete", true);
+    expect(await page.locator("#companionImg").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+    await expect(page.locator("#levelMarkers button")).toHaveCount(5);
     const help = page.locator(width === 390 ? "#mobileWorldInfo" : "#worldInfo");
     await expect(help).toHaveText("游戏说明");
     await help.click();
@@ -83,7 +89,7 @@ test("map inside the game host returns the whole window to the handbook home", a
   await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
 });
 
-test("hosted v18 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
+test("hosted v19 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   await page.emulateMedia({ reducedMotion: "reduce" });

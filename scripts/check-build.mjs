@@ -88,10 +88,10 @@ for (const level of levels) {
 }
 const gameDir = path.join(output, "games");
 assert.deepEqual(readdirSync(gameDir).sort(),
-  ["audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
-  "游戏仅发布三份运行页面、发布清单和第三方许可证");
+  ["assets", "audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
+  "游戏发布三份轻量入口、静态素材目录、发布清单和第三方许可证");
 const gameRelease = JSON.parse(readFileSync(path.join(gameDir, "release.json"), "utf8"));
-assert.equal(gameRelease.version, "v18");
+assert.equal(gameRelease.version, "v19");
 for (const [name, metadata] of Object.entries(gameRelease.files)) {
   const bytes = readFileSync(path.join(gameDir, name));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
@@ -101,9 +101,31 @@ for (const [name, metadata] of Object.entries(gameRelease.files)) {
   assert.ok(!/file:\/\/|\/Users\/|v16-preview\.html/.test(bytes.toString()),
     `不能发布本机路径或旧小样导航：${name}`);
 }
-assert.ok(readFileSync(path.join(gameDir, "audit-sea.html"), "utf8").includes("Copyright © 2010-2025 three.js authors"));
-assert.ok(!/"(backdrop|kelpBackdrop|fish|turtle)":\s*"data:/.test(readFileSync(path.join(gameDir, "audit-sea.html"), "utf8")),
-  "第二关不再内嵌已停用的背景、小鱼和海龟位图");
+const gameAssetNames = Object.keys(gameRelease.assets);
+assert.deepEqual(readdirSync(path.join(gameDir, "assets")).sort(),
+  gameAssetNames.map(name => path.basename(name)).sort(), "发布清单必须覆盖全部静态素材，且不能留下多余文件");
+for (const [name, metadata] of Object.entries(gameRelease.assets)) {
+  const bytes = readFileSync(path.join(gameDir, name));
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
+    `发布素材内容不一致：${name}`);
+}
+assert.equal(gameRelease.assets[gameRelease.music.staticAsset].publishedSHA256, gameRelease.music.sha256,
+  "两关必须继续使用原版原创音乐字节");
+for (const page of ["index.html", "audit-sea.html", "lighthouse.html"]) {
+  const html = readFileSync(path.join(gameDir, page), "utf8");
+  assert.ok(Buffer.byteLength(html) < 65000, `游戏入口 HTML 必须保持轻量：${page}`);
+  assert.ok(!/data:(image|audio)\//.test(html), `游戏图片和音频必须独立加载：${page}`);
+}
+assert.ok(Object.entries(gameRelease.assets).some(([name, metadata]) => {
+  if (metadata.kind !== "runtime") return false;
+  const runtime = readFileSync(path.join(gameDir, name), "utf8");
+  return runtime.includes("SPDX-License-Identifier: MIT") && runtime.includes('revision:"180"');
+}), "Three.js 0.180.0 运行时及其 MIT 标识必须保留");
+const gameRuntime = Object.entries(gameRelease.assets)
+  .filter(([, metadata]) => metadata.kind === "runtime")
+  .map(([name]) => readFileSync(path.join(gameDir, name), "utf8")).join("\n");
+assert.ok(!/"(backdrop|kelpBackdrop|fish|turtle)":\s*"/.test(gameRuntime),
+  "第二关不能恢复已停用的背景、小鱼和海龟位图");
 assert.ok(!existsSync(path.join(output, ".local")), "本地数据不能发布到静态站点");
 if (errors.length) {
   console.error([...new Set(errors)].join("\n"));
