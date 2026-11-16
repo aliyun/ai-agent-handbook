@@ -1,10 +1,10 @@
 {
-  "version": "v17",
+  "version": "v18",
   "files": {
     "index.html": {
-      "sourceSHA256": "f59fbed934fe27347051eb7a68e7db6673d35a66f94f590a7397347cf21ecf9e",
-      "publishedSHA256": "488cd515059b402e632bcf4f32f680347323f57457ca7af7c3cfa53fb0cd684e",
-      "bytes": 944126
+      "sourceSHA256": "b990aae9b4b083a95bc2833960a52efb200355694258e8431d6c0352a0d47c55",
+      "publishedSHA256": "c660eea157146a5574f66652055064f5b1a97f2ea304c00c0ec1e98b6ad40c25",
+      "bytes": 945079
     },
     "lighthouse.html": {
       "sourceSHA256": "e491f00fdfa9775b9b21b517c2d336a38de43122a60b4805558c6698d30f2818",
@@ -12,9 +12,9 @@
       "bytes": 4533072
     },
     "audit-sea.html": {
-      "sourceSHA256": "786064d4da195bc283a797f108bb4c10c00b5a592e571e1376cb8c7c4b4826ab",
-      "publishedSHA256": "7d815d6f0049632a15498d3cf40f95ce97868e2eca7eec0339c0cc1669e135bd",
-      "bytes": 2460154
+      "sourceSHA256": "b39d1ef21e1c17738514600a5b779895059aa3864ff0b8165b81729cacf6ae24",
+      "publishedSHA256": "29a8fa5148fe3497a9fc3fb5b406c4d84b951781df86f65a1a2c91ccc0d8bbf6",
+      "bytes": 2459750
     }
   },
   "music": {
@@ -33,7 +33,8 @@
     "Local-file comment adapted for hosting.",
     "Three.js MIT notice retained.",
     "Embedded image/music literals line-wrapped with unchanged runtime bytes.",
-    "v17: second chapter drops four unused embedded bitmaps (backdrop, kelpBackdrop, fish, turtle); map and first chapter unchanged from v16."
+    "v17: second chapter drops four unused embedded bitmaps (backdrop, kelpBackdrop, fish, turtle); map and first chapter unchanged from v16.",
+    "v18: map adds a return-to-handbook link; second chapter welcome card keeps only chapter, title and start; sample label removed."
   ],
   "defaultView": "external",
   "targets": {

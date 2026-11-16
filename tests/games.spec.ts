@@ -56,11 +56,34 @@ for (const width of [1440, 390]) {
     await page.locator("#level-observe").click();
     await expect(page.locator("#playLink")).toHaveAttribute("href", "audit-sea.html?level=0");
     await page.screenshot({ path: `test-results/game-map-${width}.png` });
+    const home = page.locator(width === 390 ? "#mobileHandbookHome" : "#handbookHome");
+    await expect(home).toBeVisible();
+    await expect(home).toHaveText("返回手册");
+    await expect(home).toHaveAttribute("target", "_top");
+    await home.click();
+    await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
+    await expect(page.locator(".hero-actions").getByRole("link", { name: /游戏闯关/ })).toBeVisible();
     expect(errors).toEqual([]);
   });
 }
 
-test("hosted v17 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
+test("map inside the game host returns the whole window to the handbook home", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("games/audit-sea.html");
+  await ready(page);
+  const welcome = page.locator("#welcome");
+  await expect(welcome.locator(".kicker")).toHaveText("第二关");
+  await expect(welcome.locator("h2")).toHaveText("高礁、异星鱼类和百年沉船");
+  await expect(welcome.locator("p")).toHaveCount(0);
+  await expect(page.locator("#start")).toHaveText("开始探索");
+  expect(await page.locator("body").innerText()).not.toContain("通透海景小样");
+  await page.locator("#start").click();
+  await openMap(page);
+  await page.frameLocator("#mapLayer").locator("#handbookHome").click();
+  await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
+});
+
+test("hosted v18 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   await page.emulateMedia({ reducedMotion: "reduce" });

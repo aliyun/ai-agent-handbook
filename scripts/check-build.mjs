@@ -91,7 +91,7 @@ assert.deepEqual(readdirSync(gameDir).sort(),
   ["audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
   "游戏仅发布三份运行页面、发布清单和第三方许可证");
 const gameRelease = JSON.parse(readFileSync(path.join(gameDir, "release.json"), "utf8"));
-assert.equal(gameRelease.version, "v17");
+assert.equal(gameRelease.version, "v18");
 for (const [name, metadata] of Object.entries(gameRelease.files)) {
   const bytes = readFileSync(path.join(gameDir, name));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
