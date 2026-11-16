@@ -227,6 +227,71 @@ for (const width of [1440, 390]) {
 
 for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
+    test(`AgentLoop flywheel series at ${width}px in ${theme} theme`, async ({ page }) => {
+      const series = [
+        { slug: "agentloop-overview", title: "AgentLoop 数据飞轮实践（一）：总览 —— 让 Agent 持续调优的闭环", h2: 4, h3: 2, rows: 6, cells: 18, images: 4, first: 20 },
+        { slug: "agentloop-ingestion", title: "AgentLoop 数据飞轮实践（二）：数据接入 —— 四种方式把 Agent 连进 AgentLoop", h2: 5, h3: 8, rows: 6, cells: 12, images: 11, first: 24 },
+        { slug: "agentloop-evaluation", title: "AgentLoop 数据飞轮实践（三）：评估 —— 从黄金指标到 Rubric", h2: 6, h3: 4, rows: 6, cells: 12, images: 17, first: 35 },
+        { slug: "agentloop-experiment", title: "AgentLoop 数据飞轮实践（四）：实验 —— 回测、离线实验平台与题目级 Rubric", h2: 6, h3: 2, rows: 8, cells: 16, images: 11, first: 52 },
+        { slug: "agentloop-experience", title: "AgentLoop 数据飞轮实践（五）：经验自进化 —— 自动挖掘经验资产，消融实验验证真实收益", h2: 6, h3: 2, rows: 5, cells: 10, images: 10, first: 63 },
+      ];
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      for (const [index, article] of series.entries()) {
+        await page.goto("optimization/chapter-18.html");
+        const links = page.locator(".case-index a");
+        await expect(links).toHaveCount(7);
+        const link = links.nth(index + 2);
+        await expect(link.locator("span")).toHaveText(String(index + 3).padStart(2, "0"));
+        await expect(link).toContainText(article.title);
+        await expect(link).toHaveAttribute("href", new RegExp(`chapter-18/${article.slug}\\.html$`));
+        await link.click();
+        const doc = page.locator(".vp-doc");
+        await expect(doc.locator("h1")).toHaveCount(1);
+        await expect(doc.locator("h1")).toContainText(article.title);
+        await expect(doc.locator("h2")).toHaveCount(article.h2);
+        await expect(doc.locator("h3")).toHaveCount(article.h3);
+        await expect(doc.locator("table")).toHaveCount(1);
+        await expect(doc.locator("table tr")).toHaveCount(article.rows);
+        await expect(doc.locator("table th, table td")).toHaveCount(article.cells);
+        await expect(doc).not.toContainText("**");
+        const header = doc.locator("blockquote").first();
+        await expect(header).toContainText(`第 ${index + 1} 篇 / 共 5 篇`);
+        await expect(header.locator("br")).toHaveCount(1);
+        const siblings = header.locator("a");
+        await expect(siblings).toHaveCount(index === 0 ? 1 : 2);
+        for (const sibling of await siblings.all()) {
+          await expect(sibling).toHaveAttribute("href", /chapter-18\/agentloop-[a-z]+\.html$/);
+        }
+        if (index < 4) {
+          await expect(doc.locator(`a[href$="${series[index + 1].slug}.html"]`)).toHaveCount(2);
+        } else {
+          await expect(doc.locator('ol[start="3"]')).toHaveCount(1);
+          await expect(doc.locator("code")).toContainText("alibabacloud-agentloop-experience");
+        }
+        await expect(doc.locator("img")).toHaveCount(article.images);
+        for (const [order, image] of (await doc.locator("img").all()).entries()) {
+          await image.scrollIntoViewIfNeeded();
+          await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+          // Byte-identical originals share one hashed Vite asset (048 = chapter 22 image-002, 072 = 022).
+          const number = String(order + article.first).padStart(3, "0");
+          const accepted = { "048": "(?:048|002)", "072": "(?:072|022)" }[number] || number;
+          await expect(image).toHaveAttribute("src", new RegExp(`image-${accepted}\\.[\\w-]+\\.png$`));
+          await expect(image).not.toHaveAttribute("src", /Expires=|Signature=/);
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        await doc.locator("h1").scrollIntoViewIfNeeded();
+        await page.screenshot({ path: `test-results/agentloop-${article.slug}-${width}-${theme}.png` });
+      }
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
     test(`Personal Agent SuperAgent article at ${width}px in ${theme} theme`, async ({ page }) => {
       const title = "关于DeepSeek的SuperAgent，以及我们的实践";
       const errors: string[] = [];
