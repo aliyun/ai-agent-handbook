@@ -10,7 +10,7 @@ We dedicate this project to everyone contributing to the development of AI.
 
 [Play the online challenges](https://aliyun.github.io/ai-agent-handbook/challenges/) — we've designed a few mini-games. How high can you score?
 
-[Play the AgentLoop ocean game](https://aliyun.github.io/ai-agent-handbook/games/) and explore its readable source and local build workflow in the [game contribution guide](https://github.com/aliyun/ai-agent-handbook/blob/main/game/README_EN.md). Contributions to the remaining chapters, interaction design, and automated tests are welcome.
+[Play the AgentLoop ocean game](https://aliyun.github.io/ai-agent-handbook/games/) , have fun!
 
 We welcome universities and other educational institutions to co-build an enterprise-grade Agent curriculum with us. If you are interested, please reach out on WeChat (max_0928) and mention "curriculum co-building" in your friend request.
 
