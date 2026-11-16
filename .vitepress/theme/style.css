@@ -199,6 +199,12 @@ html[data-reading-size="large"] {
 .book-button.secondary:hover {
   background: var(--vp-c-bg-soft);
 }
+.practice-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
 .book-button.challenge-entry {
   gap: 8px;
   white-space: nowrap;

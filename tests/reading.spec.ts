@@ -117,7 +117,8 @@ for (const width of [1440, 390]) {
       expect(githubBox!.x + githubBox!.width).toBeLessThanOrEqual(width);
       if (width < 700) await page.locator(".VPNavBarHamburger").click();
       const nav = page.locator(width < 700 ? ".VPNavScreen" : ".VPNavBar");
-      await expect(nav.getByRole("link", { name: /闯关游戏/ })).toBeVisible();
+      await expect(nav.getByRole("link", { name: /代码实战/ })).toBeVisible();
+      await expect(nav.getByRole("link", { name: "游戏闯关", exact: true })).toBeVisible();
       await expect(nav.getByRole("link", { name: "GitHub 仓库" })).toBeVisible();
       await expect(nav.getByRole("switch")).toBeVisible();
       if (width < 700) {

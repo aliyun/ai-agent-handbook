@@ -1,12 +1,14 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { load } from "cheerio";
 import { pages, root } from "../.vitepress/book.mjs";
 import { legacyHeadingIds } from "../.vitepress/markdown.mjs";
 import { levels } from "../challenges/levels.mjs";
 
-const checkedPages = [...pages, { href: "/challenges/" }, ...levels
+const checkedPages = [...pages, { href: "/challenges/" },
+  ...["/games/", "/games/lighthouse.html", "/games/audit-sea.html"].map(href => ({ href })), ...levels
   .filter(level => level.status === "available")
   .map(level => ({ href: `/challenges/${level.id}/` }))];
 const base = process.env.SITE_BASE || "/ai-agent-handbook/";
@@ -84,6 +86,22 @@ for (const level of levels) {
     }
   }
 }
+const gameDir = path.join(output, "games");
+assert.deepEqual(readdirSync(gameDir).sort(),
+  ["audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
+  "游戏仅发布三份运行页面、发布清单和第三方许可证");
+const gameRelease = JSON.parse(readFileSync(path.join(gameDir, "release.json"), "utf8"));
+assert.equal(gameRelease.version, "v16");
+for (const [name, metadata] of Object.entries(gameRelease.files)) {
+  const bytes = readFileSync(path.join(gameDir, name));
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
+    `发布副本内容不一致：${name}`);
+  assert.ok(bytes.toString().split(/\r?\n/).every(line => Buffer.byteLength(line) < 2097152),
+    `内嵌素材代码行必须能被强制安全扫描器完整读取：${name}`);
+  assert.ok(!/file:\/\/|\/Users\/|v16-preview\.html/.test(bytes.toString()),
+    `不能发布本机路径或旧小样导航：${name}`);
+}
+assert.ok(readFileSync(path.join(gameDir, "audit-sea.html"), "utf8").includes("Copyright © 2010-2025 three.js authors"));
 assert.ok(!existsSync(path.join(output, ".local")), "本地数据不能发布到静态站点");
 if (errors.length) {
   console.error([...new Set(errors)].join("\n"));

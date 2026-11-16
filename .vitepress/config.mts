@@ -80,8 +80,13 @@ export default defineConfig({
     siteTitle: false,
     nav: [
       {
-        text: '<span class="nav-challenge-label">闯关游戏 <span class="challenge-beta">Beta</span></span>',
+        text: '<span class="nav-challenge-label">代码实战 <span class="challenge-beta">Beta</span></span>',
         link: "/challenges/",
+        target: "_self",
+      },
+      {
+        text: "游戏闯关",
+        link: "/games/",
         target: "_self",
       },
     ],

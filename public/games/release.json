@@ -1,0 +1,51 @@
+{
+  "version": "v16",
+  "files": {
+    "index.html": {
+      "sourceSHA256": "f59fbed934fe27347051eb7a68e7db6673d35a66f94f590a7397347cf21ecf9e",
+      "publishedSHA256": "488cd515059b402e632bcf4f32f680347323f57457ca7af7c3cfa53fb0cd684e",
+      "bytes": 944126
+    },
+    "lighthouse.html": {
+      "sourceSHA256": "e491f00fdfa9775b9b21b517c2d336a38de43122a60b4805558c6698d30f2818",
+      "publishedSHA256": "3fe5e3830bb5cf7ffd80e556b5959f4cff42f31d431664a2c6ef6d9dc628880e",
+      "bytes": 4533072
+    },
+    "audit-sea.html": {
+      "sourceSHA256": "c56c26121041885292d20155a8909539231dd067c0590043a9da2e94420021dd",
+      "publishedSHA256": "7a8b7eaa19812650c086f13072a2b669a36f5a2f7488fa341093479929b6c50d",
+      "bytes": 3106996
+    }
+  },
+  "music": {
+    "original": true,
+    "method": "程序作曲与合成，无商业歌曲采样；两关使用同一原创循环音乐。",
+    "sha256": "28a23f92cfc50736772fa276f4bdfe3fcd8a87f5689354a423a0d24c15f1df05"
+  },
+  "runtime": {
+    "three": "0.180.0",
+    "license": "MIT",
+    "notice": "three.LICENSE.txt"
+  },
+  "changes": [
+    "Sibling navigation filenames adapted for /games/ hosting.",
+    "Direct first-chapter entry redirects to the shared host for progress preservation.",
+    "Local-file comment adapted for hosting.",
+    "Three.js MIT notice retained.",
+    "Embedded image/music literals line-wrapped with unchanged runtime bytes."
+  ],
+  "defaultView": "external",
+  "targets": {
+    "pearl": 20,
+    "shell": 12
+  },
+  "playableChapters": [
+    1,
+    2
+  ],
+  "developmentChapters": [
+    3,
+    4,
+    5
+  ]
+}
