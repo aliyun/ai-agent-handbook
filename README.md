@@ -10,7 +10,7 @@
 
 💯 [测试题](https://aliyun.github.io/ai-agent-handbook/challenges/) ，设计了一些代码测试题，来看看你能拿多少分吧？
 
-🎮 [海底世界](https://aliyun.github.io/ai-agent-handbook/games/) ，设计了一些小游戏，放松下吧；游戏已开放可读源码与本地构建流程，欢迎查看 [源码与共建指南](https://github.com/aliyun/ai-agent-handbook/blob/main/game/README.md)，一起完善后三关、交互体验和自动化测试。
+🎮 [海底世界](https://aliyun.github.io/ai-agent-handbook/games/) ，设计了一些小游戏，来放松下吧。
 
 欢迎高校等教育机构等一起共建企业级 Agent 课程，让更多人体系化的掌握 Agent。若感兴趣，请添加微信（max_0928）进行沟通，备注共建。
 
