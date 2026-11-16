@@ -1,7 +1,7 @@
-# AgentLoop 数据飞轮实践（四）：实验 —— 回测、离线实验平台与题目级 Rubric
+# AgentLoop 数据飞轮实践（四）：实验，回测、离线实验平台与题目级 Rubric
 
 > <strong>AgentLoop 数据飞轮实践系列</strong> · 第 4 篇 / 共 5 篇\
-> 上一篇：[评估 —— 从黄金指标到 Rubric](./05%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%AF%84%E4%BC%B0%20%E2%80%94%E2%80%94%20%E4%BB%8E%E9%BB%84%E9%87%91%E6%8C%87%E6%A0%87%E5%88%B0%20Rubric.md) ｜ 下一篇：[经验库 —— 自动挖掘经验资产](./07%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E7%BB%8F%E9%AA%8C%E8%87%AA%E8%BF%9B%E5%8C%96%20%E2%80%94%E2%80%94%20%E8%87%AA%E5%8A%A8%E6%8C%96%E6%8E%98%E7%BB%8F%E9%AA%8C%E8%B5%84%E4%BA%A7%EF%BC%8C%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81%E7%9C%9F%E5%AE%9E%E6%94%B6%E7%9B%8A.md)
+> 上一篇：[评估，从黄金指标到 Rubric](./05%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%AF%84%E4%BC%B0%EF%BC%8C%E4%BB%8E%E9%BB%84%E9%87%91%E6%8C%87%E6%A0%87%E5%88%B0%20Rubric.md) ｜ 下一篇：[经验库，自动挖掘经验资产](./07%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E7%BB%8F%E9%AA%8C%E8%87%AA%E8%BF%9B%E5%8C%96%EF%BC%8C%E8%87%AA%E5%8A%A8%E6%8C%96%E6%8E%98%E7%BB%8F%E9%AA%8C%E8%B5%84%E4%BA%A7%EF%BC%8C%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81%E7%9C%9F%E5%AE%9E%E6%94%B6%E7%9B%8A.md)
 
 评估发现了 badcase，调优也有了方向，接下来的问题是：<strong>怎么证明一次优化真的有效？</strong>
 
@@ -143,4 +143,4 @@ Agent 正常响应（『我无法获取您的实际位置信息』），说明�
 
 ---
 
-<strong>下一篇预告</strong>：手工调优闭环跑通了，最后一块拼图是"全自动化"：经验库从历史轨迹中自动挖掘经验资产，Agent 装个 Skill 就能召回。效果如何？消融实验见分晓——[详见第 5 篇](./07%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E7%BB%8F%E9%AA%8C%E8%87%AA%E8%BF%9B%E5%8C%96%20%E2%80%94%E2%80%94%20%E8%87%AA%E5%8A%A8%E6%8C%96%E6%8E%98%E7%BB%8F%E9%AA%8C%E8%B5%84%E4%BA%A7%EF%BC%8C%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81%E7%9C%9F%E5%AE%9E%E6%94%B6%E7%9B%8A.md)。
+<strong>下一篇预告</strong>：手工调优闭环跑通了，最后一块拼图是"全自动化"：经验库从历史轨迹中自动挖掘经验资产，Agent 装个 Skill 就能召回。效果如何？消融实验见分晓——[详见第 5 篇](./07%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%94%EF%BC%89%EF%BC%9A%E7%BB%8F%E9%AA%8C%E8%87%AA%E8%BF%9B%E5%8C%96%EF%BC%8C%E8%87%AA%E5%8A%A8%E6%8C%96%E6%8E%98%E7%BB%8F%E9%AA%8C%E8%B5%84%E4%BA%A7%EF%BC%8C%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81%E7%9C%9F%E5%AE%9E%E6%94%B6%E7%9B%8A.md)。

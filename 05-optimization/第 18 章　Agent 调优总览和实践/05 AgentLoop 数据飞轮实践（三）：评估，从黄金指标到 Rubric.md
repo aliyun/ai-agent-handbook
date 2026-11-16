@@ -1,7 +1,7 @@
-# AgentLoop 数据飞轮实践（三）：评估 —— 从黄金指标到 Rubric
+# AgentLoop 数据飞轮实践（三）：评估，从黄金指标到 Rubric
 
 > <strong>AgentLoop 数据飞轮实践系列</strong> · 第 3 篇 / 共 5 篇\
-> 上一篇：[数据接入 —— 四种方式把 Agent 连进 AgentLoop](./04%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%20%E2%80%94%E2%80%94%20%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8A%8A%20Agent%20%E8%BF%9E%E8%BF%9B%20AgentLoop.md) ｜ 下一篇：[实验 —— 回测与离线实验平台](./06%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%AE%9E%E9%AA%8C%20%E2%80%94%E2%80%94%20%E5%9B%9E%E6%B5%8B%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%9E%E9%AA%8C%E5%B9%B3%E5%8F%B0%E4%B8%8E%E9%A2%98%E7%9B%AE%E7%BA%A7%20Rubric.md)
+> 上一篇：[数据接入，四种方式把 Agent 连进 AgentLoop](./04%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%EF%BC%8C%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8A%8A%20Agent%20%E8%BF%9E%E8%BF%9B%20AgentLoop.md) ｜ 下一篇：[实验，回测与离线实验平台](./06%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%AE%9E%E9%AA%8C%EF%BC%8C%E5%9B%9E%E6%B5%8B%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%9E%E9%AA%8C%E5%B9%B3%E5%8F%B0%E4%B8%8E%E9%A2%98%E7%9B%AE%E7%BA%A7%20Rubric.md)
 
 数据接入完成后，下一个问题是：<strong>Agent 跑得怎么样？</strong>
 
@@ -174,4 +174,4 @@ AI 的输出相当完整：覆盖"回答结果质量"与"执行过程质量"两�
 
 ---
 
-<strong>下一篇预告</strong>：评估发现了问题，接下来要反复验证优化效果。实验计划、部署在客户内网的离线实验平台、题目级 Rubric、实验大盘——[详见第 4 篇](./06%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%AE%9E%E9%AA%8C%20%E2%80%94%E2%80%94%20%E5%9B%9E%E6%B5%8B%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%9E%E9%AA%8C%E5%B9%B3%E5%8F%B0%E4%B8%8E%E9%A2%98%E7%9B%AE%E7%BA%A7%20Rubric.md)。
+<strong>下一篇预告</strong>：评估发现了问题，接下来要反复验证优化效果。实验计划、部署在客户内网的离线实验平台、题目级 Rubric、实验大盘——[详见第 4 篇](./06%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%AE%9E%E9%AA%8C%EF%BC%8C%E5%9B%9E%E6%B5%8B%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%9E%E9%AA%8C%E5%B9%B3%E5%8F%B0%E4%B8%8E%E9%A2%98%E7%9B%AE%E7%BA%A7%20Rubric.md)。

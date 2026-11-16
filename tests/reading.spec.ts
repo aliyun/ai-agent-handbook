@@ -229,11 +229,11 @@ for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
     test(`AgentLoop flywheel series at ${width}px in ${theme} theme`, async ({ page }) => {
       const series = [
-        { slug: "agentloop-overview", title: "AgentLoop 数据飞轮实践（一）：总览 —— 让 Agent 持续调优的闭环", h2: 4, h3: 2, rows: 6, cells: 18, images: 4, first: 20 },
-        { slug: "agentloop-ingestion", title: "AgentLoop 数据飞轮实践（二）：数据接入 —— 四种方式把 Agent 连进 AgentLoop", h2: 5, h3: 8, rows: 6, cells: 12, images: 11, first: 24 },
-        { slug: "agentloop-evaluation", title: "AgentLoop 数据飞轮实践（三）：评估 —— 从黄金指标到 Rubric", h2: 6, h3: 4, rows: 6, cells: 12, images: 17, first: 35 },
-        { slug: "agentloop-experiment", title: "AgentLoop 数据飞轮实践（四）：实验 —— 回测、离线实验平台与题目级 Rubric", h2: 6, h3: 2, rows: 8, cells: 16, images: 11, first: 52 },
-        { slug: "agentloop-experience", title: "AgentLoop 数据飞轮实践（五）：经验自进化 —— 自动挖掘经验资产，消融实验验证真实收益", h2: 6, h3: 2, rows: 5, cells: 10, images: 10, first: 63 },
+        { slug: "agentloop-overview", title: "AgentLoop 数据飞轮实践（一）：总览，让 Agent 持续调优的闭环", h2: 4, h3: 2, rows: 6, cells: 18, images: 4, first: 20 },
+        { slug: "agentloop-ingestion", title: "AgentLoop 数据飞轮实践（二）：数据接入，四种方式把 Agent 连进 AgentLoop", h2: 5, h3: 8, rows: 6, cells: 12, images: 11, first: 24 },
+        { slug: "agentloop-evaluation", title: "AgentLoop 数据飞轮实践（三）：评估，从黄金指标到 Rubric", h2: 6, h3: 4, rows: 6, cells: 12, images: 17, first: 35 },
+        { slug: "agentloop-experiment", title: "AgentLoop 数据飞轮实践（四）：实验，回测、离线实验平台与题目级 Rubric", h2: 6, h3: 2, rows: 8, cells: 16, images: 11, first: 52 },
+        { slug: "agentloop-experience", title: "AgentLoop 数据飞轮实践（五）：经验自进化，自动挖掘经验资产，消融实验验证真实收益", h2: 6, h3: 2, rows: 5, cells: 10, images: 10, first: 63 },
       ];
       const errors: string[] = [];
       page.on("pageerror", error => errors.push(error.message));

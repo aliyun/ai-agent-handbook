@@ -1,7 +1,7 @@
-# AgentLoop 数据飞轮实践（二）：数据接入 —— 四种方式把 Agent 连进 AgentLoop
+# AgentLoop 数据飞轮实践（二）：数据接入，四种方式把 Agent 连进 AgentLoop
 
 > <strong>AgentLoop 数据飞轮实践系列</strong> · 第 2 篇 / 共 5 篇\
-> 上一篇：[总览 —— 让 Agent 持续调优的闭环](./03%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E6%80%BB%E8%A7%88%20%E2%80%94%E2%80%94%20%E8%AE%A9%20Agent%20%E6%8C%81%E7%BB%AD%E8%B0%83%E4%BC%98%E7%9A%84%E9%97%AD%E7%8E%AF.md) ｜ 下一篇：[评估 —— 从黄金指标到 Rubric](./05%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%AF%84%E4%BC%B0%20%E2%80%94%E2%80%94%20%E4%BB%8E%E9%BB%84%E9%87%91%E6%8C%87%E6%A0%87%E5%88%B0%20Rubric.md)
+> 上一篇：[总览，让 Agent 持续调优的闭环](./03%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E6%80%BB%E8%A7%88%EF%BC%8C%E8%AE%A9%20Agent%20%E6%8C%81%E7%BB%AD%E8%B0%83%E4%BC%98%E7%9A%84%E9%97%AD%E7%8E%AF.md) ｜ 下一篇：[评估，从黄金指标到 Rubric](./05%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%AF%84%E4%BC%B0%EF%BC%8C%E4%BB%8E%E9%BB%84%E9%87%91%E6%8C%87%E6%A0%87%E5%88%B0%20Rubric.md)
 
 数据接入是数据飞轮的起点：没有高质量的运行数据，观测、评估、实验都无从谈起。但"把数据接上来"这件事本身并不简单——Agent 不像传统微服务只有一种调用形态，它可能是开箱即用的通用 Agent，可能是基于框架研发的，可能是高代码自研的，甚至可能完全不想改一行代码。
 
@@ -140,4 +140,4 @@ eBPF 工作在内核层，采集对应用完全透明——适合存量系统、
 
 ---
 
-<strong>下一篇预告</strong>：数据进来之后，下一步是回答"Agent 跑得怎么样"。我们将定义客服场景的黄金指标，让 AI 帮忙拆解成 Rubric，创建评估器并跑通第一个评估任务——[详见第 3 篇](./05%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%AF%84%E4%BC%B0%20%E2%80%94%E2%80%94%20%E4%BB%8E%E9%BB%84%E9%87%91%E6%8C%87%E6%A0%87%E5%88%B0%20Rubric.md)。
+<strong>下一篇预告</strong>：数据进来之后，下一步是回答"Agent 跑得怎么样"。我们将定义客服场景的黄金指标，让 AI 帮忙拆解成 Rubric，创建评估器并跑通第一个评估任务——[详见第 3 篇](./05%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%AF%84%E4%BC%B0%EF%BC%8C%E4%BB%8E%E9%BB%84%E9%87%91%E6%8C%87%E6%A0%87%E5%88%B0%20Rubric.md)。

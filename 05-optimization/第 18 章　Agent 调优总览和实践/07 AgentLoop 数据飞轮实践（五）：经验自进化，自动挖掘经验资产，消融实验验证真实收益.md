@@ -1,7 +1,7 @@
-# AgentLoop 数据飞轮实践（五）：经验自进化 —— 自动挖掘经验资产，消融实验验证真实收益
+# AgentLoop 数据飞轮实践（五）：经验自进化，自动挖掘经验资产，消融实验验证真实收益
 
 > <strong>AgentLoop 数据飞轮实践系列</strong> · 第 5 篇 / 共 5 篇\
-> 上一篇：[实验 —— 回测与离线实验平台](./06%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%AE%9E%E9%AA%8C%20%E2%80%94%E2%80%94%20%E5%9B%9E%E6%B5%8B%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%9E%E9%AA%8C%E5%B9%B3%E5%8F%B0%E4%B8%8E%E9%A2%98%E7%9B%AE%E7%BA%A7%20Rubric.md) ｜ 系列总览：[总览 —— 让 Agent 持续调优的闭环](./03%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E6%80%BB%E8%A7%88%20%E2%80%94%E2%80%94%20%E8%AE%A9%20Agent%20%E6%8C%81%E7%BB%AD%E8%B0%83%E4%BC%98%E7%9A%84%E9%97%AD%E7%8E%AF.md)
+> 上一篇：[实验，回测与离线实验平台](./06%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E5%AE%9E%E9%AA%8C%EF%BC%8C%E5%9B%9E%E6%B5%8B%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%9E%E9%AA%8C%E5%B9%B3%E5%8F%B0%E4%B8%8E%E9%A2%98%E7%9B%AE%E7%BA%A7%20Rubric.md) ｜ 系列总览：[总览，让 Agent 持续调优的闭环](./03%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E6%80%BB%E8%A7%88%EF%BC%8C%E8%AE%A9%20Agent%20%E6%8C%81%E7%BB%AD%E8%B0%83%E4%BC%98%E7%9A%84%E9%97%AD%E7%8E%AF.md)
 
 前四篇走通了"人类专家驱动"的调优闭环。这一篇是数据飞轮的最后一块、也是最自动化的一块：<strong>经验库</strong>——让 Agent 从自己的历史运行中自动沉淀经验，越跑越好。最后，我们用消融实验回答一个关键问题：经验注入到底有没有用、怎么用收益最大。
 

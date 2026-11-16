@@ -1,7 +1,7 @@
-# AgentLoop 数据飞轮实践（一）：总览 —— 让 Agent 持续调优的闭环
+# AgentLoop 数据飞轮实践（一）：总览，让 Agent 持续调优的闭环
 
 > <strong>AgentLoop 数据飞轮实践系列</strong> · 第 1 篇 / 共 5 篇\
-> 下一篇：[数据接入 —— 四种方式把 Agent 连进 AgentLoop](./04%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%20%E2%80%94%E2%80%94%20%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8A%8A%20Agent%20%E8%BF%9E%E8%BF%9B%20AgentLoop.md)
+> 下一篇：[数据接入，四种方式把 Agent 连进 AgentLoop](./04%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%EF%BC%8C%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8A%8A%20Agent%20%E8%BF%9E%E8%BF%9B%20AgentLoop.md)
 
 Agent 上线只是起点。真正决定 Agent 好不好用的，是上线之后能不能<strong>持续调优</strong>：用户反馈的问题能不能被系统性地发现、沉淀、验证、修复，并且让 Agent 一次比一次聪明。
 
@@ -95,4 +95,4 @@ Agent 上线只是起点。真正决定 Agent 好不好用的，是上线之后�
 
 ---
 
-<strong>下一篇预告</strong>：数据接入是整个飞轮的起点。AgentLoop 基于 OTel 标准协议和探针技术提供了四种接入方式，我们将亲手把 Claude Code 构建的客服 Agent 接入平台——[详见第 2 篇](./04%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%20%E2%80%94%E2%80%94%20%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8A%8A%20Agent%20%E8%BF%9E%E8%BF%9B%20AgentLoop.md)。
+<strong>下一篇预告</strong>：数据接入是整个飞轮的起点。AgentLoop 基于 OTel 标准协议和探针技术提供了四种接入方式，我们将亲手把 Claude Code 构建的客服 Agent 接入平台——[详见第 2 篇](./04%20AgentLoop%20%E6%95%B0%E6%8D%AE%E9%A3%9E%E8%BD%AE%E5%AE%9E%E8%B7%B5%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%EF%BC%8C%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8A%8A%20Agent%20%E8%BF%9E%E8%BF%9B%20AgentLoop.md)。

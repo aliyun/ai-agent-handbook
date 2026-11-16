@@ -98,11 +98,11 @@ const chapterGroups = [
     articles: [
       ["overview", "01 Agent 调优总览"],
       ["flywheel-platform", "02 Agent 数据飞轮平台的选型和实践"],
-      ["agentloop-overview", "03 AgentLoop 数据飞轮实践（一）：总览 —— 让 Agent 持续调优的闭环"],
-      ["agentloop-ingestion", "04 AgentLoop 数据飞轮实践（二）：数据接入 —— 四种方式把 Agent 连进 AgentLoop"],
-      ["agentloop-evaluation", "05 AgentLoop 数据飞轮实践（三）：评估 —— 从黄金指标到 Rubric"],
-      ["agentloop-experiment", "06 AgentLoop 数据飞轮实践（四）：实验 —— 回测、离线实验平台与题目级 Rubric"],
-      ["agentloop-experience", "07 AgentLoop 数据飞轮实践（五）：经验自进化 —— 自动挖掘经验资产，消融实验验证真实收益"],
+      ["agentloop-overview", "03 AgentLoop 数据飞轮实践（一）：总览，让 Agent 持续调优的闭环"],
+      ["agentloop-ingestion", "04 AgentLoop 数据飞轮实践（二）：数据接入，四种方式把 Agent 连进 AgentLoop"],
+      ["agentloop-evaluation", "05 AgentLoop 数据飞轮实践（三）：评估，从黄金指标到 Rubric"],
+      ["agentloop-experiment", "06 AgentLoop 数据飞轮实践（四）：实验，回测、离线实验平台与题目级 Rubric"],
+      ["agentloop-experience", "07 AgentLoop 数据飞轮实践（五）：经验自进化，自动挖掘经验资产，消融实验验证真实收益"],
     ],
   },
 ];
