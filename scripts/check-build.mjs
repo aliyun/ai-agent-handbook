@@ -91,7 +91,7 @@ assert.deepEqual(readdirSync(gameDir).sort(),
   ["assets", "audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
   "游戏发布三份轻量入口、静态素材目录、发布清单和第三方许可证");
 const gameRelease = JSON.parse(readFileSync(path.join(gameDir, "release.json"), "utf8"));
-assert.equal(gameRelease.version, "v20");
+assert.equal(gameRelease.version, "v21");
 for (const [name, metadata] of Object.entries(gameRelease.files)) {
   const bytes = readFileSync(path.join(gameDir, name));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
@@ -130,6 +130,14 @@ assert.ok(!/"(backdrop|kelpBackdrop|fish|turtle)":\s*"/.test(gameRuntime),
   "第二关不能恢复已停用的背景、小鱼和海龟位图");
 assert.ok(gameRuntime.includes("maxPixelRatio") && gameRuntime.includes("maxFrameSteps"),
   "第二关运行时必须保留移动端渲染负载和固定步上限诊断");
+assert.ok(gameRuntime.includes("const CRITICAL_ASSETS=['hero','reef','floor','slab','pod']") &&
+  gameRuntime.includes("Promise.allSettled(DEFERRED_ASSETS"),
+  "第一关必须只等待五项首屏素材，其余图片在后台完成");
+assert.ok(gameRuntime.includes("setTimeout(()=>{status.hidden=true;document.documentElement.classList.remove('map-loading')"),
+  "地图入口不能依赖图片完成或前台 requestAnimationFrame 才能交互");
+assert.ok(gameRelease.changes.at(-1).includes("second chapter WebGL initializes only when selected") &&
+  gameRelease.changes.at(-1).includes("one camera collision solve per rendered frame"),
+  "v21 发布清单必须记录第二关按需初始化和每帧一次相机求解");
 assert.ok(!gameRuntime.includes("pilotIdle") && !gameRuntime.includes("pilotHi5"),
   "第二关运行时不能保留已删除的章鱼图片引用");
 assert.ok(!readFileSync(path.join(gameDir, "lighthouse.html"), "utf8").includes('data-action="run"'),

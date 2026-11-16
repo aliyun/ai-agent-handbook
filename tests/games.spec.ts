@@ -75,6 +75,27 @@ for (const width of [1440, 390]) {
   });
 }
 
+test("map controls do not wait for decorative images", async ({ page }) => {
+  let releaseImages!: () => void;
+  const imageGate = new Promise<void>(resolve => { releaseImages = resolve; });
+  await page.route(/6089652e5676066fada9e023|db9cdbf6864ad11b15e75d20/, async route => {
+    await imageGate;
+    await route.continue();
+  });
+  try {
+    await page.goto("games/", { waitUntil: "domcontentloaded" });
+    await expect(page.locator("html")).not.toHaveClass(/map-loading/);
+    await expect(page.locator("#mapLoadStatus")).toBeHidden();
+    await expect(page.locator("#playLink")).toHaveCSS("pointer-events", "auto");
+    expect(await page.locator("#worldArt").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(0);
+    expect(await page.locator("#companionImg").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(0);
+  } finally {
+    releaseImages();
+  }
+  await expect(page.locator("#worldArt")).toHaveJSProperty("complete", true);
+  await expect(page.locator("#companionImg")).toHaveJSProperty("complete", true);
+});
+
 test("map inside the game host returns the whole window to the handbook home", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("games/audit-sea.html");
@@ -91,7 +112,7 @@ test("map inside the game host returns the whole window to the handbook home", a
   await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
 });
 
-test("hosted v20 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
+test("hosted v21 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -135,34 +156,52 @@ test("hosted v20 defaults to exterior and preserves both games across map naviga
   expect(errors).toEqual([]);
 });
 
-test("direct first-chapter links hide chapter two while entering chapter one", async ({ page }) => {
+test("direct first-chapter links load critical art without starting chapter two", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.route("**/games/assets/3ed369e02ca906dc9f663821.webp", async route => {
-    await new Promise(resolve => setTimeout(resolve, 3_000));
+  const secondChapterAssets: string[] = [];
+  page.on("request", request => {
+    if (/fa4520bd5be2c859e8910a2c|3ed369e02ca906dc9f663821|e538b877c67776fea9ef9bca/.test(request.url()))
+      secondChapterAssets.push(request.url());
+  });
+  let releaseDeferred!: () => void;
+  const deferredGate = new Promise<void>(resolve => { releaseDeferred = resolve; });
+  await page.route("**/games/assets/e92748f1fffaf11b780dedf5.webp", async route => {
+    await deferredGate;
     await route.continue();
   });
-  await page.goto("games/lighthouse.html");
-  await expect(page).toHaveURL(/\/games\/audit-sea\.html\?level=0$/);
-  await expect(page.locator("#shell")).toHaveClass(/first-active/);
-  await expect(page.locator("#world")).toHaveCSS("visibility", "hidden");
-  await expect(page.locator("#welcome")).not.toBeVisible();
-  await expect(page.locator("#firstLayer")).toBeVisible();
-  await ready(page);
-  await page.waitForFunction(() => (window as any).__auditSea.snapshot().navigation.firstReady);
-  const first = page.frames().find(f => /\/lighthouse\.html\?host=1$/.test(f.url()))!;
-  await first.waitForFunction(() => (window as any).__platformer.snapshot().state === "playing");
-  expect(await first.locator('[data-action="run"]').count()).toBe(0);
-  await expect(first.locator('[data-action="jump"]')).toBeVisible();
-  const x = await first.evaluate(() => (window as any).__platformer.snapshot().player.x);
-  await page.keyboard.down("ArrowRight");
-  await expect.poll(() => first.evaluate(() => (window as any).__platformer.snapshot().player.x)).toBeGreaterThan(x + 35);
-  await page.keyboard.up("ArrowRight");
-  await openMap(page);
-  const frozen = await first.evaluate(() => (window as any).__platformer.snapshot());
-  await choose(page, "observe");
-  await first.waitForFunction(() => (window as any).__platformer.snapshot().state === "playing");
-  expect((await first.evaluate(() => (window as any).__platformer.snapshot())).player.x).toBeGreaterThan(x + 35);
-  expect((await first.evaluate(() => (window as any).__platformer.snapshot())).attempts).toBe(frozen.attempts);
+  try {
+    await page.goto("games/lighthouse.html", { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(/\/games\/audit-sea\.html\?level=0$/);
+    await expect(page.locator("#shell")).toHaveClass(/first-active/);
+    await expect(page.locator("#world")).toHaveCSS("visibility", "hidden");
+    await expect(page.locator("#welcome")).not.toBeVisible();
+    await expect(page.locator("#firstLayer")).toBeVisible();
+    await page.waitForFunction(() => (window as any).__auditSea.snapshot().navigation.firstReady);
+    const first = page.frames().find(f => /\/lighthouse\.html\?host=1$/.test(f.url()))!;
+    await first.waitForFunction(() => (window as any).__platformer.snapshot().state === "playing");
+    await expect(first.locator("#start")).toHaveText("开始");
+    await expect(first.locator("#start")).toBeEnabled();
+    const mark = first.locator("#mark");
+    await expect(mark).toHaveJSProperty("complete", true);
+    expect(await mark.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+    await expect(mark).toHaveCSS("visibility", "visible");
+    await expect(mark).toHaveCSS("transform", "none");
+    expect(secondChapterAssets).toEqual([]);
+    expect(await first.locator('[data-action="run"]').count()).toBe(0);
+    await expect(first.locator('[data-action="jump"]')).toBeVisible();
+    const x = await first.evaluate(() => (window as any).__platformer.snapshot().player.x);
+    await page.keyboard.down("ArrowRight");
+    await expect.poll(() => first.evaluate(() => (window as any).__platformer.snapshot().player.x)).toBeGreaterThan(x + 35);
+    await page.keyboard.up("ArrowRight");
+    await openMap(page);
+    const frozen = await first.evaluate(() => (window as any).__platformer.snapshot());
+    await choose(page, "observe");
+    await first.waitForFunction(() => (window as any).__platformer.snapshot().state === "playing");
+    expect((await first.evaluate(() => (window as any).__platformer.snapshot())).player.x).toBeGreaterThan(x + 35);
+    expect((await first.evaluate(() => (window as any).__platformer.snapshot())).attempts).toBe(frozen.attempts);
+  } finally {
+    releaseDeferred();
+  }
 });
 
 test("mobile sea limits render load and releases real touch steering", async ({ browser }) => {
@@ -182,8 +221,8 @@ test("mobile sea limits render load and releases real touch steering", async ({ 
   await ready(page);
   await page.locator("#start").click();
   const render = (await snapshot(page)).render;
-  expect(render).toMatchObject({ profile: "mobile", maxPixelRatio: 1.5, maxFrameSteps: 4 });
-  expect(render.pixelRatio).toBeLessThanOrEqual(1.5);
+  expect(render).toMatchObject({ profile: "mobile", maxPixelRatio: 1.25, maxFrameSteps: 2 });
+  expect(render.pixelRatio).toBeLessThanOrEqual(1.25);
 
   const cdp = await context.newCDPSession(page);
   async function point(code: string, id: number) {
@@ -191,19 +230,22 @@ test("mobile sea limits render load and releases real touch steering", async ({ 
     return { x: box!.x + box!.width / 2, y: box!.y + box!.height / 2,
       id, radiusX: 5, radiusY: 5, force: 1 };
   }
+  const forward = await point("KeyW", 20);
   const left = await point("KeyA", 21);
   const right = await point("KeyD", 22);
-  const start = (await snapshot(page)).heading;
-  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [left] });
-  await page.waitForTimeout(700);
+  const start = await snapshot(page);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [forward, left] });
+  await page.waitForTimeout(1_200);
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-  const turnedLeft = (await snapshot(page)).heading;
-  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [right] });
-  await page.waitForTimeout(700);
+  const turnedLeft = await snapshot(page);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [forward, right] });
+  await page.waitForTimeout(1_200);
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
   const finished = await snapshot(page);
-  expect(turnedLeft).toBeLessThan(start - 0.3);
-  expect(finished.heading).toBeGreaterThan(turnedLeft + 0.3);
+  expect(turnedLeft.heading).toBeLessThan(start.heading - 0.1);
+  expect(turnedLeft.player.z).not.toBe(start.player.z);
+  expect(finished.heading).toBeGreaterThan(turnedLeft.heading + 0.1);
+  expect(finished.player.z).not.toBe(turnedLeft.player.z);
   expect(finished.input).toMatchObject({ touch: [], turn: 0 });
   expect(removedPilotRequests).toEqual([]);
   await context.close();

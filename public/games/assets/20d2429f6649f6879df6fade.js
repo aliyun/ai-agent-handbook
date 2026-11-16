@@ -491,9 +491,29 @@ function snapshot(){return {scene,pipe:pipe&&pipe.phase,fade,state,player:{...pl
 // Deterministic hooks exist only on the explicit local test URL; the normal game has no cheats.
 window.__platformer={get ready(){return ready;},snapshot};
 if(TEST)Object.assign(window.__platformer,{reset:()=>{reset();state='playing';hideOverlay();draw();},advance:(seconds)=>{for(let t=0;t<seconds-1e-6;t+=DT){capturePrevious();simulate(DT);}draw(1);return snapshot();},input:(name,value)=>setAction(name,value,'test:'+name),place:(props)=>{Object.assign(player,props);camera=clamp(player.x-365,0,ROOM()-W);capturePrevious();draw();},world:()=>world,ship:()=>shipWorld,sea:()=>seaWorld,render:draw,scale:()=>({rs:RS,max:MAX_RS,w:canvas.width,h:canvas.height,css:canvas.getBoundingClientRect().width,dpr:devicePixelRatio}),setMaxScale:(v)=>{MAX_RS=v;fitCanvas(true);return RS;},map:()=>({open:mapOpen,busy:mapBusy,ready:mapReady,prev:mapPrev,via:mapVia,island:islandPos,state}),dock:()=>({hidden:shell.classList.contains('dock-hidden'),hint:dockHint}),view:()=>view,audio:()=>({enabled:sound,status:audio?.state||'not-created',music:!!musicSource,musicStarts,musicDuration:musicSource?.buffer.duration||0,master:masterBus?.gain.value||0,musicGain:musicBus?.gain.value||0,voices,events:audioEvents.slice()})});
-Promise.all(Object.entries(ASSET).map(([name,src])=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{IM[name]=im;resolve();};im.onerror=()=>reject(new Error(name));im.src=src;}))).then(()=>{fitCanvas(false);$('mark').src=ASSET.hero;$('shellIcon').src=ASSET.shell;reset();buildArtCache();ready=true;showOverlay('ready');$('start').disabled=false;draw();watchCanvas();
+const CRITICAL_ASSETS=['hero','reef','floor','slab','pod'];
+const DEFERRED_ASSETS=Object.keys(ASSET).filter(name=>!CRITICAL_ASSETS.includes(name));
+let criticalLoaded=0;
+$('mark').style.visibility='hidden';$('start').textContent=`加载中 0/${CRITICAL_ASSETS.length}`;
+function blankImage(){const c=document.createElement('canvas');c.width=c.height=2;return c;}
+function loadAsset(name,critical=false){return new Promise((resolve,reject)=>{
+ const im=name==='hero'?$('mark'):new Image();
+ im.decoding='async';
+ im.onload=()=>{IM[name]=im;if(name==='hero')im.style.visibility='';if(critical){criticalLoaded++;$('start').textContent=`加载中 ${criticalLoaded}/${CRITICAL_ASSETS.length}`;}resolve(im);};
+ im.onerror=()=>reject(new Error(name));im.src=ASSET[name];
+});}
+function refreshArtCache(){CACHE.platform.clear();CACHE.hero.clear();CACHE.blocks={};CACHE.background={};buildArtCache();draw(1);}
+Promise.all(CRITICAL_ASSETS.map(name=>loadAsset(name,true))).then(()=>{
+ const blank=blankImage();for(const name of DEFERRED_ASSETS)IM[name]=blank;
+ fitCanvas(false);reset();buildArtCache();ready=true;showOverlay('ready');$('start').disabled=false;draw();watchCanvas();
  if(HOSTED){
   worldEl.inert=hostSuspended;postHost({type:'ready',started:false});
   if(hostPendingResume!==null){const pending=hostPendingResume;hostPendingResume=null;resumeHost(pending.play);}
  }
- setTimeout(ensureMap,800);requestAnimationFrame(frame);}).catch(err=>{$('overlayTitle').textContent='素材未能加载';$('overlayText').hidden=false;$('overlayText').textContent='请重新打开完整的 HTML 文件。未开始游戏。';$('overlayText').classList.add('loading-error');$('start').textContent='加载失败';console.error(err);});
+ setTimeout(ensureMap,800);requestAnimationFrame(frame);
+ Promise.allSettled(DEFERRED_ASSETS.map(name=>loadAsset(name))).then(results=>{
+  const failed=results.flatMap((result,index)=>result.status==='rejected'?[DEFERRED_ASSETS[index]]:[]);
+  if(IM.shell?.naturalWidth)$('shellIcon').src=ASSET.shell;
+  refreshArtCache();if(failed.length)console.warn('Deferred images unavailable',failed);
+ });
+}).catch(err=>{$('overlayTitle').textContent='素材未能加载';$('overlayText').hidden=false;$('overlayText').textContent='请检查网络后重新载入。';$('overlayText').classList.add('loading-error');$('start').textContent='加载失败';console.error(err);});

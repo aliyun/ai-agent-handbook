@@ -15,9 +15,8 @@ const PLAY_LABELS={0:'开始游戏',1:'开始探索'};
 let reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 $('worldArt').src=ASSETS.scene;
 
-// Official assets remain embedded unchanged; the help surface now shows chapters.
-// Decode official expressions before selecting a region; no network access needed.
-[ASSETS.scene,ASSETS.pod].forEach(src=>{const im=new Image();im.src=src;});
+// Visible images load once through their real DOM elements. The map shell and chapter
+// controls stay usable while those decorative images arrive.
 REGIONS.forEach((r,i)=>{
  const b=document.createElement('button');b.className='level';b.type='button';b.dataset.index=i;b.id='level-'+r.id;
  b.style.setProperty('--x',r.x+'%');b.style.setProperty('--y',r.y+'%');b.style.setProperty('--hit',r.hit+'px');
@@ -64,15 +63,16 @@ function setMotion(){ $('experience').classList.toggle('no-motion',reduced);$('m
 $('motionToggle').addEventListener('click',()=>{reduced=!reduced;setMotion();});
 setMotion();selectRegion(1,{scroll:false});
 
-// The host may reveal this map only after both visible original images have loaded.
+// Image latency must not block the map shell, chapter selection or host handshake.
 const MAP_READY=new Promise(resolve=>{
- const images=[$('worldArt'),$('companionImg')],status=$('mapLoadStatus'),message=$('mapLoadMessage'),retry=$('mapLoadRetry');
- let done=false;
- const slow=setTimeout(()=>{if(!done){message.textContent='地图素材载入较慢，可以重新载入';retry.hidden=false;}},20000);
- const check=()=>{if(!done&&images.every(img=>img.complete&&img.naturalWidth>0)){done=true;clearTimeout(slow);status.hidden=true;document.documentElement.classList.remove('map-loading');resolve();}};
- for(const img of images){img.addEventListener('load',check);img.addEventListener('error',()=>{if(!done){message.textContent='地图素材加载失败，请重新载入';retry.hidden=false;}});}
- retry.addEventListener('click',()=>{message.textContent='正在重新载入海底地图…';retry.hidden=true;for(const img of images){if(!img.complete||!img.naturalWidth){const url=new URL(img.getAttribute('src'),location.href);url.searchParams.set('retry',String(Date.now()));img.src=url.href;}}check();});
- check();
+ const images=[$('worldArt'),$('companionImg')],status=$('mapLoadStatus');
+ for(const img of images){
+  const reveal=()=>{img.style.visibility='';};
+  if(!img.complete||!img.naturalWidth)img.style.visibility='hidden';
+  img.addEventListener('load',reveal,{once:true});
+  img.addEventListener('error',()=>{img.style.visibility='hidden';},{once:true});
+ }
+ setTimeout(()=>{status.hidden=true;document.documentElement.classList.remove('map-loading');resolve();},0);
 });
 
 
