@@ -91,7 +91,7 @@ assert.deepEqual(readdirSync(gameDir).sort(),
   ["audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
   "游戏仅发布三份运行页面、发布清单和第三方许可证");
 const gameRelease = JSON.parse(readFileSync(path.join(gameDir, "release.json"), "utf8"));
-assert.equal(gameRelease.version, "v16");
+assert.equal(gameRelease.version, "v17");
 for (const [name, metadata] of Object.entries(gameRelease.files)) {
   const bytes = readFileSync(path.join(gameDir, name));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
@@ -102,6 +102,8 @@ for (const [name, metadata] of Object.entries(gameRelease.files)) {
     `不能发布本机路径或旧小样导航：${name}`);
 }
 assert.ok(readFileSync(path.join(gameDir, "audit-sea.html"), "utf8").includes("Copyright © 2010-2025 three.js authors"));
+assert.ok(!/"(backdrop|kelpBackdrop|fish|turtle)":\s*"data:/.test(readFileSync(path.join(gameDir, "audit-sea.html"), "utf8")),
+  "第二关不再内嵌已停用的背景、小鱼和海龟位图");
 assert.ok(!existsSync(path.join(output, ".local")), "本地数据不能发布到静态站点");
 if (errors.length) {
   console.error([...new Set(errors)].join("\n"));

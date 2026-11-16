@@ -60,7 +60,7 @@ for (const width of [1440, 390]) {
   });
 }
 
-test("hosted v16 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
+test("hosted v17 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   await page.emulateMedia({ reducedMotion: "reduce" });
