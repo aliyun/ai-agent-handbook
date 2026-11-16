@@ -39,6 +39,8 @@ for (const width of [1440, 390]) {
     expect(Math.abs(a!.y - b!.y)).toBeLessThan(1);
     await games.click();
     await expect(page).toHaveURL(/\/games\/$/);
+    await expect(page).toHaveTitle("自进化小岛：AgentLoop 海底探险游戏");
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "自进化小岛：AgentLoop 海底探险游戏");
     await expect(page.locator("html")).not.toHaveClass(/map-loading/, { timeout: 30_000 });
     await expect(page.locator("#worldArt")).toHaveJSProperty("complete", true);
     expect(await page.locator("#worldArt").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(1500);
