@@ -9,7 +9,10 @@
     "dev": "node scripts/build-challenges.mjs && vitepress dev --host 127.0.0.1",
     "build": "node scripts/build-challenges.mjs && vitepress build",
     "preview": "vitepress preview --host 127.0.0.1",
-    "check": "node scripts/check-book.mjs && npm run check:challenges",
+    "game:build": "node game/scripts/build.mjs",
+    "game:dev": "npm run game:build && vite game/dist --host 127.0.0.1",
+    "game:check": "node game/scripts/check.mjs",
+    "check": "node scripts/check-book.mjs && npm run check:challenges && npm run game:check",
     "check:challenges": "node challenges/01-refund-timeout/tests/run-tests.mjs && node challenges/02-resume/tests/run-tests.mjs && node challenges/03-memory/tests/run-tests.mjs && node challenges/04-efficiency/tests/run-tests.mjs",
     "check:build": "node scripts/check-build.mjs",
     "test": "playwright test"
@@ -22,9 +25,11 @@
   "devDependencies": {
     "@playwright/test": "1.64.0",
     "cheerio": "1.1.2",
+    "esbuild": "^0.25.12",
     "markdown-it": "14.3.3",
     "markdown-it-mathjax3": "4.3.2",
     "mermaid": "12.1.0",
+    "three": "^0.180.0",
     "vitepress": "1.6.4",
     "vue": "3.5.43"
   }
