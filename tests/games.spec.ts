@@ -91,7 +91,7 @@ test("map inside the game host returns the whole window to the handbook home", a
   await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
 });
 
-test("hosted v19 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
+test("hosted v20 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -109,7 +109,7 @@ test("hosted v19 defaults to exterior and preserves both games across map naviga
   await page.keyboard.press("c");
   const sea = await snapshot(page);
   expect(sea.camera.mode).toBe("cockpit");
-  expect(sea.cockpit.loopieCount).toBe(2);
+  expect(sea.cockpit).toMatchObject({ loopieCount: 0, sideDecorations: "none" });
   expect(sea.exteriorAppearance.opaqueRearHull).toBe(true);
   await openMap(page);
   await choose(page, "observe");
@@ -135,14 +135,24 @@ test("hosted v19 defaults to exterior and preserves both games across map naviga
   expect(errors).toEqual([]);
 });
 
-test("direct first-chapter links use the shared host without losing map round-trip progress", async ({ page }) => {
+test("direct first-chapter links hide chapter two while entering chapter one", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.route("**/games/assets/3ed369e02ca906dc9f663821.webp", async route => {
+    await new Promise(resolve => setTimeout(resolve, 3_000));
+    await route.continue();
+  });
   await page.goto("games/lighthouse.html");
   await expect(page).toHaveURL(/\/games\/audit-sea\.html\?level=0$/);
+  await expect(page.locator("#shell")).toHaveClass(/first-active/);
+  await expect(page.locator("#world")).toHaveCSS("visibility", "hidden");
+  await expect(page.locator("#welcome")).not.toBeVisible();
+  await expect(page.locator("#firstLayer")).toBeVisible();
   await ready(page);
   await page.waitForFunction(() => (window as any).__auditSea.snapshot().navigation.firstReady);
   const first = page.frames().find(f => /\/lighthouse\.html\?host=1$/.test(f.url()))!;
   await first.waitForFunction(() => (window as any).__platformer.snapshot().state === "playing");
+  expect(await first.locator('[data-action="run"]').count()).toBe(0);
+  await expect(first.locator('[data-action="jump"]')).toBeVisible();
   const x = await first.evaluate(() => (window as any).__platformer.snapshot().player.x);
   await page.keyboard.down("ArrowRight");
   await expect.poll(() => first.evaluate(() => (window as any).__platformer.snapshot().player.x)).toBeGreaterThan(x + 35);
@@ -153,6 +163,50 @@ test("direct first-chapter links use the shared host without losing map round-tr
   await first.waitForFunction(() => (window as any).__platformer.snapshot().state === "playing");
   expect((await first.evaluate(() => (window as any).__platformer.snapshot())).player.x).toBeGreaterThan(x + 35);
   expect((await first.evaluate(() => (window as any).__platformer.snapshot())).attempts).toBe(frozen.attempts);
+});
+
+test("mobile sea limits render load and releases real touch steering", async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+    deviceScaleFactor: 3,
+    reducedMotion: "reduce",
+  });
+  const page = await context.newPage();
+  const removedPilotRequests: string[] = [];
+  page.on("request", request => {
+    if (/36d57f|432cff/.test(request.url())) removedPilotRequests.push(request.url());
+  });
+  await page.goto("games/audit-sea.html?test=1");
+  await ready(page);
+  await page.locator("#start").click();
+  const render = (await snapshot(page)).render;
+  expect(render).toMatchObject({ profile: "mobile", maxPixelRatio: 1.5, maxFrameSteps: 4 });
+  expect(render.pixelRatio).toBeLessThanOrEqual(1.5);
+
+  const cdp = await context.newCDPSession(page);
+  async function point(code: string, id: number) {
+    const box = await page.locator(`[data-key="${code}"]`).boundingBox();
+    return { x: box!.x + box!.width / 2, y: box!.y + box!.height / 2,
+      id, radiusX: 5, radiusY: 5, force: 1 };
+  }
+  const left = await point("KeyA", 21);
+  const right = await point("KeyD", 22);
+  const start = (await snapshot(page)).heading;
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [left] });
+  await page.waitForTimeout(700);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  const turnedLeft = (await snapshot(page)).heading;
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [right] });
+  await page.waitForTimeout(700);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  const finished = await snapshot(page);
+  expect(turnedLeft).toBeLessThan(start - 0.3);
+  expect(finished.heading).toBeGreaterThan(turnedLeft + 0.3);
+  expect(finished.input).toMatchObject({ touch: [], turn: 0 });
+  expect(removedPilotRequests).toEqual([]);
+  await context.close();
 });
 
 async function softwareWebGL(page: Page) {

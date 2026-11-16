@@ -1,20 +1,20 @@
 {
-  "version": "v19",
+  "version": "v20",
   "files": {
     "index.html": {
-      "sourceSHA256": "c660eea157146a5574f66652055064f5b1a97f2ea304c00c0ec1e98b6ad40c25",
+      "sourceSHA256": "3991d1b62a44245d101d7b7a35ee8c0aff393b042d563cc25f8cb099420ad77e",
       "publishedSHA256": "3991d1b62a44245d101d7b7a35ee8c0aff393b042d563cc25f8cb099420ad77e",
       "bytes": 29017
     },
     "lighthouse.html": {
-      "sourceSHA256": "3fe5e3830bb5cf7ffd80e556b5959f4cff42f31d431664a2c6ef6d9dc628880e",
-      "publishedSHA256": "9d61455da39fcd6b60737ffc6b28d9cf296e399444ab8d461debea2a4952068f",
-      "bytes": 11958
+      "sourceSHA256": "9d61455da39fcd6b60737ffc6b28d9cf296e399444ab8d461debea2a4952068f",
+      "publishedSHA256": "cdcfbdd108b77f824dd94bba26cd9571fad03fbd4569bd37376efaf9a06e237e",
+      "bytes": 11871
     },
     "audit-sea.html": {
-      "sourceSHA256": "29a8fa5148fe3497a9fc3fb5b406c4d84b951781df86f65a1a2c91ccc0d8bbf6",
-      "publishedSHA256": "db120ca30a1f147a13252b4db1a2b716e758d5c5385cca03529b7c17bf4dc4c0",
-      "bytes": 16231
+      "sourceSHA256": "db120ca30a1f147a13252b4db1a2b716e758d5c5385cca03529b7c17bf4dc4c0",
+      "publishedSHA256": "363438a823c26190f0200b664c27c953850be52fb46b078c9521dcacb1dc106c",
+      "bytes": 16128
     }
   },
   "music": {
@@ -36,7 +36,8 @@
     "Embedded image/music literals line-wrapped with unchanged runtime bytes.",
     "v17: second chapter drops four unused embedded bitmaps (backdrop, kelpBackdrop, fish, turtle); map and first chapter unchanged from v16.",
     "v18: map adds a return-to-handbook link; second chapter welcome card keeps only chapter, title and start; sample label removed.",
-    "v19: unchanged original images/music and classic runtime scripts served as hash-named static assets; map exposes explicit loading/retry state and sends host readiness only after both visible images have loaded."
+    "v19: unchanged original images/music and classic runtime scripts served as hash-named static assets; map exposes explicit loading/retry state and sends host readiness only after both visible images have loaded.",
+    "v20: first-chapter host selection occurs before second-chapter WebGL loading; mobile first-chapter run button removed; coarse-pointer rendering capped at 1.5 DPR with bounded fixed-step catch-up for smoother steering; two cockpit pilot images and their runtime references removed."
   ],
   "defaultView": "external",
   "targets": {
@@ -93,11 +94,6 @@
       "bytes": 55382,
       "kind": "image"
     },
-    "assets/36d57f0d4019159b831dd47f.png": {
-      "publishedSHA256": "36d57f0d4019159b831dd47fba3e0919566bf5f07d9ef6f93eb057ca8bd0dd8e",
-      "bytes": 137449,
-      "kind": "image"
-    },
     "assets/38e5ed54c5373a3ec204fa10.webp": {
       "publishedSHA256": "38e5ed54c5373a3ec204fa10467c4ae6d83f02974415b600deeb74ca67e5b9a8",
       "bytes": 4656,
@@ -126,11 +122,6 @@
     "assets/42f9475583762d7cd8b1124c.webp": {
       "publishedSHA256": "42f9475583762d7cd8b1124c4de3ef8042aa3527f4fcff887ccbc5bef5d65eea",
       "bytes": 18268,
-      "kind": "image"
-    },
-    "assets/432cffcaade9bce7b8393fa9.png": {
-      "publishedSHA256": "432cffcaade9bce7b8393fa9e8fa280ab81cf8e7254be19495c83bfb7acc5bc7",
-      "bytes": 139508,
       "kind": "image"
     },
     "assets/4333a52a5760a560fa2fd0c0.webp": {
@@ -168,9 +159,9 @@
       "bytes": 55472,
       "kind": "runtime"
     },
-    "assets/65e243c53f0db930e40b8763.js": {
-      "publishedSHA256": "65e243c53f0db930e40b87639252c6f8e2581d431413f51560133350c531dee4",
-      "bytes": 665312,
+    "assets/63f333dd708cfbec45f6bfd6.js": {
+      "publishedSHA256": "63f333dd708cfbec45f6bfd661df5efbdd52b39ef4687e4836895168e03853a9",
+      "bytes": 664338,
       "kind": "runtime"
     },
     "assets/69b1decc93d2d224e4ce5a84.webp": {
