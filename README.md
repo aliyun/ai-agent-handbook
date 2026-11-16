@@ -8,7 +8,9 @@
 
 🤗 [在线阅读](https://aliyun.github.io/ai-agent-handbook/) ，这里的阅读体验更好。
 
-💯 [在线闯关](https://aliyun.github.io/ai-agent-handbook/challenges/) ，设计了一些小游戏，来看看你能拿多少分吧？
+💯 [测试题](https://aliyun.github.io/ai-agent-handbook/challenges/) ，设计了一些代码测试题，来看看你能拿多少分吧？
+
+🎮 [海底世界](https://aliyun.github.io/ai-agent-handbook/games/) ，设计了一些小游戏，放松下吧。
 
 欢迎高校等教育机构等一起共建企业级 Agent 课程，让更多人体系化的掌握 Agent。若感兴趣，请添加微信（max_0928）进行沟通，备注共建。
 
