@@ -648,7 +648,7 @@ function draw(){
  // the legacy opaque front panel and seeing the pilot from inside their own body.
  pod.visible=!inspectionAlien&&(cameraMode==='external'||inspectionView);shadow.visible=pod.visible;
  if(cockpit&&!inspectionView&&cameraMode==='cockpit')cockpit.update({time:simTime,y:player.y,heading,velocity,surface:OCEAN_PERIOD.surface});
- radar();renderer.render(scene,camera);
+ radar();renderMain();
  if(cockpit&&!inspectionView&&cameraMode==='cockpit')cockpit.render();
 }
 const radarCtx=$('radar').getContext('2d');
@@ -673,9 +673,9 @@ function frame(t){
 async function initAudio(){
  if(!sound||activeLevel!==1)return;
  try{
-  if(!audio){audio=new(window.AudioContext||window.webkitAudioContext)();master=audio.createGain();master.gain.value=.65;const compressor=audio.createDynamicsCompressor();compressor.threshold.value=-12;compressor.ratio.value=5;master.connect(compressor);compressor.connect(audio.destination);musicBus=audio.createGain();musicBus.gain.value=.48;musicBus.connect(master);sfxBus=audio.createGain();sfxBus.connect(master);}
+  ensureAudioGraph();
   await audio.resume();
-  if(!musicPromise){musicPromise=(async()=>{const response=await fetch(DATA.music);if(!response.ok)throw new Error('Music HTTP '+response.status);const bytes=await response.arrayBuffer();const buffer=await audio.decodeAudioData(bytes);musicSource=audio.createBufferSource();musicSource.buffer=buffer;musicSource.loop=true;musicSource.connect(musicBus);musicSource.start();musicStarts++;})();}
+  if(!musicPromise){musicPromise=(async()=>{const buffer=musicBuffer||await prepareMusic();if(!buffer)throw new Error('Music unavailable');musicSource=audio.createBufferSource();musicSource.buffer=buffer;musicSource.loop=true;musicSource.connect(musicBus);musicSource.start();musicStarts++;})();}
   await musicPromise;updateMix();
  }catch(e){sound=false;if(master)master.gain.value=0;$('soundBtn').textContent='声音：关';$('soundBtn').setAttribute('aria-pressed','false');musicPromise=null;showToast('声音暂未能启动，可以点击声音开关重试');console.warn('Audio unavailable',e);}
 }
@@ -771,26 +771,134 @@ if(TEST)Object.assign(window.__auditSea,{
  resumeView(){inspectionAlien=false;inspectionView=false;paused=false;updateCamera(0,true);draw();return snapshot();},
  project:(x,y,z)=>{const p=new V3(x,y,z).project(camera);return {x:(p.x+1)*innerWidth/2,y:(1-p.y)*innerHeight/2,z:p.z};},
  samples:()=>frameSamples.slice(),audioNodes:()=>({audio,master,musicBus,sfxBus,musicSource}),
- wildlifeView(kind,index=0,angle=0,distance=5,height=.6){inspectionView=true;paused=true;clearInput();marineLife.update(REDUCED?0:simTime);const focus=marineLife.focus(kind,index);camera.position.copy(focus).add(new V3(0,height,distance).applyAxisAngle(new V3(0,1,0),angle));camera.lookAt(focus);camera.updateMatrixWorld();renderer.render(scene,camera);return snapshot();},
+ wildlifeView(kind,index=0,angle=0,distance=5,height=.6){inspectionView=true;paused=true;clearInput();marineLife.update(REDUCED?0:simTime);const focus=marineLife.focus(kind,index);camera.position.copy(focus).add(new V3(0,height,distance).applyAxisAngle(new V3(0,1,0),angle));camera.lookAt(focus);camera.updateMatrixWorld();renderMain();return snapshot();},
  wildlifeAt(time){marineLife.update(time);const result=marineLife.snapshot();marineLife.update(REDUCED?0:simTime);return result;},
  wildlifeMeshes(){const result=[];scene.traverse(o=>{if(o.name?.startsWith('marine-'))result.push({name:o.name,type:o.type,isInstanced:!!o.isInstancedMesh,instances:o.count||0});});return result;},
  alienAt:time=>deepSea.at(time),alienSafety:()=>deepSea.safety(),alienMeshes:()=>deepSea.meshes(),alienEnvelopes:()=>deepSea.envelopes(),
  oceanAt:time=>deepSea.oceanAt(time),oceanSafety:()=>deepSea.oceanSafety(),shadowBounds:()=>deepSea.shadowBounds(),oceanEnvelopes:()=>deepSea.oceanEnvelopes(),
  oceanView(region,kind,index=0,angle=.8,distance=6,height=.9){inspectionAlien=true;inspectionView=true;paused=true;clearInput();deepSea.update({player,heading,time:REDUCED?0:simTime});const p=deepSea.oceanFocus(region,kind,index);if(kind==='crown')p.y+=.65;camera.position.copy(p).add(new V3(0,height,distance).applyAxisAngle(new V3(0,1,0),angle));camera.lookAt(p);camera.updateMatrixWorld();draw();return snapshot();},
- alienView(kind,index=0,angle=0,distance=7,height=.9){inspectionAlien=true;inspectionView=true;paused=true;clearInput();deepSea.update({player,heading,time:REDUCED?0:simTime});const p=deepSea.focus(kind,index);if(kind==='crown')p.y+=.65;camera.position.copy(p).add(new V3(0,height,distance).applyAxisAngle(new V3(0,1,0),angle));camera.lookAt(p);camera.updateMatrixWorld();pod.visible=false;shadow.visible=false;renderer.info.reset();renderer.render(scene,camera);return snapshot();},
- headlightTest(on){deepSea.lightTest(on);renderer.info.reset();renderer.render(scene,camera);if(cameraMode==='cockpit'&&!inspectionView)cockpit.render();return snapshot();},
+ alienView(kind,index=0,angle=0,distance=7,height=.9){inspectionAlien=true;inspectionView=true;paused=true;clearInput();deepSea.update({player,heading,time:REDUCED?0:simTime});const p=deepSea.focus(kind,index);if(kind==='crown')p.y+=.65;camera.position.copy(p).add(new V3(0,height,distance).applyAxisAngle(new V3(0,1,0),angle));camera.lookAt(p);camera.updateMatrixWorld();pod.visible=false;shadow.visible=false;renderer.info.reset();renderMain();return snapshot();},
+ headlightTest(on){deepSea.lightTest(on);renderer.info.reset();renderMain();if(cameraMode==='cockpit'&&!inspectionView)cockpit.render();return snapshot();},
+ lightCensus:(step=10,turns=12,levels=[2,10,30,70,120])=>lightCensus(step,turns,levels),
+ warmReport:()=>warmReport,
+ slotReport:()=>({slots:LIGHT_SLOTS,sources:lightSources.length,peak:slotPeak,overflow:slotOverflow,active:activeLights.length}),
 });
+// v22 local prototype: prepare every reachable lighting variant before the
+// player can start. Visuals and gameplay state are restored after warming.
+let warmReport=null;
+const WARM_BUDGET_MS=15000;
+// dive-ui:start — generic progress bar. Weights follow measured time (asset
+// download ~60%, GPU warm-up the rest); between stages the bar creeps toward a
+// ceiling so it never sits still, and the final stretch fills in ~200 ms.
+let diveTarget=0,diveCeil=0,diveShown=0,diveAt=0,diveLast=0,diveDoneAt=0,diveFrom=0,diveRaf=0,divePct=-1;
+function diveStage(step,progress,ceil){const box=$('dive');if(!box)return;box.dataset.step=step;const now=performance.now();diveTarget=Math.max(diveTarget,progress);diveCeil=Math.max(diveTarget,ceil??Math.min(progress+.08,.97));diveAt=now;if(step==='done'){diveDoneAt=now;diveFrom=diveShown;}if(!diveRaf)diveRaf=requestAnimationFrame(diveTick);}
+function diveTick(){const box=$('dive');diveRaf=0;if(!box)return;const now=performance.now();
+ if(box.dataset.step==='done'){const k=Math.min(1,(now-diveDoneAt)/200);diveShown=diveFrom+(1-diveFrom)*(1-(1-k)*(1-k));}
+ else{const soft=diveTarget+(diveCeil-diveTarget)*(1-Math.exp(-(now-diveAt)/800)),dt=diveLast?now-diveLast:16;diveShown+=(Math.max(soft,diveShown)-diveShown)*(1-Math.exp(-dt/90));}
+ diveLast=now;box.style.setProperty('--dive',diveShown.toFixed(4));const pct=Math.floor(diveShown*100+1e-6);if(pct!==divePct){divePct=pct;const t=$('divePct');if(t)t.textContent=pct+'%';const bar=box.querySelector('[role=progressbar]');if(bar)bar.setAttribute('aria-valuenow',pct);}
+ if(diveShown<1)diveRaf=requestAnimationFrame(diveTick);else box.dataset.full='1';}
+// dive-ui:end
+const yieldTask=()=>new Promise(r=>setTimeout(r,0));
+// Fixed light-slot pool. Three.js keys shader programs by the number of
+// visible point lights, so v21 compiled ~53 new programs whenever culling
+// changed that number mid-flight. Here the source lights keep all their
+// existing rules (ocean-loop culling, deep-sea colours, beacons); before each
+// render their visible results are copied into a constant set of slots and
+// unused slots get intensity 0. Same light sum, one program set.
+const PARAMS=new URLSearchParams(location.search);
+const LIGHT_SLOTS=+(PARAMS.get('slots')??12);
+const lightSources=[],lightSlots=[],activeLights=[];let slotOverflow=0,slotPeak=0;
+function setupLightSlots(){
+ if(!LIGHT_SLOTS)return;
+ scene.traverse(o=>{if(o.isPointLight)lightSources.push(o);});
+ for(let i=0;i<LIGHT_SLOTS;i++){const l=new THREE.PointLight('#000000',0,1,2);l.name='light-slot-'+i;scene.add(l);lightSlots.push(l);}
+}
+function shown(o){for(let p=o;p;p=p.parent)if(!p.visible)return false;return true;}
+const slotEye=new V3(),slotA=new V3(),slotB=new V3();
+function applyLightSlots(){
+ if(!LIGHT_SLOTS)return;
+ activeLights.length=0;
+ for(const l of lightSources){if(shown(l)&&l.intensity>0)activeLights.push(l);l.userData.slotVisible=l.visible;l.visible=false;}
+ slotPeak=Math.max(slotPeak,activeLights.length);
+ if(activeLights.length>LIGHT_SLOTS){slotOverflow++;camera.getWorldPosition(slotEye);activeLights.sort((a,b)=>a.getWorldPosition(slotA).distanceToSquared(slotEye)-b.getWorldPosition(slotB).distanceToSquared(slotEye));}
+ for(let i=0;i<lightSlots.length;i++){const slot=lightSlots[i],src=activeLights[i];
+  if(src){src.getWorldPosition(slot.position);slot.color.copy(src.color);slot.intensity=src.intensity;slot.distance=src.distance;slot.decay=src.decay;}else slot.intensity=0;}
+}
+function renderMain(){applyLightSlots();renderer.render(scene,camera);releaseLightSlots();}
+function releaseLightSlots(){if(!LIGHT_SLOTS)return;for(const l of lightSources)l.visible=l.userData.slotVisible;}
+function worldSpot(){let spot=null;scene.traverse(o=>{if(o.isSpotLight)spot=o;});return spot;}
+function visibleLights(){let p=0;for(const l of lightSources)if(shown(l)&&l.intensity>0)p++;const spot=worldSpot();return [p,spot&&shown(spot)?1:0];}
+function saveView(){return {player:player.clone(),voyage:{...voyage},heading,cameraHeading,cameraMode,pos:camera.position.clone(),quat:camera.quaternion.clone(),target:cameraTarget.clone(),desired:cameraDesired.clone()};}
+function setMode(mode){cameraMode=mode;const inside=mode==='cockpit';camera.fov=inside?68:57;camera.near=inside?.06:.2;camera.updateProjectionMatrix();pod.visible=!inside;}
+function restoreView(s){player.copy(s.player);Object.assign(voyage,s.voyage);heading=s.heading;cameraHeading=s.cameraHeading;setMode(s.cameraMode);camera.position.copy(s.pos);camera.quaternion.copy(s.quat);cameraTarget.copy(s.target);cameraDesired.copy(s.desired);camera.updateMatrixWorld();}
+// Diagnostic only: how many source lights the culling rules switch on.
+function lightCensus(step,turns,levels){
+ const saved=saveView(),flags=[];scene.traverse(o=>flags.push([o,o.visible]));
+ const seen={},t0=performance.now();let samples=0;
+ for(const mode of ['external','cockpit']){setMode(mode);
+  for(let x=-110;x<110;x+=step)for(let z=-179;z<81;z+=step){const floor=floorHeight(x,z);
+   for(const lift of levels){const y=Math.min(floor+lift,OCEAN_PERIOD.surface-2);if(y<floor+1)continue;player.set(x,y,z);
+    deepSea.update({player,heading,time:0});
+    for(let k=0;k<turns;k++){heading=cameraHeading=k*Math.PI*2/turns;updateCamera(0,true);oceanPool.update(camera,scene.fog.far);const [p,s]=visibleLights();const key=mode+':'+p+':'+s;seen[key]=(seen[key]||0)+1;samples++;}
+   }}}
+ for(const [o,v] of flags)o.visible=v;restoreView(saved);deepSea.update({player,heading,time:0});updateCamera(0,true);
+ return {samples,ms:performance.now()-t0,combos:seen};
+}
+const WARM=PARAMS.get('warm')!=='0';
+async function warmUp(){
+ const t0=performance.now(),report={slots:LIGHT_SLOTS,programsBefore:renderer.info.programs.length,combos:[]};
+ camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false);
+ const saved=saveView(),flags=[];scene.traverse(o=>flags.push([o,o.visible,o.frustumCulled]));
+ const spot=worldSpot(),shadowAuto=spot.shadow.autoUpdate;
+ try{
+  // Headlight off/on are the only two light layouts left to compile.
+  for(const [i,s] of [0,1].entries()){
+   const c0=performance.now();spot.visible=!!s;
+   applyLightSlots();await renderer.compileAsync(scene,camera);releaseLightSlots();
+   report.combos.push({s,ms:Math.round(performance.now()-c0),programs:renderer.info.programs.length});
+   diveStage('light',.6+.1*(i+1));
+  }
+  diveStage('shadow',.86);await yieldTask();
+  // One frame with every object shown and unculled uploads all geometry and
+  // textures and builds every shadow-depth variant. The canvas is hidden.
+  const r0=performance.now();
+  scene.traverse(o=>{o.visible=true;o.frustumCulled=false;});spot.shadow.autoUpdate=true;
+  renderMain();
+  report.fullFrameMs=Math.round(performance.now()-r0);
+  for(const [o,v,f] of flags){o.visible=v;o.frustumCulled=f;}
+  diveStage('cockpit',.92);await yieldTask();
+  const k0=performance.now();
+  setMode('cockpit');updateCamera(0,true);oceanPool.update(camera,scene.fog.far);
+  cockpit.update({time:0,y:player.y,heading,velocity,surface:OCEAN_PERIOD.surface});renderMain();cockpit.render();
+  for(const program of renderer.info.programs){program.getUniforms();program.getAttributes();}
+  report.cockpitMs=Math.round(performance.now()-k0);
+ }finally{
+  for(const [o,v,f] of flags){o.visible=v;o.frustumCulled=f;}
+  spot.shadow.autoUpdate=shadowAuto;restoreView(saved);updateCamera(0,true);oceanPool.update(camera,scene.fog.far);
+ }
+ report.programsAfter=renderer.info.programs.length;report.ms=Math.round(performance.now()-t0);warmReport=report;return report;
+}
+// Music bytes are fetched and decoded on a suspended context; playback still
+// starts only after the player's click resumes audio.
+let musicBuffer=null,musicPrep=null;
+function ensureAudioGraph(){if(audio)return;audio=new(window.AudioContext||window.webkitAudioContext)();master=audio.createGain();master.gain.value=.65;const compressor=audio.createDynamicsCompressor();compressor.threshold.value=-12;compressor.ratio.value=5;master.connect(compressor);compressor.connect(audio.destination);musicBus=audio.createGain();musicBus.gain.value=.48;musicBus.connect(master);sfxBus=audio.createGain();sfxBus.connect(master);}
+function prepareMusic(){if(!musicPrep)musicPrep=(async()=>{const response=await fetch(DATA.music);if(!response.ok)throw new Error('Music HTTP '+response.status);const bytes=await response.arrayBuffer();ensureAudioGraph();musicBuffer=await audio.decodeAudioData(bytes);return musicBuffer;})().catch(e=>{console.warn('Music prefetch failed',e);musicPrep=null;return null;});return musicPrep;}
 let secondInitPromise;
 function ensureSecond(){
  if(secondInitPromise)return secondInitPromise;
  secondInitPromise=(async()=>{
   try{
+   $('sea').classList.add('warming');diveStage('assets',.04,.55);prepareMusic();
    renderer=new THREE.WebGLRenderer({canvas:$('sea'),antialias:true,alpha:false,powerPreference:'high-performance'});renderer.info.autoReset=false;renderer.setPixelRatio(Math.min(devicePixelRatio,MAX_RENDER_DPR));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
    const loader=new THREE.TextureLoader();await Promise.all(Object.entries(DATA).filter(([k])=>k!=='music').map(async([k,url])=>{const t=await loader.loadAsync(url);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());textures[k]=t;}));
    $('shellIcon').src=DATA.shell;
    addLight();addGround();addReefs();addPlants();addGate();addExpandedOcean();addCollectibles();addPod();replaceMarineLife();camera.fov=57;camera.near=.2;camera.updateProjectionMatrix();cockpit=createCockpit(renderer,camera,textures.hull);highSea=addHighSea(scene,floorHeight,textures.rock);highSea.update(0);clearSea=addClearSeaSample(scene,{floor:floorHeight,rocks:rockBodies});clearSea.patchScene(pod);deepSea=createDeepSea(scene,renderer,{floor:floorHeight,rocks:rockBodies,objects,pod});clearSea.patchFog(pod);
    for(const o of objects){o.body.userData.loopPickupId=o.glow.userData.loopPickupId=o.index;}
-   oceanPool=createOceanPool(scene,{pod,shadow,objects,rocks:rockBodies,player});deepSea.trackShadows();updateCamera(0,true);ready=true;fit();$('start').textContent='开始探索';$('start').disabled=false;requestAnimationFrame(frame);
+   oceanPool=createOceanPool(scene,{pod,shadow,objects,rocks:rockBodies,player});setupLightSlots();deepSea.trackShadows();updateCamera(0,true);
+   diveStage('assets',.6);await yieldTask();
+   if(WARM){try{await warmUp();}catch(e){console.warn('Warm-up skipped',e);warmReport={error:String(e?.message||e)};}}
+   if(!musicBuffer){diveStage('sound',.95);await Promise.race([prepareMusic(),new Promise(r=>setTimeout(r,2500))]);}
+   ready=true;fit();diveStage('done',1);$('sea').classList.remove('warming');$('start').textContent='开始探索';$('start').disabled=false;requestAnimationFrame(frame);
    $('sea').addEventListener('webglcontextlost',e=>{e.preventDefault();clearInput();paused=true;fail(new Error('图形上下文中断，请重新打开页面'));});
   }catch(e){secondInitPromise=null;fail(e);throw e;}
  })();

@@ -26,17 +26,17 @@ const publishedRuntimes = Object.fromEntries(
 assert.deepEqual(
   readFileSync(path.join(sourceDir, "map.js")),
   readFileSync(path.join(publicDir, publishedRuntimes["index.html"])),
-  "地图源码应与当前线上 v21 运行时一致",
+  "地图源码应与当前线上 v22 运行时一致",
 );
 assert.deepEqual(
   readFileSync(path.join(sourceDir, "lighthouse.js")),
   readFileSync(path.join(publicDir, publishedRuntimes["lighthouse.html"])),
-  "第一关源码应与当前线上 v21 运行时一致",
+  "第一关源码应与当前线上 v22 运行时一致",
 );
 assert.deepEqual(
   readFileSync(path.join(distDir, "assets", "sea.js")),
   readFileSync(path.join(publicDir, publishedRuntimes["audit-sea.html"])),
-  "第二关源码重新打包后应与当前线上 v21 运行时一致",
+  "第二关源码重新打包后应与当前线上 v22 运行时一致",
 );
 
 new Function(readFileSync(path.join(sourceDir, "map.js"), "utf8"));
@@ -44,7 +44,7 @@ new Function(readFileSync(path.join(sourceDir, "lighthouse.js"), "utf8"));
 
 const manifest = JSON.parse(readFileSync(path.join(distDir, "release.json"), "utf8"));
 assert.equal(manifest.developmentBuild, true);
-assert.match(manifest.version, /^v21-source-preview$/);
+assert.match(manifest.version, /^v22-source-preview$/);
 for (const [name, metadata] of Object.entries({ ...manifest.files, ...manifest.assets })) {
   const file = path.join(distDir, name);
   assert.ok(existsSync(file), `构建产物缺少 ${name}`);
@@ -62,4 +62,4 @@ for (const name of readdirSync(sourceDir, { recursive: true }).filter(file => fi
   assert.doesNotMatch(text, /file:\/\/|\/Users\//, `${name} 不得包含本机路径`);
 }
 assert.match(readFileSync(path.join(distDir, "audit-sea.html"), "utf8"), /three\.js 0\.180\.0/);
-console.log("Game source checked: readable sources rebuild the published v21 runtimes exactly.");
+console.log("Game source checked: readable sources rebuild the published v22 runtimes exactly.");

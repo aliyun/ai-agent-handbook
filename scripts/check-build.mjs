@@ -91,7 +91,7 @@ assert.deepEqual(readdirSync(gameDir).sort(),
   ["assets", "audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
   "游戏发布三份轻量入口、静态素材目录、发布清单和第三方许可证");
 const gameRelease = JSON.parse(readFileSync(path.join(gameDir, "release.json"), "utf8"));
-assert.equal(gameRelease.version, "v21");
+assert.equal(gameRelease.version, "v22");
 for (const [name, metadata] of Object.entries(gameRelease.files)) {
   const bytes = readFileSync(path.join(gameDir, name));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
@@ -135,9 +135,19 @@ assert.ok(gameRuntime.includes("const CRITICAL_ASSETS=['hero','reef','floor','sl
   "第一关必须只等待五项首屏素材，其余图片在后台完成");
 assert.ok(gameRuntime.includes("setTimeout(()=>{status.hidden=true;document.documentElement.classList.remove('map-loading')"),
   "地图入口不能依赖图片完成或前台 requestAnimationFrame 才能交互");
-assert.ok(gameRelease.changes.at(-1).includes("second chapter WebGL initializes only when selected") &&
-  gameRelease.changes.at(-1).includes("one camera collision solve per rendered frame"),
-  "v21 发布清单必须记录第二关按需初始化和每帧一次相机求解");
+assert.ok(gameRelease.changes.some(line => line.startsWith("v21:") &&
+  line.includes("second chapter WebGL initializes only when selected")),
+  "发布清单必须保留 v21 第二关按需初始化记录");
+assert.ok(gameRelease.changes.at(-1).startsWith("v22:") &&
+  gameRelease.changes.at(-1).includes("before 开始探索") &&
+  gameRelease.changes.at(-1).includes("fixed light-slot pool"),
+  "v22 发布清单必须记录开始前预热和固定光源槽位");
+assert.ok(gameRuntime.includes("light-slot-") && gameRuntime.includes("compileAsync") &&
+  gameRuntime.includes("divePct") && gameRuntime.includes("dataset.full"),
+  "第二关运行时必须在开始前预热着色器并使用固定光源槽位");
+const seaPage = readFileSync(path.join(gameDir, "audit-sea.html"), "utf8");
+assert.ok(seaPage.includes('id="dive"') && seaPage.includes('role="progressbar"') && seaPage.includes('id="divePct"'),
+  "第二关入口必须显示带百分比的装载进度条");
 assert.ok(!gameRuntime.includes("pilotIdle") && !gameRuntime.includes("pilotHi5"),
   "第二关运行时不能保留已删除的章鱼图片引用");
 assert.ok(!readFileSync(path.join(gameDir, "lighthouse.html"), "utf8").includes('data-action="run"'),

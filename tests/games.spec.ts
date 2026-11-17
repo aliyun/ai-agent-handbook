@@ -105,6 +105,10 @@ test("map inside the game host returns the whole window to the handbook home", a
   await expect(welcome.locator("h2")).toHaveText("高礁、异星鱼类和百年沉船");
   await expect(welcome.locator("p")).toHaveCount(0);
   await expect(page.locator("#start")).toHaveText("开始探索");
+  await expect(page.locator("#start")).toBeEnabled();
+  await expect(page.locator("#divePct")).toHaveText("100%");
+  await expect(page.locator("#dive [role=progressbar]")).toHaveAttribute("aria-valuenow", "100");
+  expect(await page.locator("#dive").innerText()).toBe("100%");
   expect(await page.locator("body").innerText()).not.toContain("通透海景小样");
   await page.locator("#start").click();
   await openMap(page);
@@ -112,7 +116,7 @@ test("map inside the game host returns the whole window to the handbook home", a
   await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
 });
 
-test("hosted v21 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
+test("hosted v22 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   await page.emulateMedia({ reducedMotion: "reduce" });

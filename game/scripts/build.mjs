@@ -42,7 +42,7 @@ cpSync(path.join(sourceDir, "map.js"), path.join(distAssets, "map.js"));
 cpSync(path.join(sourceDir, "lighthouse.js"), path.join(distAssets, "lighthouse.js"));
 const seaRuntimePath = path.join(distAssets, "sea.js");
 await build({
-  entryPoints: [path.join(sourceDir, "sea", "space-v21.js")],
+  entryPoints: [path.join(sourceDir, "sea", "space-v22.js")],
   bundle: true,
   minify: true,
   format: "iife",

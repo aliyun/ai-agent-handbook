@@ -20,7 +20,7 @@ npm run game:check
 npm test
 ```
 
-`game:check` rebuilds the game and verifies that the readable source reproduces all three runtimes from the published v21 release. `game/dist/` is generated for local preview and must not be committed.
+`game:check` rebuilds the game and verifies that the readable source reproduces all three runtimes from the published v22 release. `game/dist/` is generated for local preview and must not be committed.
 
 ## Source layout
 
@@ -30,7 +30,7 @@ game/
 │   ├── map.js              # Five-island map and chapter guide
 │   ├── lighthouse.js       # Chapter 1: Canvas 2D platformer
 │   └── sea/
-│       ├── space-v21.js    # Chapter 2 entry: Three.js ocean
+│       ├── space-v22.js    # Chapter 2 entry: Three.js ocean
 │       └── *.js            # Ocean, cockpit, wildlife, and terrain modules
 ├── scripts/
 │   ├── build.mjs           # Build a runnable local preview
@@ -69,4 +69,4 @@ Use [Issues](https://github.com/aliyun/ai-agent-handbook/issues) to discuss new 
 - Apache License 2.0 does not grant trademark rights. Alibaba Cloud, AgentLoop, and Loopie names, marks, and character artwork remain the property of their respective rights holders. Confirm separate permission before reusing them for promotion or derivative branding.
 - Contributors may submit only code and media they have the right to license. Third-party material must include its source, license, and required attribution.
 
-To study the implementation, start with `map.js`, `lighthouse.js`, and `sea/space-v21.js`. They show the map host, a Canvas 2D chapter, and a Three.js 3D chapter respectively.
+To study the implementation, start with `map.js`, `lighthouse.js`, and `sea/space-v22.js`. They show the map host, a Canvas 2D chapter, and a Three.js 3D chapter respectively.

@@ -1,5 +1,5 @@
 {
-  "version": "v21",
+  "version": "v22",
   "files": {
     "index.html": {
       "sourceSHA256": "3991d1b62a44245d101d7b7a35ee8c0aff393b042d563cc25f8cb099420ad77e",
@@ -12,9 +12,9 @@
       "bytes": 11850
     },
     "audit-sea.html": {
-      "sourceSHA256": "363438a823c26190f0200b664c27c953850be52fb46b078c9521dcacb1dc106c",
-      "publishedSHA256": "c61d9a44d2d2fc587f25976bce5b344a5b9e91915d0baad93bf4ded72184a1d2",
-      "bytes": 16128
+      "sourceSHA256": "c61d9a44d2d2fc587f25976bce5b344a5b9e91915d0baad93bf4ded72184a1d2",
+      "publishedSHA256": "53a2062fdef5fad238780b0259df59c57486dd36b91c9609550eb8752d83ab46",
+      "bytes": 17604
     }
   },
   "music": {
@@ -38,7 +38,8 @@
     "v18: map adds a return-to-handbook link; second chapter welcome card keeps only chapter, title and start; sample label removed.",
     "v19: unchanged original images/music and classic runtime scripts served as hash-named static assets; map exposes explicit loading/retry state and sends host readiness only after both visible images have loaded.",
     "v20: first-chapter host selection occurs before second-chapter WebGL loading; mobile first-chapter run button removed; coarse-pointer rendering capped at 1.5 DPR with bounded fixed-step catch-up for smoother steering; two cockpit pilot images and their runtime references removed.",
-    "v21: map shell and controls become interactive without waiting for decorative images; first chapter starts after five critical images while remaining art loads in the background; first chapter loading mark no longer mirrors fallback text; second chapter WebGL initializes only when selected; coarse-pointer rendering uses a 1.25 DPR cap, two-step catch-up, and one camera collision solve per rendered frame."
+    "v21: map shell and controls become interactive without waiting for decorative images; first chapter starts after five critical images while remaining art loads in the background; first chapter loading mark no longer mirrors fallback text; second chapter WebGL initializes only when selected; coarse-pointer rendering uses a 1.25 DPR cap, two-step catch-up, and one camera collision solve per rendered frame.",
+    "v22: second chapter prepares shaders, shadows, the cockpit view and music before 开始探索 while a percentage progress bar shows loading; scene point lights render through a fixed light-slot pool so moving and turning no longer compile new GPU programs mid-play."
   ],
   "defaultView": "external",
   "targets": {
@@ -230,9 +231,9 @@
       "bytes": 33506,
       "kind": "image"
     },
-    "assets/e1de3024600dadc471bd7551.js": {
-      "publishedSHA256": "e1de3024600dadc471bd7551c13f6da334ef22f6c672ad387334fef58334310b",
-      "bytes": 664532,
+    "assets/ed544c977873bfa120d6fec1.js": {
+      "publishedSHA256": "ed544c977873bfa120d6fec12c6150698c5c953dbc4c5001b6505e01aff4be87",
+      "bytes": 669601,
       "kind": "runtime"
     },
     "assets/e538b877c67776fea9ef9bca.webp": {

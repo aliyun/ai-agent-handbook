@@ -20,7 +20,7 @@ npm run game:check
 npm test
 ```
 
-`game:check` 会重新构建游戏，并确认可读源码能够生成与当前线上 v21 完全一致的三个运行时。生成目录 `game/dist/` 只用于本地预览，不提交到 Git。
+`game:check` 会重新构建游戏，并确认可读源码能够生成与当前线上 v22 完全一致的三个运行时。生成目录 `game/dist/` 只用于本地预览，不提交到 Git。
 
 ## 目录结构
 
@@ -30,7 +30,7 @@ game/
 │   ├── map.js              # 五关群岛地图与游戏说明
 │   ├── lighthouse.js       # 第一关：Canvas 2D 横版游戏
 │   └── sea/
-│       ├── space-v21.js    # 第二关入口：Three.js 立体海洋
+│       ├── space-v22.js    # 第二关入口：Three.js 立体海洋
 │       └── *.js            # 海域、驾驶舱、生物和地形模块
 ├── scripts/
 │   ├── build.mjs           # 生成本地可运行预览
@@ -69,4 +69,4 @@ public/games/               # GitHub Pages 当前发布产物与静态资源
 - Apache License 2.0 不授予商标权。Alibaba Cloud、AgentLoop、Loopie 的名称、标识和角色形象仍属于相应权利人；复用、宣传或制作衍生品牌素材时，请另行确认授权。
 - 贡献者只能提交自己有权许可的代码和素材。引用第三方内容时，必须说明来源、许可证和必要的署名方式。
 
-如果只想借鉴实现，可以从 `map.js`、`lighthouse.js` 和 `sea/space-v21.js` 三个入口开始阅读。它们分别展示了地图宿主、Canvas 2D 关卡和 Three.js 3D 关卡的实现方式。
+如果只想借鉴实现，可以从 `map.js`、`lighthouse.js` 和 `sea/space-v22.js` 三个入口开始阅读。它们分别展示了地图宿主、Canvas 2D 关卡和 Three.js 3D 关卡的实现方式。
