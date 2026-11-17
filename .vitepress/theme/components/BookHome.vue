@@ -33,7 +33,7 @@ onMounted(() => {
           >
           <div class="practice-actions">
             <a class="book-button secondary challenge-entry" :href="withBase('/challenges/')" target="_self"
-              >代码实战 <span class="challenge-beta">Beta</span><span aria-hidden="true">→</span></a
+              >代码实战 <span aria-hidden="true">→</span></a
             >
             <a class="book-button secondary challenge-entry" :href="withBase('/games/')" target="_self"
               >游戏闯关 <span aria-hidden="true">→</span></a
