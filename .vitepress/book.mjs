@@ -291,32 +291,37 @@ for (const part of parts) {
     });
     topic.children = [
       page(
-        "06-case-study/Jev 专题/综述：深度解析 Jev 模型：如何快速做结构化决策.md",
+        "06-case-study/决策模型专题/综述：深度解析 Jev 模型：如何快速做结构化决策.md",
         "cases/jev/deep-dive",
         { chapter: "jev", part: part.title },
       ),
       page(
-        "06-case-study/Jev 专题/开发框架：让 Agent 学会判断，从 Jev 接入到完整 Harness 决策流程.md",
+        "06-case-study/决策模型专题/开发框架：让 Agent 学会判断，从 Jev 接入到完整 Harness 决策流程.md",
         "cases/jev/harness-decisions",
         { chapter: "jev", part: part.title },
       ),
       page(
-        "06-case-study/Jev 专题/基于Jev 范式决策模型，构建智能工单分诊助手.md",
+        "06-case-study/决策模型专题/基于Jev 范式决策模型，构建智能工单分诊助手.md",
         "cases/jev/agentcore-ticket-triage",
         { chapter: "jev", part: part.title },
       ),
       page(
-        "06-case-study/Jev 专题/Jev 模型智能路由实践.md",
+        "06-case-study/决策模型专题/Jev 模型智能路由实践.md",
         "cases/jev/hiroute",
         { chapter: "jev", part: part.title },
       ),
       page(
-        "06-case-study/Jev 专题/用决策模型替代传统生成式 LLM-as-a-Judge 做自动化评测与决策.md",
+        "06-case-study/决策模型专题/用决策模型替代传统生成式 LLM-as-a-Judge 做自动化评测与决策.md",
         "cases/jev/decision-model-evals",
         { chapter: "jev", part: part.title },
       ),
+      page(
+        "06-case-study/决策模型专题/从生成到决策：AgenticOps决策模型的能力实测.md",
+        "cases/jev/agenticops-decision-models",
+        { chapter: "jev", part: part.title },
+      ),
     ];
-    topic.sourceDirectory = "06-case-study/Jev 专题";
+    topic.sourceDirectory = "06-case-study/决策模型专题";
     part.pages.push(topic);
     readingOrder.push(topic, ...topic.children);
 

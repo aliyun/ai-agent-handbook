@@ -3,6 +3,55 @@ import { readdirSync } from "node:fs";
 import path from "node:path";
 import { pages, parts, root, readSource, resolveBookLink } from "../.vitepress/book.mjs";
 
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`AgenticOps decision models at ${width}px in ${theme} theme`, async ({ page }) => {
+      const title = "从生成到决策：AgenticOps决策模型的能力实测";
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto("cases/jev/");
+      await expect(page.locator(".vp-doc h1")).toHaveText(/决策模型专题：结构化决策的实践/);
+      const topicLink = page.locator('.vp-doc a[href$="agenticops-decision-models.html"]');
+      await expect(topicLink).toContainText(title);
+      await topicLink.click();
+      await expect(page).toHaveURL(/cases\/jev\/agenticops-decision-models\.html$/);
+      const article = page.locator(".vp-doc");
+      await expect(article.locator("h1")).toContainText(title);
+      await expect(article.locator("h2")).toHaveCount(6);
+      await expect(article.locator("h3")).toHaveCount(17);
+      await expect(article.locator("h4")).toHaveCount(26);
+      await expect(article.locator("img")).toHaveCount(26);
+      for (const [index, image] of (await article.locator("img").all()).entries()) {
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+        const number = String(index + 1).padStart(2, "0");
+        const extension = index === 3 ? "gif" : index >= 24 ? "avif" : "png";
+        await expect(image).toHaveAttribute("src", new RegExp(`agenticops-decision-${number}\\.[\\w-]+\\.${extension}$`));
+      }
+      await expect(article.locator("table")).toHaveCount(3);
+      await expect(article.locator("table tbody tr")).toHaveCount(17);
+      await expect(article.locator("table td, table th")).toHaveCount(80);
+      await expect(article.locator("table br")).toHaveCount(6);
+      await expect(article.locator(".custom-block.tip")).toHaveCount(11);
+      await expect(article.locator(".custom-block-title").first()).toHaveText("Takeaway｜把任务拆细，模型才选得准。");
+      await expect(article).not.toContainText("**");
+      await expect(article).not.toContainText(":::");
+      await expect(article.locator('a[href*="taobao.net"], a[href*="alidocs.dingtalk.com"], img[src*="Signature="]')).toHaveCount(0);
+      await expect(article).toContainText("团队EAS模型服务接入指南（含Pilot、r9、27B、StartLux-style C）（内部文档）");
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.screenshot({ path: `test-results/decision-models-top-${width}-${theme}.png` });
+      await article.locator("table").nth(1).scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/decision-models-table-${width}-${theme}.png` });
+      await article.locator(".custom-block.tip").first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/decision-models-takeaway-${width}-${theme}.png` });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
 test("runtime repository order and stable source mappings", () => {
   const run = parts.find(part => part.id === "run")!;
   const entries = readdirSync(path.join(root, run.dir), { withFileTypes: true })

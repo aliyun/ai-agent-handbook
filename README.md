@@ -65,7 +65,7 @@
 | [运行篇](./03-run/) | `03-run/` | 第 07–12 章 | 从单 Agent 稳定运行扩展到异步、多 Agent 与分布式通信。 |
 | [治理篇](./04-governance/) | `04-governance/` | 第 13–16 章 | 让运行可见、行为有边界、资产可管理、上线前可验证。 |
 | [调优篇](./05-optimization/) | `05-optimization/` | 第 17–24 章 | 从模型与 Agent 两条主线构建持续优化闭环。 |
-| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章、Jev 专题、Personal Agent 专题、FDE 专题 | 企业实践、垂直场景、Agent Infra 前沿探索、结构化决策、Personal Agent 观察与 FDE 工程实践。 |
+| [实践篇](./06-case-study/) | `06-case-study/` | 第 25–29 章、决策模型专题、Personal Agent 专题、FDE 专题 | 企业实践、垂直场景、Agent Infra 前沿探索、结构化决策、Personal Agent 观察与 FDE 工程实践。 |
 | [总结与展望篇](./07-conclusion/) | `07-conclusion/` | 第 30 章 | 从 Agentic Application 走向 Agentic OS。 |
 
 ## 4. 下一步规划
