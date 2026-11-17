@@ -2,9 +2,9 @@
   "version": "v22",
   "files": {
     "index.html": {
-      "sourceSHA256": "3991d1b62a44245d101d7b7a35ee8c0aff393b042d563cc25f8cb099420ad77e",
-      "publishedSHA256": "40380476c0ce545810359c2b4047cdd5318cb608010e1193d8d70c0bad46f2b7",
-      "bytes": 29017
+      "sourceSHA256": "40380476c0ce545810359c2b4047cdd5318cb608010e1193d8d70c0bad46f2b7",
+      "publishedSHA256": "b689fd2d9479c87648f729841dae1f985db4ed0cfe01b9f3e5002f95069a7b4e",
+      "bytes": 29358
     },
     "lighthouse.html": {
       "sourceSHA256": "cdcfbdd108b77f824dd94bba26cd9571fad03fbd4569bd37376efaf9a06e237e",
@@ -39,7 +39,7 @@
     "v19: unchanged original images/music and classic runtime scripts served as hash-named static assets; map exposes explicit loading/retry state and sends host readiness only after both visible images have loaded.",
     "v20: first-chapter host selection occurs before second-chapter WebGL loading; mobile first-chapter run button removed; coarse-pointer rendering capped at 1.5 DPR with bounded fixed-step catch-up for smoother steering; two cockpit pilot images and their runtime references removed.",
     "v21: map shell and controls become interactive without waiting for decorative images; first chapter starts after five critical images while remaining art loads in the background; first chapter loading mark no longer mirrors fallback text; second chapter WebGL initializes only when selected; coarse-pointer rendering uses a 1.25 DPR cap, two-step catch-up, and one camera collision solve per rendered frame.",
-    "v22: second chapter prepares shaders, shadows, the cockpit view and music before 开始探索 while a percentage progress bar shows loading; scene point lights render through a fixed light-slot pool so moving and turning no longer compile new GPU programs mid-play."
+    "v22: second chapter prepares shaders, shadows, the cockpit view and music before 开始探索 while a percentage progress bar shows loading; scene point lights render through a fixed light-slot pool so moving and turning no longer compile new GPU programs mid-play; the map header link now opens the GitHub repository in a new tab instead of returning to the handbook."
   ],
   "defaultView": "external",
   "targets": {

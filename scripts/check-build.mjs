@@ -145,6 +145,11 @@ assert.ok(gameRelease.changes.at(-1).startsWith("v22:") &&
 assert.ok(gameRuntime.includes("light-slot-") && gameRuntime.includes("compileAsync") &&
   gameRuntime.includes("divePct") && gameRuntime.includes("dataset.full"),
   "第二关运行时必须在开始前预热着色器并使用固定光源槽位");
+const mapPage = readFileSync(path.join(gameDir, "index.html"), "utf8");
+assert.ok(mapPage.includes('id="githubRepo" href="https://github.com/aliyun/ai-agent-handbook" target="_blank" rel="noopener"') &&
+  mapPage.includes('id="mobileGithubRepo" href="https://github.com/aliyun/ai-agent-handbook" target="_blank" rel="noopener"') &&
+  !mapPage.includes("返回手册"),
+  "地图右上角和手机提示栏必须链接到 GitHub 仓库并在新标签页打开");
 const seaPage = readFileSync(path.join(gameDir, "audit-sea.html"), "utf8");
 assert.ok(seaPage.includes('id="dive"') && seaPage.includes('role="progressbar"') && seaPage.includes('id="divePct"'),
   "第二关入口必须显示带百分比的装载进度条");

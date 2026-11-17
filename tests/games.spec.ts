@@ -64,13 +64,13 @@ for (const width of [1440, 390]) {
     await page.locator("#level-observe").click();
     await expect(page.locator("#playLink")).toHaveAttribute("href", "audit-sea.html?level=0");
     await page.screenshot({ path: `test-results/game-map-${width}.png` });
-    const home = page.locator(width === 390 ? "#mobileHandbookHome" : "#handbookHome");
-    await expect(home).toBeVisible();
-    await expect(home).toHaveText("返回手册");
-    await expect(home).toHaveAttribute("target", "_top");
-    await home.click();
-    await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
-    await expect(page.locator(".hero-actions").getByRole("link", { name: /游戏闯关/ })).toBeVisible();
+    const repo = page.locator(width === 390 ? "#mobileGithubRepo" : "#githubRepo");
+    await expect(repo).toBeVisible();
+    await expect(repo).toHaveText("GitHub");
+    await expect(repo).toHaveAttribute("href", "https://github.com/aliyun/ai-agent-handbook");
+    await expect(repo).toHaveAttribute("target", "_blank");
+    await expect(repo).toHaveAttribute("rel", "noopener");
+    await expect(page.locator("#handbookHome, #mobileHandbookHome")).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 }
@@ -96,7 +96,7 @@ test("map controls do not wait for decorative images", async ({ page }) => {
   await expect(page.locator("#companionImg")).toHaveJSProperty("complete", true);
 });
 
-test("map inside the game host returns the whole window to the handbook home", async ({ page }) => {
+test("map inside the game host links to the GitHub repository in a new tab", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("games/audit-sea.html");
   await ready(page);
@@ -112,8 +112,10 @@ test("map inside the game host returns the whole window to the handbook home", a
   expect(await page.locator("body").innerText()).not.toContain("通透海景小样");
   await page.locator("#start").click();
   await openMap(page);
-  await page.frameLocator("#mapLayer").locator("#handbookHome").click();
-  await expect(page).toHaveURL(/\/ai-agent-handbook\/$/);
+  const repo = page.frameLocator("#mapLayer").locator("#githubRepo");
+  await expect(repo).toBeVisible();
+  await expect(repo).toHaveAttribute("href", "https://github.com/aliyun/ai-agent-handbook");
+  await expect(repo).toHaveAttribute("target", "_blank");
 });
 
 test("hosted v22 defaults to exterior and preserves both games across map navigation", async ({ page }) => {
