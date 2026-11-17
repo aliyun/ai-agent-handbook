@@ -52,6 +52,32 @@ for (const width of [1440, 390]) {
   }
 }
 
+test("optimization guide precedes chapter 17 with a stable reading route", () => {
+  const optimization = parts.find(part => part.id === "optimization")!;
+  const entries = readdirSync(path.join(root, optimization.dir), { withFileTypes: true })
+    .sort((a, b) => Number(b.isDirectory()) - Number(a.isDirectory()) || Buffer.compare(Buffer.from(a.name), Buffer.from(b.name)));
+  expect(entries[0].name).toBe("00 调优篇导读");
+  expect(entries[0].isDirectory()).toBe(true);
+  expect(entries[1].name).toBe("第 17 章　模型调优");
+  expect(optimization.pages.map(chapter => chapter.chapter)).toEqual([17, 18, 19, 20, 21, 22, 23, 24]);
+  expect(optimization.guide.source).toBe("05-optimization/00 调优篇导读/调优篇导读.md");
+  expect(optimization.guide.href).toBe("/optimization/");
+  expect(resolveBookLink("05-optimization/00 调优篇导读/", "README.md")).toBe("/optimization/");
+});
+
+for (const width of [1440, 390]) {
+  test(`optimization guide links to chapter 17 at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("optimization/");
+    await expect(page.locator(".vp-doc h1")).toContainText("调优篇导读");
+    await expect(page.locator(".vp-doc table tbody tr")).toHaveCount(3);
+    await expect(page.locator(".VPDocFooter a.next")).toHaveAttribute("href", /\/optimization\/chapter-17\.html$/);
+    await page.locator(".VPDocFooter a.next").click();
+    await expect(page.locator(".vp-doc h1")).toContainText("第 17 章");
+    await expect(page.locator(".VPDocFooter a.prev")).toHaveAttribute("href", /\/optimization\/$/);
+  });
+}
+
 test("runtime repository order and stable source mappings", () => {
   const run = parts.find(part => part.id === "run")!;
   const entries = readdirSync(path.join(root, run.dir), { withFileTypes: true })

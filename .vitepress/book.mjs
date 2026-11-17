@@ -46,6 +46,7 @@ export const parts = [
   {
     id: "optimization",
     dir: "05-optimization",
+    guideSource: "05-optimization/00 调优篇导读/调优篇导读.md",
     title: "调优篇",
     english: "Optimize",
     range: "17—24",
