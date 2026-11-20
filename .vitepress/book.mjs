@@ -86,6 +86,15 @@ const chapterGroups = [
     ],
   },
   {
+    chapter: 10,
+    landing: "website/chapter-10.md",
+    articles: [
+      ["overview", "01 Agent 异步任务与自动化流程综述"],
+      ["durable-agent", "02 Durable Agent 详解：如何让 Agent 在云端长期稳定运行"],
+      ["agentscope-durable", "03 AgentScope Durable 详解"],
+    ],
+  },
+  {
     chapter: 17,
     landing: "website/chapter-17.md",
     articles: [

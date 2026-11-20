@@ -31,7 +31,7 @@ export const legacyHeadingIds = {
   "/run/chapter-09.html": {
     "第-09-章-ai-网关与统一流量治理": "第-9-章-ai-网关与统一流量治理",
   },
-  "/run/chapter-10.html": {
+  "/run/chapter-10/overview.html": {
     "_10-6-本章小结": "本章小结",
   },
   "/run/chapter-11.html": {

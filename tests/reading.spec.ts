@@ -3,6 +3,98 @@ import { readdirSync } from "node:fs";
 import path from "node:path";
 import { pages, parts, root, readSource, resolveBookLink } from "../.vitepress/book.mjs";
 
+test("chapter 10 keeps its landing route and orders the three articles", () => {
+  const run = parts.find(part => part.id === "run")!;
+  const chapter = run.pages.find(page => page.chapter === 10)!;
+  expect(chapter.href).toBe("/run/chapter-10.html");
+  expect(chapter.title).toBe("第 10 章 Agent 异步任务与自动化流程");
+  expect(chapter.children.map(article => article.title)).toEqual([
+    "01 Agent 异步任务与自动化流程综述",
+    "02 Durable Agent 详解：如何让 Agent 在云端长期稳定运行",
+    "03 AgentScope Durable 详解",
+  ]);
+  expect(chapter.children.map(article => article.href)).toEqual([
+    "/run/chapter-10/overview.html",
+    "/run/chapter-10/durable-agent.html",
+    "/run/chapter-10/agentscope-durable.html",
+  ]);
+  expect(resolveBookLink(`${chapter.sourceDirectory}/`, "README.md")).toBe(chapter.href);
+  for (const article of chapter.children) {
+    expect(resolveBookLink(article.source, "README.md")).toBe(article.href);
+  }
+});
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`chapter 10 articles at ${width}px in ${theme} theme`, async ({ page }) => {
+      test.setTimeout(120_000);
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto("run/chapter-10.html");
+      await expect(page.locator(".vp-doc h1")).toContainText("第 10 章");
+      const links = page.locator(".case-index a");
+      await expect(links).toHaveCount(3);
+      for (const [index, slug] of ["overview", "durable-agent", "agentscope-durable"].entries()) {
+        await expect(links.nth(index)).toHaveAttribute("href", new RegExp(`/run/chapter-10/${slug}\\.html$`));
+        await expect(links.nth(index).locator("span")).toHaveText(String(index + 1).padStart(2, "0"));
+      }
+      await page.screenshot({ path: `test-results/chapter-10-index-${width}-${theme}.png` });
+      await page.locator(".VPDocFooter a.next").click();
+      const titles = ["01 Agent 异步任务与自动化流程综述", "02 Durable Agent 详解：如何让 Agent 在云端长期稳定运行", "03 AgentScope Durable 详解"];
+      const slugs = ["overview", "durable-agent", "agentscope-durable"];
+      for (const [index, title] of titles.entries()) {
+        const article = page.locator(".vp-doc");
+        await expect(article.locator("h1")).toHaveCount(1);
+        await expect(article.locator("h1")).toContainText(title);
+        await expect(article.locator("img")).toHaveCount([4, 6, 4][index]);
+        for (const image of await article.locator("img").all()) {
+          await image.scrollIntoViewIfNeeded();
+          await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+        }
+        if (index > 0) {
+          await expect(article.locator("h2")).toHaveCount(index === 1 ? 4 : 5);
+          await expect(article.locator("h2 em")).toHaveCount(index === 1 ? 8 : 5);
+          await expect(article.locator("h3")).toHaveCount(index === 1 ? 22 : 14);
+          await expect(article.locator("table")).toHaveCount(index === 1 ? 7 : 1);
+          await expect(article.locator("table tr")).toHaveCount(index === 1 ? 40 : 6);
+          await expect(article.locator("table td, table th")).toHaveCount(index === 1 ? 120 : 12);
+          await expect(article.locator("pre")).toHaveCount(index === 1 ? 8 : 10);
+          await expect(article.locator("li").filter({ hasText: /^\s*$/ })).toHaveCount(0);
+          await expect(article).not.toContainText("**");
+          await expect(article).not.toContainText("Cloud Native");
+          await expect(article.locator(`a[href="https://mp.weixin.qq.com/s/${index === 1 ? 'z8JHkCyOVVKrXpKH-vy6tw' : 'iDpIiF4UNAvUEq1KV1NuLw'}"]`)).toHaveCount(1);
+          await article.locator("table").first().scrollIntoViewIfNeeded();
+          await page.screenshot({ path: `test-results/chapter-10-${slugs[index]}-table-${width}-${theme}.png` });
+          await article.locator("pre").first().scrollIntoViewIfNeeded();
+          await page.screenshot({ path: `test-results/chapter-10-${slugs[index]}-code-${width}-${theme}.png` });
+          await article.locator("img").first().scrollIntoViewIfNeeded();
+          await page.screenshot({ path: `test-results/chapter-10-${slugs[index]}-figure-${width}-${theme}.png` });
+        }
+        await article.locator("h1").scrollIntoViewIfNeeded();
+        await page.screenshot({ path: `test-results/chapter-10-${slugs[index]}-top-${width}-${theme}.png` });
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        const next = index < 2 ? `/run/chapter-10/${slugs[index + 1]}.html` : "/run/chapter-11.html";
+        await expect(page.locator(".VPDocFooter a.next")).toHaveAttribute("href", new RegExp(`${next.replace(/\./g, "\\.")}$`));
+        await page.locator(".VPDocFooter a.next").click();
+      }
+      await expect(page.locator(".vp-doc h1")).toContainText("第 11 章");
+      await expect(page.locator(".VPDocFooter a.prev")).toHaveAttribute("href", /\/run\/chapter-10\/agentscope-durable\.html$/);
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
+test("old chapter 10 section links open the relocated overview", async ({ page }) => {
+  for (const hash of ["_10-6-本章小结", "本章小结"]) {
+    await page.goto(`run/chapter-10.html#${encodeURIComponent(hash)}`);
+    await expect(page).toHaveURL(/\/run\/chapter-10\/overview\.html#/);
+    await expect(page.locator(".vp-doc h1")).toContainText("01 Agent 异步任务");
+    await expect(page.locator(`[id="${hash}"]`)).toHaveCount(1);
+  }
+});
+
 for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
     test(`AgenticOps decision models at ${width}px in ${theme} theme`, async ({ page }) => {
