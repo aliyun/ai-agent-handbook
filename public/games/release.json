@@ -1,9 +1,9 @@
 {
-  "version": "v22",
+  "version": "v23",
   "files": {
     "index.html": {
-      "sourceSHA256": "40380476c0ce545810359c2b4047cdd5318cb608010e1193d8d70c0bad46f2b7",
-      "publishedSHA256": "b689fd2d9479c87648f729841dae1f985db4ed0cfe01b9f3e5002f95069a7b4e",
+      "sourceSHA256": "4016138f8967e8e1a0586c7dd21ac418c2905c1d55f95d454f9ead030cffbb7e",
+      "publishedSHA256": "4016138f8967e8e1a0586c7dd21ac418c2905c1d55f95d454f9ead030cffbb7e",
       "bytes": 29358
     },
     "lighthouse.html": {
@@ -12,9 +12,14 @@
       "bytes": 11850
     },
     "audit-sea.html": {
-      "sourceSHA256": "c61d9a44d2d2fc587f25976bce5b344a5b9e91915d0baad93bf4ded72184a1d2",
-      "publishedSHA256": "53a2062fdef5fad238780b0259df59c57486dd36b91c9609550eb8752d83ab46",
-      "bytes": 17604
+      "sourceSHA256": "dad21a05d1805cf1b5ed6d09e048db3d06520ec5529d62e890786f0babb6703f",
+      "publishedSHA256": "dad21a05d1805cf1b5ed6d09e048db3d06520ec5529d62e890786f0babb6703f",
+      "bytes": 17835
+    },
+    "echo-theater.html": {
+      "sourceSHA256": "b2b3d83f61f8438c911b813be627b2bc87c0511791a8bd54ae4b576ba968b847",
+      "publishedSHA256": "635dfcdd1e434ac54acd55f4fd7f9dfc88e9ed119fb34dbb2897e166b2ae6389",
+      "bytes": 13182
     }
   },
   "music": {
@@ -39,7 +44,8 @@
     "v19: unchanged original images/music and classic runtime scripts served as hash-named static assets; map exposes explicit loading/retry state and sends host readiness only after both visible images have loaded.",
     "v20: first-chapter host selection occurs before second-chapter WebGL loading; mobile first-chapter run button removed; coarse-pointer rendering capped at 1.5 DPR with bounded fixed-step catch-up for smoother steering; two cockpit pilot images and their runtime references removed.",
     "v21: map shell and controls become interactive without waiting for decorative images; first chapter starts after five critical images while remaining art loads in the background; first chapter loading mark no longer mirrors fallback text; second chapter WebGL initializes only when selected; coarse-pointer rendering uses a 1.25 DPR cap, two-step catch-up, and one camera collision solve per rendered frame.",
-    "v22: second chapter prepares shaders, shadows, the cockpit view and music before 开始探索 while a percentage progress bar shows loading; scene point lights render through a fixed light-slot pool so moving and turning no longer compile new GPU programs mid-play; the map header link now opens the GitHub repository in a new tab instead of returning to the handbook."
+    "v22: second chapter prepares shaders, shadows, the cockpit view and music before 开始探索 while a percentage progress bar shows loading; scene point lights render through a fixed light-slot pool so moving and turning no longer compile new GPU programs mid-play; the map header link now opens the GitHub repository in a new tab instead of returning to the handbook.",
+    "v23: third chapter 回声剧场 opens as Loopie · 吃出一片海, a single-player eat-and-grow Canvas 2D game with a fixed power table, a 300-power success dialog and its own original looping music; it runs in a third host layer so the map and the first two chapters keep their state, the map marks three chapters playable with a third-chapter guide, and its sixteen bitmaps load as hash-named static assets (the official Loopie image is reused unchanged)."
   ],
   "defaultView": "external",
   "targets": {
@@ -48,10 +54,10 @@
   },
   "playableChapters": [
     1,
-    2
+    2,
+    3
   ],
   "developmentChapters": [
-    3,
     4,
     5
   ],
@@ -71,6 +77,16 @@
       "bytes": 10028,
       "kind": "image"
     },
+    "assets/0cae8e6bb5274b8f20b46e76.webp": {
+      "publishedSHA256": "0cae8e6bb5274b8f20b46e76d3efcb3148f51369d588cd6b9a436ad3644b1cd4",
+      "bytes": 11468,
+      "kind": "image"
+    },
+    "assets/11f8d6cc51827d5ba290e549.webp": {
+      "publishedSHA256": "11f8d6cc51827d5ba290e549841339059bbff9994619f6d6e306928126913e1e",
+      "bytes": 13990,
+      "kind": "image"
+    },
     "assets/1804b3043079d2b70bafdb02.webp": {
       "publishedSHA256": "1804b3043079d2b70bafdb028de8031becee0584025342ffc8d2ab49d1ebbccf",
       "bytes": 41398,
@@ -84,6 +100,11 @@
     "assets/2114652f6a8d4df46d562050.webp": {
       "publishedSHA256": "2114652f6a8d4df46d5620509ac4abaf64cfbda2d133e5e7c86ae27c20d6b0a8",
       "bytes": 11920,
+      "kind": "image"
+    },
+    "assets/2760d38697c820ecb58aeeb6.webp": {
+      "publishedSHA256": "2760d38697c820ecb58aeeb6b3ba607cbf7cb47be83c8d985056098c540f5bce",
+      "bytes": 15284,
       "kind": "image"
     },
     "assets/28a23f92cfc50736772fa276.mp3": {
@@ -104,6 +125,16 @@
     "assets/38e5ed54c5373a3ec204fa10.webp": {
       "publishedSHA256": "38e5ed54c5373a3ec204fa10467c4ae6d83f02974415b600deeb74ca67e5b9a8",
       "bytes": 4656,
+      "kind": "image"
+    },
+    "assets/39b1db80c753a889051fac0e.webp": {
+      "publishedSHA256": "39b1db80c753a889051fac0ead838bcf627c119deeb34ab3971ae0fba5bb6781",
+      "bytes": 146216,
+      "kind": "image"
+    },
+    "assets/3c65350609b8bb67a15f4e54.webp": {
+      "publishedSHA256": "3c65350609b8bb67a15f4e5483a3dc1326942c18fe96bd62daa1a0da298a5b99",
+      "bytes": 91944,
       "kind": "image"
     },
     "assets/3e011722dda1800e17eca2f3.webp": {
@@ -141,6 +172,11 @@
       "bytes": 119018,
       "kind": "image"
     },
+    "assets/55fb1f1ba32c195a7a83d228.webp": {
+      "publishedSHA256": "55fb1f1ba32c195a7a83d228485e72f875761075085289dad4940c47ce43850f",
+      "bytes": 41950,
+      "kind": "image"
+    },
     "assets/5a579d60fda6c99c79965ada.webp": {
       "publishedSHA256": "5a579d60fda6c99c79965adae1056ae15e90088c923b9f3ba9274d1c93a14e3f",
       "bytes": 199224,
@@ -171,9 +207,24 @@
       "bytes": 270370,
       "kind": "image"
     },
+    "assets/72a6f0a514530e1d447a6aa6.webp": {
+      "publishedSHA256": "72a6f0a514530e1d447a6aa67e241f0631dbf9372df155619a5111560a3193a1",
+      "bytes": 19566,
+      "kind": "image"
+    },
+    "assets/77e21d3ca55cc9d0d3dd50ad.webp": {
+      "publishedSHA256": "77e21d3ca55cc9d0d3dd50ad51ff11935deb9b100959919c488d0a702291c7ed",
+      "bytes": 21094,
+      "kind": "image"
+    },
     "assets/794472830a00b05d44d31c28.webp": {
       "publishedSHA256": "794472830a00b05d44d31c28a4436d719879694b0e216a3e3f15ef78c46b51e8",
       "bytes": 17584,
+      "kind": "image"
+    },
+    "assets/7c7aebd4a7404dfd4afaae53.webp": {
+      "publishedSHA256": "7c7aebd4a7404dfd4afaae5348b7e7a5269b99bd2b36bd47e0bdc23d80fa1516",
+      "bytes": 24132,
       "kind": "image"
     },
     "assets/8c16843c4110686ae4d9d419.webp": {
@@ -186,14 +237,29 @@
       "bytes": 68096,
       "kind": "image"
     },
+    "assets/92fc52a88a1521d8563d34a8.webp": {
+      "publishedSHA256": "92fc52a88a1521d8563d34a8ac66575b78ed02e07d3b311c4e51532622d490f7",
+      "bytes": 24452,
+      "kind": "image"
+    },
     "assets/971755e660e4102186ab53d0.webp": {
       "publishedSHA256": "971755e660e4102186ab53d0e9059603ab24b87504f86edd9c3b15023db33fca",
       "bytes": 53916,
       "kind": "image"
     },
+    "assets/9a4abd59b32d42fe67c7bf2c.webp": {
+      "publishedSHA256": "9a4abd59b32d42fe67c7bf2c32732ea7e2e7ba927673bc603cdd6c3b8742685c",
+      "bytes": 20206,
+      "kind": "image"
+    },
     "assets/aa348882e09ae460fb95f3ad.webp": {
       "publishedSHA256": "aa348882e09ae460fb95f3adb89e22b5606625d1facc90b9a8f5cb772b4de3e9",
       "bytes": 98140,
+      "kind": "image"
+    },
+    "assets/b20492f44c6141df9aefbd83.webp": {
+      "publishedSHA256": "b20492f44c6141df9aefbd832d8f6c7130dbe89184ce5cf353e0c346d3c3f3b3",
+      "bytes": 143422,
       "kind": "image"
     },
     "assets/bb9e68f41672486a78d65b7f.webp": {
@@ -204,6 +270,11 @@
     "assets/bedd05581d8578fbb68cb5d1.webp": {
       "publishedSHA256": "bedd05581d8578fbb68cb5d135629ddf824f8f923713d861b7dfb0b45737e901",
       "bytes": 15000,
+      "kind": "image"
+    },
+    "assets/c0173609109a9882b0cc4c48.webp": {
+      "publishedSHA256": "c0173609109a9882b0cc4c4829a30814c6e3fc583efea82aedfba89c1c94b3f1",
+      "bytes": 21978,
       "kind": "image"
     },
     "assets/c2ecda90d2e95b3949678823.webp": {
@@ -221,19 +292,24 @@
       "bytes": 89000,
       "kind": "image"
     },
-    "assets/dae33c96c737a74f9a26650a.js": {
-      "publishedSHA256": "dae33c96c737a74f9a26650a3c1bbb8c3e462b3d1daad3c1a3a3e8dc472c41ee",
-      "bytes": 13898,
-      "kind": "runtime"
-    },
     "assets/db9cdbf6864ad11b15e75d20.webp": {
       "publishedSHA256": "db9cdbf6864ad11b15e75d204329b5e49c4947d38a090cd92fdcc6faf851f7e4",
       "bytes": 33506,
       "kind": "image"
     },
-    "assets/ed544c977873bfa120d6fec1.js": {
-      "publishedSHA256": "ed544c977873bfa120d6fec12c6150698c5c953dbc4c5001b6505e01aff4be87",
-      "bytes": 669601,
+    "assets/e16b99cf9574e95415200b59.js": {
+      "publishedSHA256": "e16b99cf9574e95415200b5982c8ef22fff689f88960e1653b6daec31d154bd0",
+      "bytes": 15273,
+      "kind": "runtime"
+    },
+    "assets/e48d782696a51b7a3d68df26.webp": {
+      "publishedSHA256": "e48d782696a51b7a3d68df26bec6bbd63999b9462185060585bcf4b4e225fca6",
+      "bytes": 86556,
+      "kind": "image"
+    },
+    "assets/e50d3dc2e8bde400238e58be.js": {
+      "publishedSHA256": "e50d3dc2e8bde400238e58be7ae27230ac696afb0641c16a56e6f3d856f71195",
+      "bytes": 670585,
       "kind": "runtime"
     },
     "assets/e538b877c67776fea9ef9bca.webp": {
@@ -246,10 +322,28 @@
       "bytes": 293602,
       "kind": "image"
     },
+    "assets/ee1927ce897c41258f224da9.webp": {
+      "publishedSHA256": "ee1927ce897c41258f224da9f0b0a06e43c6d352ae3955c002d5d986d4bd296e",
+      "bytes": 23016,
+      "kind": "image"
+    },
+    "assets/f8e5e26daedc501dcc44fb48.js": {
+      "publishedSHA256": "f8e5e26daedc501dcc44fb48b88c702af16840891e2a7718b68050d706ce3ac1",
+      "bytes": 30203,
+      "kind": "runtime"
+    },
     "assets/fa4520bd5be2c859e8910a2c.webp": {
       "publishedSHA256": "fa4520bd5be2c859e8910a2cbc402b66ceaa3bc543bf2cf969943c72e6196920",
       "bytes": 33310,
       "kind": "image"
     }
+  },
+  "thirdChapter": {
+    "entry": "echo-theater.html",
+    "host": "audit-sea.html?level=2",
+    "players": 1,
+    "successPower": 300,
+    "music": "original synthesized loop generated in the browser; no external audio file",
+    "loopie": "assets/4757b05faeef6963ef422b48.webp"
   }
 }

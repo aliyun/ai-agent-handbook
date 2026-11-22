@@ -12,7 +12,7 @@ const $ = id => document.getElementById(id);
 const DATA = window.__SEA_ASSETS;
 const TEST = new URLSearchParams(location.search).has('test');
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const INITIAL_LEVEL = new URLSearchParams(location.search).get('level') === '0' ? 0 : 1;
+const INITIAL_LEVEL = ({'0':0,'2':2})[new URLSearchParams(location.search).get('level')] ?? 1;
 const COARSE_POINTER = matchMedia('(pointer: coarse)').matches;
 const MAX_RENDER_DPR = COARSE_POINTER ? 1.25 : 2;
 const MAX_FRAME_STEPS = COARSE_POINTER ? 2 : 4;
@@ -25,7 +25,7 @@ const camera = new THREE.PerspectiveCamera(57, innerWidth / innerHeight, .2, 420
 const TOTALS={pearl:50,shell:20};
 const TARGETS={pearl:20,shell:12};
 let gateUnlocked=false,gatePassed=false,gateCurtain;
-let activeLevel=INITIAL_LEVEL,firstReady=false,firstStarted=false,firstQueuedPlay=false;
+let activeLevel=INITIAL_LEVEL,firstReady=false,firstStarted=false,firstQueuedPlay=false,thirdReady=false,thirdStarted=false,thirdQueuedPlay=false;
 const keyOrder=new Map(),touchOrder=new Map();let inputSerial=0;
 // Bounds retained only for original collectible placement, NOT player movement.
 const SEA_BOUNDS={minX:-70,maxX:70,minZ:-134,maxZ:36};
@@ -688,7 +688,7 @@ function tone(kind){
 }
 function start(){if(!ready||started||activeLevel!==1)return;started=true;$('welcome').hidden=true;clearInput();showHint();$('sea').focus({preventScroll:true});last=performance.now();accumulator=0;initAudio();record('start');}
 function postMap(message){$('mapLayer').contentWindow?.postMessage({source:'loopie-audit',...message},'*');}
-function mapState(){return {type:'show',selected:activeLevel,labels:{0:firstStarted?'继续游戏':'开始游戏',1:started?'继续探索':'开始探索'}};}
+function mapState(){return {type:'show',selected:activeLevel,labels:{0:firstStarted?'继续游戏':'开始游戏',1:started?'继续探索':'开始探索',2:thirdStarted?'继续游戏':'开始游戏'}};}
 // The release build rewrites this local preview filename to index.html after bundling.
 function ensureMap(){if(!$('mapLayer').getAttribute('src'))$('mapLayer').src='loopie-world-map-audit-v16-preview.html?embed=1';}
 function postFirst(message){$('firstLayer').contentWindow?.postMessage({source:'loopie-host',...message},'*');}
@@ -703,27 +703,41 @@ function ensureFirst(play=false){
  if(!$('firstLayer').getAttribute('src'))$('firstLayer').src='lighthouse-platformer-audit-v16-preview.html?host=1';
  resumeFirst();
 }
+function postThird(message){$('thirdLayer').contentWindow?.postMessage({source:'loopie-host',...message},'*');}
+function resumeThird(){
+ if(!thirdReady||activeLevel!==2||mapOpen||mapBusy)return;
+ const play=thirdQueuedPlay;thirdQueuedPlay=false;postThird({type:'resume',play});if(play)thirdStarted=true;
+ $('thirdLayer').focus({preventScroll:true});
+}
+function ensureThird(play=false){
+ thirdQueuedPlay=thirdQueuedPlay||play;
+ if(!$('thirdLayer').getAttribute('src'))$('thirdLayer').src='echo-theater.html?host=1';
+ resumeThird();
+}
 function activateLevel(level){
  activeLevel=level;$('shell').classList.toggle('first-active',level===0);
  $('firstLayer').hidden=level!==0;$('firstLayer').inert=level!==0||mapOpen||mapBusy;
  $('firstLayer').tabIndex=level===0?0:-1;$('firstLayer').setAttribute('aria-hidden',String(level!==0));
+ $('shell').classList.toggle('third-active',level===2);
+ $('thirdLayer').hidden=level!==2;$('thirdLayer').inert=level!==2||mapOpen||mapBusy;
+ $('thirdLayer').tabIndex=level===2?0:-1;$('thirdLayer').setAttribute('aria-hidden',String(level!==2));
  $('world').inert=level!==1||mapOpen||mapBusy;
- if(level===1)postFirst({type:'pause'});updateMix();
+ if(level!==0)postFirst({type:'pause'});if(level!==2)postThird({type:'pause'});updateMix();
 }
 function openMap(){
  if((activeLevel===1&&!ready)||mapOpen||mapBusy)return;
- ensureMap();clearInput();if(activeLevel===0)postFirst({type:'pause'});
- mapOpen=mapBusy=true;$('world').inert=true;$('firstLayer').inert=true;$('mapLayer').inert=false;$('mapLayer').tabIndex=0;$('mapLayer').setAttribute('aria-hidden','false');postMap(mapState());
+ ensureMap();clearInput();if(activeLevel===0)postFirst({type:'pause'});if(activeLevel===2)postThird({type:'pause'});
+ mapOpen=mapBusy=true;$('world').inert=true;$('firstLayer').inert=true;$('thirdLayer').inert=true;$('mapLayer').inert=false;$('mapLayer').tabIndex=0;$('mapLayer').setAttribute('aria-hidden','false');postMap(mapState());
  $('shell').classList.add('map-open');updateMix();record('map-open',{level:activeLevel+1});clearTimeout(mapTimer);
  mapTimer=setTimeout(()=>{mapBusy=false;$('shell').classList.add('map-settled');$('mapLayer').focus();postMap({type:'focus'});},REDUCED?180:1250);
 }
 function closeMap(via,level=activeLevel){
- if(!mapOpen||mapBusy||!Number.isInteger(level)||level<0||level>1)return;
- mapBusy=true;activateLevel(level);if(level===0)ensureFirst(via==='play');else ensureSecond().then(()=>{if(via==='play'&&!started&&!mapOpen&&!mapBusy)start();}).catch(()=>{});
+ if(!mapOpen||mapBusy||!Number.isInteger(level)||level<0||level>2)return;
+ mapBusy=true;activateLevel(level);if(level===0)ensureFirst(via==='play');else if(level===2)ensureThird(via==='play');else ensureSecond().then(()=>{if(via==='play'&&!started&&!mapOpen&&!mapBusy)start();}).catch(()=>{});
  $('shell').classList.remove('map-open','map-settled');$('mapLayer').inert=true;$('mapLayer').tabIndex=-1;$('mapLayer').setAttribute('aria-hidden','true');$('shell').focus({preventScroll:true});clearTimeout(mapTimer);
  mapTimer=setTimeout(()=>{
   mapOpen=mapBusy=false;activateLevel(level);clearInput();last=performance.now();accumulator=0;
-  if(level===0)resumeFirst();else if(!started&&via==='play')start();else if(started)$('sea').focus({preventScroll:true});else $('start').focus({preventScroll:true});
+  if(level===0)resumeFirst();else if(level===2)resumeThird();else if(!started&&via==='play')start();else if(started)$('sea').focus({preventScroll:true});else $('start').focus({preventScroll:true});
   updateMix();record('map-close',{level:level+1});
  },REDUCED?180:1250);
 }
@@ -732,6 +746,11 @@ addEventListener('message',e=>{
  if(e.source===$('firstLayer').contentWindow&&d?.source==='loopie-first'){
   if(d.type==='ready'){firstReady=true;firstStarted=!!d.started;resumeFirst();}
   else if(d.type==='back'&&activeLevel===0){firstStarted=!!d.started;openMap();}
+  return;
+ }
+ if(e.source===$('thirdLayer').contentWindow&&d?.source==='loopie-third'){
+  if(d.type==='ready'){thirdReady=true;thirdStarted=!!d.started;resumeThird();}
+  else if(d.type==='back'&&activeLevel===2){thirdStarted=!!d.started;openMap();}
   return;
  }
  if(e.source!==$('mapLayer').contentWindow||d?.source!=='loopie-map')return;
@@ -753,8 +772,9 @@ document.querySelectorAll('[data-key]').forEach(b=>{b.addEventListener('pointerd
 addEventListener('visibilitychange',()=>{clearInput();last=performance.now();accumulator=0;if(document.hidden&&audio?.state==='running')audio.suspend();else if(!document.hidden&&sound&&started&&activeLevel===1)audio?.resume().catch(()=>{});});
 addEventListener('resize',()=>{if(ready)fit();});
 addEventListener('pointermove',e=>{if(started&&e.clientY>innerHeight-115){$('shell').classList.remove('hide-hint');clearTimeout(hintTimer);hintTimer=setTimeout(()=>$('shell').classList.add('hide-hint'),1800);}});
-function snapshot(){return {ready,started,paused,mapOpen,mapBusy,navigation:{level:activeLevel+1,firstReady,firstStarted},input:{keys:[...keys],touch:[...touchKeys.values()],turn:turnInput()},targets:{...TARGETS},gate:{unlocked:gateUnlocked,passed:gatePassed,position:gatePosition.toArray()},time:simTime,player:{x:player.x+voyage.x*220,y:player.y,z:player.z+voyage.z*260},localPlayer:player.toArray(),voyage:{...voyage},ocean:{period:{...OCEAN_PERIOD},pool:oceanPool?.snapshot(),highLife:highSea?.snapshot(),peaks:PEAKS.map(p=>({...p,top:floorHeight(p.x,p.z)}))},velocity:{x:velocity.x,y:velocity.y,z:velocity.z},heading,region:regionAt(player).id,visited:[...visited],totals:{...TOTALS},bounds:{horizontal:"unbounded",surface:OCEAN_PERIOD.surface,maximumY:OCEAN_PERIOD.surface-2},reaction:{...reactionState(),pilotImage:false,visibleBubbles:pod?.userData.reactionBubbles.filter(b=>b.mesh.visible).length,glassOpacity:null},pod:{yaw:pod?.rotation.y,forward:pod?new V3(0,0,-1).applyQuaternion(pod.quaternion).toArray():null},camera:{x:camera.position.x+voyage.x*220,y:camera.position.y,z:camera.position.z+voyage.z*260,heading:cameraHeading,mode:cameraMode,fov:camera.fov,near:camera.near,direction:camera.getWorldDirection(new V3()).toArray(),eyeOffset:camera.position.clone().sub(player).toArray()},cockpit:cockpit?.snapshot(),exteriorAppearance:{opaqueRearHull:!!pod?.userData.rearHull&&!pod.userData.rearHull.material.transparent&&pod.userData.rearHull.material.opacity===1,pilotVisible:false,rearGlass:false},exteriorVisible:pod?.visible,counts:{...counts},taken:objects.filter(o=>o.taken).map(o=>o.index),collisions,floor:floorHeight(player.x,player.z),depth:Number($('depth').textContent),audio:{sound,status:audio?.state||'not-created',musicStarts,music:!!musicSource},render:{profile:COARSE_POINTER?'mobile':'desktop',maxPixelRatio:MAX_RENDER_DPR,maxFrameSteps:MAX_FRAME_STEPS,pixelRatio:renderer?.getPixelRatio(),width:$('sea').width,height:$('sea').height,calls:renderer?.info.render.calls,triangles:renderer?.info.render.triangles,geometries:renderer?.info.memory.geometries,textures:renderer?.info.memory.textures},events:events.slice(),wildlife:marineLife?.snapshot(),deepSea:deepSea?.snapshot(),clearSea:clearSea?.snapshot()};}
+function snapshot(){return {ready,started,paused,mapOpen,mapBusy,navigation:{level:activeLevel+1,firstReady,firstStarted,thirdReady,thirdStarted},input:{keys:[...keys],touch:[...touchKeys.values()],turn:turnInput()},targets:{...TARGETS},gate:{unlocked:gateUnlocked,passed:gatePassed,position:gatePosition.toArray()},time:simTime,player:{x:player.x+voyage.x*220,y:player.y,z:player.z+voyage.z*260},localPlayer:player.toArray(),voyage:{...voyage},ocean:{period:{...OCEAN_PERIOD},pool:oceanPool?.snapshot(),highLife:highSea?.snapshot(),peaks:PEAKS.map(p=>({...p,top:floorHeight(p.x,p.z)}))},velocity:{x:velocity.x,y:velocity.y,z:velocity.z},heading,region:regionAt(player).id,visited:[...visited],totals:{...TOTALS},bounds:{horizontal:"unbounded",surface:OCEAN_PERIOD.surface,maximumY:OCEAN_PERIOD.surface-2},reaction:{...reactionState(),pilotImage:false,visibleBubbles:pod?.userData.reactionBubbles.filter(b=>b.mesh.visible).length,glassOpacity:null},pod:{yaw:pod?.rotation.y,forward:pod?new V3(0,0,-1).applyQuaternion(pod.quaternion).toArray():null},camera:{x:camera.position.x+voyage.x*220,y:camera.position.y,z:camera.position.z+voyage.z*260,heading:cameraHeading,mode:cameraMode,fov:camera.fov,near:camera.near,direction:camera.getWorldDirection(new V3()).toArray(),eyeOffset:camera.position.clone().sub(player).toArray()},cockpit:cockpit?.snapshot(),exteriorAppearance:{opaqueRearHull:!!pod?.userData.rearHull&&!pod.userData.rearHull.material.transparent&&pod.userData.rearHull.material.opacity===1,pilotVisible:false,rearGlass:false},exteriorVisible:pod?.visible,counts:{...counts},taken:objects.filter(o=>o.taken).map(o=>o.index),collisions,floor:floorHeight(player.x,player.z),depth:Number($('depth').textContent),audio:{sound,status:audio?.state||'not-created',musicStarts,music:!!musicSource},render:{profile:COARSE_POINTER?'mobile':'desktop',maxPixelRatio:MAX_RENDER_DPR,maxFrameSteps:MAX_FRAME_STEPS,pixelRatio:renderer?.getPixelRatio(),width:$('sea').width,height:$('sea').height,calls:renderer?.info.render.calls,triangles:renderer?.info.render.triangles,geometries:renderer?.info.memory.geometries,textures:renderer?.info.memory.textures},events:events.slice(),wildlife:marineLife?.snapshot(),deepSea:deepSea?.snapshot(),clearSea:clearSea?.snapshot()};}
 if(INITIAL_LEVEL===0){activateLevel(0);ensureFirst(true);}
+if(INITIAL_LEVEL===2){activateLevel(2);ensureThird(true);}
 window.__auditSea={snapshot};
 if(TEST)Object.assign(window.__auditSea,{
  advance(seconds){for(let t=0;t<seconds-1e-6;t+=1/60)simulate(1/60);draw();return snapshot();},

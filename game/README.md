@@ -2,7 +2,7 @@
 
 [English](./README_EN.md) | [在线试玩](https://aliyun.github.io/ai-agent-handbook/games/)
 
-这是《AI Agent Handbook》里的开源网页游戏。游戏把 Agent 的观测、审计、评估、实验和优化做成五座海底岛屿，目前开放“迷雾灯塔”和“边界海关”两关，其余三关欢迎社区一起共建。
+这是《AI Agent Handbook》里的开源网页游戏。游戏把 Agent 的观测、审计、评估、实验和优化做成五座海底岛屿，目前开放“迷雾灯塔”“边界海关”和“回声剧场”三关，其余两关欢迎社区一起共建。
 
 ## 从哪里开始
 
@@ -20,7 +20,7 @@ npm run game:check
 npm test
 ```
 
-`game:check` 会重新构建游戏，并确认可读源码能够生成与当前线上 v22 完全一致的三个运行时。生成目录 `game/dist/` 只用于本地预览，不提交到 Git。
+`game:check` 会重新构建游戏，并确认可读源码能够生成与当前线上 v23 完全一致的四个运行时。生成目录 `game/dist/` 只用于本地预览，不提交到 Git。
 
 ## 目录结构
 
@@ -29,9 +29,12 @@ game/
 ├── src/
 │   ├── map.js              # 五关群岛地图与游戏说明
 │   ├── lighthouse.js       # 第一关：Canvas 2D 横版游戏
-│   └── sea/
-│       ├── space-v22.js    # 第二关入口：Three.js 立体海洋
-│       └── *.js            # 海域、驾驶舱、生物和地形模块
+│   ├── sea/
+│   │   ├── space-v22.js    # 第二关入口：Three.js 立体海洋，同时承载地图与各关切换
+│   │   └── *.js            # 海域、驾驶舱、生物和地形模块
+│   └── ocean/
+│       ├── game.js         # 第三关入口：Canvas 2D 海洋吞食游戏
+│       └── *.mjs           # 生态规则与原创循环音乐
 ├── scripts/
 │   ├── build.mjs           # 生成本地可运行预览
 │   └── check.mjs           # 源码—线上运行时一致性检查
@@ -40,11 +43,11 @@ game/
 public/games/               # GitHub Pages 当前发布产物与静态资源
 ```
 
-地图和第一关的 HTML/CSS 外壳位于 `public/games/*.html`；交互逻辑的可读源码位于 `game/src/`。第二关以 ES Modules 维护，由 esbuild 打包。除维护发布流程外，请不要直接修改 `public/games/assets/` 中的哈希运行文件。
+地图、第一关和第三关的 HTML/CSS 外壳位于 `public/games/*.html`；交互逻辑的可读源码位于 `game/src/`。第二关和第三关以 ES Modules 维护，由 esbuild 打包。除维护发布流程外，请不要直接修改 `public/games/assets/` 中的哈希运行文件。
 
 ## 可以贡献什么
 
-- 完成第三关“回声剧场”、第四关“双生实验岛”和第五关“生长花园”；
+- 完成第四关“双生实验岛”和第五关“生长花园”；
 - 增加关卡机制、收藏物、海域生物或无障碍支持；
 - 优化手机端操控、加载速度、渲染性能和低性能设备降级；
 - 修复地图、关卡切换、进度保留和浏览器兼容问题；
@@ -69,4 +72,4 @@ public/games/               # GitHub Pages 当前发布产物与静态资源
 - Apache License 2.0 不授予商标权。Alibaba Cloud、AgentLoop、Loopie 的名称、标识和角色形象仍属于相应权利人；复用、宣传或制作衍生品牌素材时，请另行确认授权。
 - 贡献者只能提交自己有权许可的代码和素材。引用第三方内容时，必须说明来源、许可证和必要的署名方式。
 
-如果只想借鉴实现，可以从 `map.js`、`lighthouse.js` 和 `sea/space-v22.js` 三个入口开始阅读。它们分别展示了地图宿主、Canvas 2D 关卡和 Three.js 3D 关卡的实现方式。
+如果只想借鉴实现，可以从 `map.js`、`lighthouse.js`、`sea/space-v22.js` 和 `ocean/game.js` 四个入口开始阅读。它们分别展示了地图、Canvas 2D 横版关卡、Three.js 3D 关卡（兼关卡宿主）和 Canvas 2D 吞食关卡的实现方式。

@@ -8,7 +8,7 @@ import { legacyHeadingIds } from "../.vitepress/markdown.mjs";
 import { levels } from "../challenges/levels.mjs";
 
 const checkedPages = [...pages, { href: "/challenges/" },
-  ...["/games/", "/games/lighthouse.html", "/games/audit-sea.html"].map(href => ({ href })), ...levels
+  ...["/games/", "/games/lighthouse.html", "/games/audit-sea.html", "/games/echo-theater.html"].map(href => ({ href })), ...levels
   .filter(level => level.status === "available")
   .map(level => ({ href: `/challenges/${level.id}/` }))];
 const base = process.env.SITE_BASE || "/ai-agent-handbook/";
@@ -88,10 +88,12 @@ for (const level of levels) {
 }
 const gameDir = path.join(output, "games");
 assert.deepEqual(readdirSync(gameDir).sort(),
-  ["assets", "audit-sea.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
-  "游戏发布三份轻量入口、静态素材目录、发布清单和第三方许可证");
+  ["assets", "audit-sea.html", "echo-theater.html", "index.html", "lighthouse.html", "release.json", "three.LICENSE.txt"].sort(),
+  "游戏发布四份轻量入口、静态素材目录、发布清单和第三方许可证");
 const gameRelease = JSON.parse(readFileSync(path.join(gameDir, "release.json"), "utf8"));
-assert.equal(gameRelease.version, "v22");
+assert.equal(gameRelease.version, "v23");
+assert.deepEqual(gameRelease.playableChapters, [1, 2, 3], "前三关开放");
+assert.deepEqual(gameRelease.developmentChapters, [4, 5], "后两关开发中");
 for (const [name, metadata] of Object.entries(gameRelease.files)) {
   const bytes = readFileSync(path.join(gameDir, name));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), metadata.publishedSHA256,
@@ -113,7 +115,7 @@ for (const [name, metadata] of Object.entries(gameRelease.assets)) {
 }
 assert.equal(gameRelease.assets[gameRelease.music.staticAsset].publishedSHA256, gameRelease.music.sha256,
   "两关必须继续使用原版原创音乐字节");
-for (const page of ["index.html", "audit-sea.html", "lighthouse.html"]) {
+for (const page of ["index.html", "audit-sea.html", "lighthouse.html", "echo-theater.html"]) {
   const html = readFileSync(path.join(gameDir, page), "utf8");
   assert.ok(Buffer.byteLength(html) < 65000, `游戏入口 HTML 必须保持轻量：${page}`);
   assert.ok(!/data:(image|audio)\//.test(html), `游戏图片和音频必须独立加载：${page}`);
@@ -138,9 +140,9 @@ assert.ok(gameRuntime.includes("setTimeout(()=>{status.hidden=true;document.docu
 assert.ok(gameRelease.changes.some(line => line.startsWith("v21:") &&
   line.includes("second chapter WebGL initializes only when selected")),
   "发布清单必须保留 v21 第二关按需初始化记录");
-assert.ok(gameRelease.changes.at(-1).startsWith("v22:") &&
-  gameRelease.changes.at(-1).includes("before 开始探索") &&
-  gameRelease.changes.at(-1).includes("fixed light-slot pool"),
+assert.ok(gameRelease.changes.some(line => line.startsWith("v22:") &&
+  line.includes("before 开始探索") &&
+  line.includes("fixed light-slot pool")),
   "v22 发布清单必须记录开始前预热和固定光源槽位");
 assert.ok(gameRuntime.includes("light-slot-") && gameRuntime.includes("compileAsync") &&
   gameRuntime.includes("divePct") && gameRuntime.includes("dataset.full"),
@@ -151,6 +153,18 @@ assert.ok(mapPage.includes('id="githubRepo" href="https://github.com/aliyun/ai-a
   !mapPage.includes("返回手册"),
   "地图右上角和手机提示栏必须链接到 GitHub 仓库并在新标签页打开");
 const seaPage = readFileSync(path.join(gameDir, "audit-sea.html"), "utf8");
+assert.ok(gameRelease.changes.at(-1).startsWith("v23:") && gameRelease.changes.at(-1).includes("third chapter"),
+  "v23 发布清单必须记录第三关上线");
+assert.ok(seaPage.includes('id="thirdLayer"') && gameRuntime.includes("echo-theater.html?host=1") &&
+  gameRuntime.includes("loopie-third"), "第三关必须由共享宿主作为独立图层加载，以保留地图和前两关进度");
+const oceanPage = readFileSync(path.join(gameDir, "echo-theater.html"), "utf8");
+assert.ok(oceanPage.includes('location.replace("audit-sea.html?level=2")') && oceanPage.includes("window.__OCEAN_ASSETS="),
+  "第三关直接访问应进入共享宿主，素材以独立文件加载");
+const oceanAssets = JSON.parse(oceanPage.match(/window\.__OCEAN_ASSETS=(\{[^<]+\});/)[1]);
+assert.equal(Object.keys(oceanAssets).length, 16, "第三关需要背景、贝壳、轮船、Loopie 和 12 种生物共 16 张位图");
+assert.equal(oceanAssets.loopie, "assets/4757b05faeef6963ef422b48.webp", "第三关必须复用未改动的官方 Loopie 图片");
+for (const asset of Object.values(oceanAssets)) assert.ok(gameRelease.assets[asset]?.kind === "image", `第三关素材未登记：${asset}`);
+assert.ok(!/plonky|multiplayer|双人/i.test(oceanPage + gameRuntime), "第三关只做单人模式");
 assert.ok(seaPage.includes('id="dive"') && seaPage.includes('role="progressbar"') && seaPage.includes('id="divePct"'),
   "第二关入口必须显示带百分比的装载进度条");
 assert.ok(!gameRuntime.includes("pilotIdle") && !gameRuntime.includes("pilotHi5"),

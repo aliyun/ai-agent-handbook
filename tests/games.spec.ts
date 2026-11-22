@@ -15,7 +15,7 @@ async function openMap(page: Page) {
     return s.mapOpen && !s.mapBusy;
   });
 }
-async function choose(page: Page, level: "observe" | "audit") {
+async function choose(page: Page, level: "observe" | "audit" | "evaluate") {
   const map = page.frameLocator("#mapLayer");
   await map.locator(`#level-${level}`).click();
   await map.locator("#playLink").click();
@@ -53,14 +53,18 @@ for (const width of [1440, 390]) {
     await expect(page.locator("#helpTabs button")).toHaveCount(5);
     for (const [i, id] of ["observe", "audit", "evaluate", "experiment", "optimize"].entries()) {
       await page.locator(`#help-${id}`).click();
-      await expect(page.locator("#helpChapterStatus")).toHaveText(i < 2 ? "已开放" : "开发中");
-      if (i >= 2) await expect(page.locator("#helpGameplay")).toContainText("玩法尚未开放");
+      await expect(page.locator("#helpChapterStatus")).toHaveText(i < 3 ? "已开放" : "开发中");
+      if (i >= 3) await expect(page.locator("#helpGameplay")).toContainText("玩法尚未开放");
+      else await expect(page.locator("#helpGameplay")).not.toContainText("玩法尚未开放");
       const d = await page.locator("#worldDialog").evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth }));
       expect(d.scroll).toBeLessThanOrEqual(d.client + 1);
     }
     await page.keyboard.press("Escape");
-    await page.locator("#level-evaluate").click();
+    await page.locator("#level-experiment").click();
     await expect(page.locator("#playLink")).toBeHidden();
+    await page.locator("#level-evaluate").click();
+    await expect(page.locator("#playLink")).toBeVisible();
+    await expect(page.locator("#playLink")).toHaveAttribute("href", "audit-sea.html?level=2");
     await page.locator("#level-observe").click();
     await expect(page.locator("#playLink")).toHaveAttribute("href", "audit-sea.html?level=0");
     await page.screenshot({ path: `test-results/game-map-${width}.png` });
@@ -209,6 +213,86 @@ test("direct first-chapter links load critical art without starting chapter two"
     releaseDeferred();
   }
 });
+
+test("third chapter Loopie eat-and-grow plays inside the host and keeps its round across the map", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", e => errors.push(e.message));
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("games/echo-theater.html", { waitUntil: "domcontentloaded" });
+  await expect(page).toHaveURL(/\/games\/audit-sea\.html\?level=2$/);
+  await expect(page.locator("#shell")).toHaveClass(/third-active/);
+  await expect(page.locator("#world")).toHaveCSS("visibility", "hidden");
+  await expect(page.locator("#thirdLayer")).toBeVisible();
+  await page.waitForFunction(() => (window as any).__auditSea.snapshot().navigation.thirdReady);
+  const third = page.frameLocator("#thirdLayer");
+  await expect(third.locator("#home")).toBeHidden();
+  await expect(third.locator("#scores")).toBeVisible();
+  await expect(third.locator("#power-0")).toHaveText("2");
+  await third.locator("#pause").click();
+  await expect(third.locator("#paused")).toBeVisible();
+  await third.locator("#return-map").click();
+  await page.waitForFunction(() => {
+    const s = (window as any).__auditSea.snapshot();
+    return s.mapOpen && !s.mapBusy && s.navigation.thirdStarted;
+  });
+  const map = page.frameLocator("#mapLayer");
+  await expect(map.locator("#playLink")).toContainText("继续游戏");
+  await expect(page.locator("#thirdLayer")).toHaveJSProperty("inert", true);
+  await choose(page, "evaluate");
+  await expect(third.locator("#paused")).toBeVisible();
+  await third.locator("#resume").click();
+  await expect(third.locator("#paused")).toBeHidden();
+  await third.locator("#pause").click();
+  await third.locator("#return-map").click();
+  await page.waitForFunction(() => (window as any).__auditSea.snapshot().mapOpen);
+  await choose(page, "audit");
+  await expect(page.locator("#thirdLayer")).toBeHidden();
+  await expect(page.locator("#world")).toHaveCSS("visibility", "visible");
+  expect((await snapshot(page)).navigation).toMatchObject({ level: 2, thirdStarted: true });
+  await page.screenshot({ path: "test-results/game-third-back-to-second.png" });
+  expect(errors).toEqual([]);
+});
+
+for (const size of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  test(`third chapter art and 300-point success dialog at ${size.width}px`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", e => errors.push(e.message));
+    await page.setViewportSize(size);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("games/echo-theater.html?test");
+    // The diagnostics hook exists before the ocean is built; wait for loading to finish.
+    await page.waitForFunction(() => {
+      try { return (window as any).__eatGrow.snapshot().screen === "home"; } catch { return false; }
+    });
+    const s = await page.evaluate(() => (window as any).__eatGrow.snapshot());
+    expect(s.hosted).toBe(false);
+    expect(Object.keys(s.assets).length).toBe(16);
+    for (const [key, a] of Object.entries(s.assets) as [string, { width: number }][])
+      expect(a.width, key).toBeGreaterThan(0);
+    expect(s.assets.background.width).toBeGreaterThan(1000);
+    await page.locator("#start").click();
+    await page.waitForFunction(() => (window as any).__eatGrow.snapshot().screen === "playing");
+    await page.screenshot({ path: `test-results/game-third-${size.width}.png` });
+    const won = await page.evaluate(() => {
+      const g = (window as any).__eatGrow;
+      g.clearFish();
+      const p = g.snapshot().players[0];
+      g.player(0, { power: 299 });
+      g.spawn({ species: "silver", x: p.x, y: p.y, speed: 0 });
+      g.step(0.3);
+      return g.snapshot();
+    });
+    expect(won.players[0].power).toBeGreaterThanOrEqual(300);
+    expect(won.celebrated).toBe(true);
+    await expect(page.locator("#success")).toBeVisible();
+    await expect(page.locator("#success-title")).toHaveText("闯关成功");
+    await page.screenshot({ path: `test-results/game-third-success-${size.width}.png` });
+    await page.locator("#success-continue").click();
+    await expect(page.locator("#success")).toBeHidden();
+    expect((await page.evaluate(() => (window as any).__eatGrow.snapshot())).screen).toBe("playing");
+    expect(errors).toEqual([]);
+  });
+}
 
 test("mobile sea limits render load and releases real touch steering", async ({ browser }) => {
   const context = await browser.newContext({

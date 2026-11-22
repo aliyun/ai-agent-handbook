@@ -11,7 +11,8 @@ const REGIONS=[
 ];
 const $=id=>document.getElementById(id);
 let selected=1;
-const PLAY_LABELS={0:'开始游戏',1:'开始探索'};
+const PLAYABLE=3;
+const PLAY_LABELS={0:'开始游戏',1:'开始探索',2:'开始游戏'};
 let reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 $('worldArt').src=ASSETS.scene;
 
@@ -36,21 +37,21 @@ function selectRegion(index,{scroll=true}={}){
 
  $('selectedTitle').replaceChildren(document.createTextNode(r.agent));const place=document.createElement('span');place.textContent=r.name;$('selectedTitle').appendChild(place);
  $('selectedDesc').textContent=r.scene;$('companionImg').src=ASSETS[r.sprite];$('companionImg').alt=r.alt;
- $('playLink').hidden=selected>1;$('stagePill').hidden=selected<2;
- if(selected<2){$('playLink').firstChild.textContent=PLAY_LABELS[selected];$('playLink').setAttribute('href',`audit-sea.html?level=${selected}`);}$('islandGlow').style.setProperty('--gx',r.gx+'%');$('islandGlow').style.setProperty('--gy',r.gy+'%');
+ $('playLink').hidden=selected>=PLAYABLE;$('stagePill').hidden=selected<PLAYABLE;
+ if(selected<PLAYABLE){$('playLink').firstChild.textContent=PLAY_LABELS[selected];$('playLink').setAttribute('href',`audit-sea.html?level=${selected}`);}$('islandGlow').style.setProperty('--gx',r.gx+'%');$('islandGlow').style.setProperty('--gy',r.gy+'%');
  
  if(scroll&&window.matchMedia('(max-width:760px)').matches){const viewport=$('mapViewport');const target=$('atlas').clientWidth*r.x/100-viewport.clientWidth/2;viewport.scrollTo({left:Math.max(0,target),behavior:reduced?'auto':'smooth'});}
 }
 
 
-const HELP_GAMEPLAY=[{"intro": "向右前进，跳过海沟，收集珍珠与贝壳，最后点亮迷雾灯塔。", "body": "<div class=\"help-columns\"><section><h3>怎么操作</h3><dl class=\"help-keys\"><dt>移动</dt><dd><kbd>←</kbd> <kbd>→</kbd> 或 A / D</dd><dt>跳跃</dt><dd><kbd>↑</kbd> / W / 空格，按久一点跳得更高</dd><dt>蹲下</dt><dd><kbd>↓</kbd> 或 S</dd><dt>奔跑</dt><dd>按住 Shift 或 X</dd><dt>返回地图</dt><dd><kbd>Esc</kbd>，再次按下或点“继续游戏”回到原处</dd><dt>其他操作</dt><dd>鼠标移到画面底部，可唤出暂停、重来和声音开关；触屏用屏幕按钮</dd></dl></section>\n<section><h3>怎么探索</h3><p><b>踩螃蟹：</b>从上方跳下踩它；从侧面碰到会受伤。</p><p><b>顶箱与成长：</b>从下方顶开箱子，吃到弹出的小鱼，Loopie 会长大。</p><p><b>进入沉船：</b>站到水管入口上，按 ↓ 进入船舱。收集贝壳后，从右侧出口返回海底。</p><p><b>听声音：</b>开始游戏后播放深海音乐；珍珠、贝壳、踩蟹与水管各有音效。声音开关同时控制音乐和音效。</p></section></div>"}, {"intro": "收集20颗珍珠与12枚贝壳后，气泡帘开放，从海关中间穿过即可通关。", "body": "<div class=\"help-columns\"><section><h3>如何航行</h3><dl class=\"help-keys\"><dt>↑ / W</dt><dd>前进</dd><dt>↓ / S</dt><dd>后退</dd><dt>← → / A D</dt><dd>左转、右转，潜水舱同步转向，镜头从后方跟随</dd><dt>空格 / Shift</dt><dd>上浮 / 下潜</dd><dt>C / 视角按钮</dt><dd>外部与驾驶舱视角切换，不重置位置和收藏</dd><dt>Esc</dt><dd>返回地图，再次进入时保留位置和收藏</dd></dl></section><section><h3>怎么探索</h3><p>从珊瑚入口出发，左侧穿越海草林，右侧下潜沉船峡谷。沿岩拱进入发光洞窟，再前往双塔海关。收藏物在不同高度，靠近才会收集。</p><p>海域共有 50 颗珍珠和 20 枚贝壳。沉船断裂处与洞窟可以游入，也可以上浮绕行。剩余收藏仍可继续寻找。</p><p>游戏默认外部追踪视角；可随时切换驾驶舱视角。触屏使用屏幕按钮；声音开关同时控制音乐与收集音效。</p></section></div>"}];
+const HELP_GAMEPLAY=[{"intro": "向右前进，跳过海沟，收集珍珠与贝壳，最后点亮迷雾灯塔。", "body": "<div class=\"help-columns\"><section><h3>怎么操作</h3><dl class=\"help-keys\"><dt>移动</dt><dd><kbd>←</kbd> <kbd>→</kbd> 或 A / D</dd><dt>跳跃</dt><dd><kbd>↑</kbd> / W / 空格，按久一点跳得更高</dd><dt>蹲下</dt><dd><kbd>↓</kbd> 或 S</dd><dt>奔跑</dt><dd>按住 Shift 或 X</dd><dt>返回地图</dt><dd><kbd>Esc</kbd>，再次按下或点“继续游戏”回到原处</dd><dt>其他操作</dt><dd>鼠标移到画面底部，可唤出暂停、重来和声音开关；触屏用屏幕按钮</dd></dl></section>\n<section><h3>怎么探索</h3><p><b>踩螃蟹：</b>从上方跳下踩它；从侧面碰到会受伤。</p><p><b>顶箱与成长：</b>从下方顶开箱子，吃到弹出的小鱼，Loopie 会长大。</p><p><b>进入沉船：</b>站到水管入口上，按 ↓ 进入船舱。收集贝壳后，从右侧出口返回海底。</p><p><b>听声音：</b>开始游戏后播放深海音乐；珍珠、贝壳、踩蟹与水管各有音效。声音开关同时控制音乐和音效。</p></section></div>"}, {"intro": "收集20颗珍珠与12枚贝壳后，气泡帘开放，从海关中间穿过即可通关。", "body": "<div class=\"help-columns\"><section><h3>如何航行</h3><dl class=\"help-keys\"><dt>↑ / W</dt><dd>前进</dd><dt>↓ / S</dt><dd>后退</dd><dt>← → / A D</dt><dd>左转、右转，潜水舱同步转向，镜头从后方跟随</dd><dt>空格 / Shift</dt><dd>上浮 / 下潜</dd><dt>C / 视角按钮</dt><dd>外部与驾驶舱视角切换，不重置位置和收藏</dd><dt>Esc</dt><dd>返回地图，再次进入时保留位置和收藏</dd></dl></section><section><h3>怎么探索</h3><p>从珊瑚入口出发，左侧穿越海草林，右侧下潜沉船峡谷。沿岩拱进入发光洞窟，再前往双塔海关。收藏物在不同高度，靠近才会收集。</p><p>海域共有 50 颗珍珠和 20 枚贝壳。沉船断裂处与洞窟可以游入，也可以上浮绕行。剩余收藏仍可继续寻找。</p><p>游戏默认外部追踪视角；可随时切换驾驶舱视角。触屏使用屏幕按钮；声音开关同时控制音乐与收集音效。</p></section></div>"},{"intro":"吃掉强弱分比 Loopie 低的海洋生物来成长，躲开更强的对手；强弱分达到 300 即闯关成功。","body":"<div class=\"help-columns\"><section><h3>怎么操作</h3><dl class=\"help-keys\"><dt>游动</dt><dd><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>、W A S D，或移动鼠标指引方向</dd><dt>触屏</dt><dd>拖动左下角摇杆，也可以按住海水拖动</dd><dt>暂停</dt><dd>P、Esc、Enter 或空格，也可点右上角“暂停”</dd><dt>返回地图</dt><dd>暂停后点“回到游戏主界面”，再次进入时可继续这一局</dd></dl></section><section><h3>怎么成长</h3><p><b>看强弱分：</b>每种生物都标着固定强弱分，绿色边框可以吃，橙色边框有危险；分数相同互相吃不掉。</p><p><b>吃了就涨：</b>吃掉生物会把它的奖励分加到 Loopie 身上，越强的生物奖励越高。</p><p><b>闯关成功：</b>强弱分达到 300 时弹出提示，可以结束游戏回到地图，也可以继续在这片海里玩。</p><p><b>小心被吃：</b>碰到强弱分比自己高的生物，本局就会结束，可以再来一局。</p></section></div>"}];
 let helpSelected=selected;
-REGIONS.forEach((r,i)=>{const b=document.createElement('button');b.type='button';b.id='help-'+r.id;b.setAttribute('aria-controls','helpGameplay');b.appendChild(document.createTextNode(r.name));const label=document.createElement('span');label.textContent='第'+(i+1)+'关 · '+(i<2?'已开放':'开发中');b.appendChild(label);b.addEventListener('click',()=>renderHelp(i));$('helpTabs').appendChild(b);});
+REGIONS.forEach((r,i)=>{const b=document.createElement('button');b.type='button';b.id='help-'+r.id;b.setAttribute('aria-controls','helpGameplay');b.appendChild(document.createTextNode(r.name));const label=document.createElement('span');label.textContent='第'+(i+1)+'关 · '+(i<PLAYABLE?'已开放':'开发中');b.appendChild(label);b.addEventListener('click',()=>renderHelp(i));$('helpTabs').appendChild(b);});
 function renderHelp(index){
  helpSelected=Math.max(0,Math.min(REGIONS.length-1,index));const r=REGIONS[helpSelected];
  document.querySelectorAll('#helpTabs button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===helpSelected)));
  $('helpChapterTitle').textContent='第'+(helpSelected+1)+'关 · '+r.name;
- $('helpChapterStatus').textContent=helpSelected<2?'已开放':'开发中';
+ $('helpChapterStatus').textContent=helpSelected<PLAYABLE?'已开放':'开发中';
  $('helpChapterScene').textContent=r.scene;
  $('helpChapterMeaning').textContent=r.meaning;$('helpChapterVisual').textContent=r.visual;
  const play=HELP_GAMEPLAY[helpSelected];
@@ -82,19 +83,20 @@ function postGame(m){window.parent.postMessage({source:'loopie-map',...m},'*');}
 function islandPoint(){const r=$('atlas').getBoundingClientRect(),g=REGIONS[selected];return {x:(r.left+r.width*g.gx/100)/innerWidth,y:(r.top+r.height*(g.gy+g.y)/200)/innerHeight};}
 if(EMBED){
  document.documentElement.classList.add('embed');
- $('playLink').addEventListener('click',ev=>{ev.preventDefault();if(selected===0||selected===1)postGame({type:'play',level:selected});});
+ $('playLink').addEventListener('click',ev=>{ev.preventDefault();if(selected<PLAYABLE)postGame({type:'play',level:selected});});
  // 游戏说明弹窗打开时，Esc 只关闭弹窗，不返回游戏
  document.addEventListener('keydown',ev=>{if(ev.key!=='Escape'||ev.repeat||document.querySelector('dialog[open]'))return;ev.preventDefault();postGame({type:'back',via:'esc'});},true);
  addEventListener('message',ev=>{if(ev.source!==window.parent||!ev.data||ev.data.source!=='loopie-audit')return;const d=ev.data;
   if(d.type==='show'){
-   const next=d.selected===0||d.selected===1?d.selected:selected;
+   const next=Number.isInteger(d.selected)&&d.selected>=0&&d.selected<PLAYABLE?d.selected:selected;
    if(d.labels&&typeof d.labels==='object'){
     if(['开始游戏','继续游戏'].includes(d.labels[0]))PLAY_LABELS[0]=d.labels[0];
     if(['开始探索','继续探索'].includes(d.labels[1]))PLAY_LABELS[1]=d.labels[1];
-   }else if(typeof d.label==='string'&&next<2){PLAY_LABELS[next]=d.label;}
+    if(['开始游戏','继续游戏'].includes(d.labels[2]))PLAY_LABELS[2]=d.labels[2];
+   }else if(typeof d.label==='string'&&next<PLAYABLE){PLAY_LABELS[next]=d.label;}
    document.querySelectorAll('dialog[open]').forEach(x=>x.close());
    selectRegion(next,{scroll:false});postGame({type:'island',island:islandPoint()});}
-  else if(d.type==='focus')(selected<2?$('playLink'):$('level-'+REGIONS[selected].id)).focus({preventScroll:true});});
+  else if(d.type==='focus')(selected<PLAYABLE?$('playLink'):$('level-'+REGIONS[selected].id)).focus({preventScroll:true});});
  addEventListener('resize',()=>postGame({type:'island',island:islandPoint()}));
  const sendReady=()=>postGame({type:'ready',island:islandPoint()});
  MAP_READY.then(sendReady);

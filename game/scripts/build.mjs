@@ -35,6 +35,7 @@ const pages = {
   "index.html": readFileSync(path.join(distDir, "index.html"), "utf8"),
   "lighthouse.html": readFileSync(path.join(distDir, "lighthouse.html"), "utf8"),
   "audit-sea.html": readFileSync(path.join(distDir, "audit-sea.html"), "utf8"),
+  "echo-theater.html": readFileSync(path.join(distDir, "echo-theater.html"), "utf8"),
 };
 const oldRuntimes = new Set(Object.values(pages).map(runtimeRef));
 
@@ -54,11 +55,21 @@ const seaRuntime = readFileSync(seaRuntimePath, "utf8")
   .replaceAll("loopie-world-map-audit-v16-preview.html", "index.html")
   .replaceAll("lighthouse-platformer-audit-v16-preview.html", "lighthouse.html");
 writeFileSync(seaRuntimePath, seaRuntime);
+await build({
+  entryPoints: [path.join(sourceDir, "ocean", "game.js")],
+  bundle: true,
+  minify: true,
+  format: "iife",
+  target: "chrome110",
+  outfile: path.join(distAssets, "ocean.js"),
+  logLevel: "silent",
+});
 
 const nextRuntimes = {
   "index.html": "assets/map.js",
   "lighthouse.html": "assets/lighthouse.js",
   "audit-sea.html": "assets/sea.js",
+  "echo-theater.html": "assets/ocean.js",
 };
 for (const [name, nextRuntime] of Object.entries(nextRuntimes)) {
   pages[name] = pages[name].replace(runtimeRef(pages[name]), nextRuntime);
@@ -96,6 +107,6 @@ writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 console.log(JSON.stringify({
   output: path.relative(root, distDir),
   pages: Object.keys(pages),
-  sourceFiles: readdirSync(sourceDir, { recursive: true }).filter(name => name.endsWith(".js")).length,
+  sourceFiles: readdirSync(sourceDir, { recursive: true }).filter(name => /\.m?js$/.test(name)).length,
   runtimes: nextRuntimes,
 }, null, 2));

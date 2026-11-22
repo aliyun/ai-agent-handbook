@@ -2,7 +2,7 @@
 
 [中文](./README.md) | [Play online](https://aliyun.github.io/ai-agent-handbook/games/)
 
-This is the open-source web game included in the AI Agent Handbook. It turns agent observability, auditing, evaluation, experimentation, and optimization into five underwater islands. The first two chapters, Misty Lighthouse and Boundary Customs, are playable today; the other three are open for community contributions.
+This is the open-source web game included in the AI Agent Handbook. It turns agent observability, auditing, evaluation, experimentation, and optimization into five underwater islands. The first three chapters, Misty Lighthouse, Boundary Customs, and Echo Theater, are playable today; the other two are open for community contributions.
 
 ## Quick start
 
@@ -20,7 +20,7 @@ npm run game:check
 npm test
 ```
 
-`game:check` rebuilds the game and verifies that the readable source reproduces all three runtimes from the published v22 release. `game/dist/` is generated for local preview and must not be committed.
+`game:check` rebuilds the game and verifies that the readable source reproduces all four runtimes from the published v23 release. `game/dist/` is generated for local preview and must not be committed.
 
 ## Source layout
 
@@ -29,9 +29,12 @@ game/
 ├── src/
 │   ├── map.js              # Five-island map and chapter guide
 │   ├── lighthouse.js       # Chapter 1: Canvas 2D platformer
-│   └── sea/
-│       ├── space-v22.js    # Chapter 2 entry: Three.js ocean
-│       └── *.js            # Ocean, cockpit, wildlife, and terrain modules
+│   ├── sea/
+│   │   ├── space-v22.js    # Chapter 2 entry: Three.js ocean; also hosts the map and chapter switching
+│   │   └── *.js            # Ocean, cockpit, wildlife, and terrain modules
+│   └── ocean/
+│       ├── game.js         # Chapter 3 entry: Canvas 2D eat-and-grow game
+│       └── *.mjs           # Ecology rules and original looping music
 ├── scripts/
 │   ├── build.mjs           # Build a runnable local preview
 │   └── check.mjs           # Verify source/runtime equivalence
@@ -40,11 +43,11 @@ game/
 public/games/               # Current GitHub Pages release and static assets
 ```
 
-The HTML/CSS shells for the map and Chapter 1 live in `public/games/*.html`; readable interaction logic lives in `game/src/`. Chapter 2 is maintained as ES Modules and bundled with esbuild. Do not edit hash-named runtime files in `public/games/assets/` directly unless you are maintaining the release pipeline.
+The HTML/CSS shells for the map, Chapter 1, and Chapter 3 live in `public/games/*.html`; readable interaction logic lives in `game/src/`. Chapters 2 and 3 are maintained as ES Modules and bundled with esbuild. Do not edit hash-named runtime files in `public/games/assets/` directly unless you are maintaining the release pipeline.
 
 ## Ways to contribute
 
-- Build Chapter 3 (Echo Theater), Chapter 4 (Twin Experiment Islands), or Chapter 5 (Growth Garden).
+- Build Chapter 4 (Twin Experiment Islands) or Chapter 5 (Growth Garden).
 - Add gameplay mechanics, collectibles, sea life, or accessibility improvements.
 - Improve mobile controls, loading, rendering performance, and low-end fallbacks.
 - Fix navigation, progress persistence, and browser compatibility.
@@ -69,4 +72,4 @@ Use [Issues](https://github.com/aliyun/ai-agent-handbook/issues) to discuss new 
 - Apache License 2.0 does not grant trademark rights. Alibaba Cloud, AgentLoop, and Loopie names, marks, and character artwork remain the property of their respective rights holders. Confirm separate permission before reusing them for promotion or derivative branding.
 - Contributors may submit only code and media they have the right to license. Third-party material must include its source, license, and required attribution.
 
-To study the implementation, start with `map.js`, `lighthouse.js`, and `sea/space-v22.js`. They show the map host, a Canvas 2D chapter, and a Three.js 3D chapter respectively.
+To study the implementation, start with `map.js`, `lighthouse.js`, `sea/space-v22.js`, and `ocean/game.js`. They show the map, a Canvas 2D platformer, a Three.js 3D chapter that also hosts chapter switching, and a Canvas 2D eat-and-grow chapter respectively.
