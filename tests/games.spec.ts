@@ -1,8 +1,9 @@
 import { test, expect, type Page } from "@playwright/test";
 
 // Headless CI renders the 3D chapter with software WebGL at about one frame per second,
-// and each frame advances at most 0.1s of game time. Keep generous, bounded waits.
-test.describe.configure({ timeout: 480_000 });
+// and each frame advances at most 0.1s of game time. Keep generous, bounded waits:
+// the hosted v22 navigation test alone needs about 8 minutes there.
+test.describe.configure({ timeout: 720_000 });
 
 const snapshot = (page: Page) => page.evaluate(() => (window as any).__auditSea.snapshot());
 async function ready(page: Page) {
