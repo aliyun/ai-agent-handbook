@@ -1,5 +1,5 @@
 {
-  "version": "v23",
+  "version": "v24",
   "files": {
     "index.html": {
       "sourceSHA256": "4016138f8967e8e1a0586c7dd21ac418c2905c1d55f95d454f9ead030cffbb7e",
@@ -12,14 +12,19 @@
       "bytes": 11850
     },
     "audit-sea.html": {
-      "sourceSHA256": "dad21a05d1805cf1b5ed6d09e048db3d06520ec5529d62e890786f0babb6703f",
-      "publishedSHA256": "dad21a05d1805cf1b5ed6d09e048db3d06520ec5529d62e890786f0babb6703f",
-      "bytes": 17835
+      "sourceSHA256": "c119ab506152eb0db11329fc796e829b439af4c42782ca44c06a4c7540836f06",
+      "publishedSHA256": "c119ab506152eb0db11329fc796e829b439af4c42782ca44c06a4c7540836f06",
+      "bytes": 1904
     },
     "echo-theater.html": {
       "sourceSHA256": "b2b3d83f61f8438c911b813be627b2bc87c0511791a8bd54ae4b576ba968b847",
       "publishedSHA256": "635dfcdd1e434ac54acd55f4fd7f9dfc88e9ed119fb34dbb2897e166b2ae6389",
       "bytes": 13182
+    },
+    "abyssal-sea.html": {
+      "sourceSHA256": "91b708d61b22d732075d2e3edb476863ca2cc74818d02e4fd7906a06def4205f",
+      "publishedSHA256": "91b708d61b22d732075d2e3edb476863ca2cc74818d02e4fd7906a06def4205f",
+      "bytes": 10895
     }
   },
   "music": {
@@ -31,7 +36,9 @@
   "runtime": {
     "three": "0.180.0",
     "license": "MIT",
-    "notice": "three.LICENSE.txt"
+    "notice": "three.LICENSE.txt",
+    "renderer": "native WebGPU",
+    "nativeNotice": "assets/99e4d3b9eb67d3bba1b7b333.txt"
   },
   "changes": [
     "Sibling navigation filenames adapted for /games/ hosting.",
@@ -45,7 +52,8 @@
     "v20: first-chapter host selection occurs before second-chapter WebGL loading; mobile first-chapter run button removed; coarse-pointer rendering capped at 1.5 DPR with bounded fixed-step catch-up for smoother steering; two cockpit pilot images and their runtime references removed.",
     "v21: map shell and controls become interactive without waiting for decorative images; first chapter starts after five critical images while remaining art loads in the background; first chapter loading mark no longer mirrors fallback text; second chapter WebGL initializes only when selected; coarse-pointer rendering uses a 1.25 DPR cap, two-step catch-up, and one camera collision solve per rendered frame.",
     "v22: second chapter prepares shaders, shadows, the cockpit view and music before 开始探索 while a percentage progress bar shows loading; scene point lights render through a fixed light-slot pool so moving and turning no longer compile new GPU programs mid-play; the map header link now opens the GitHub repository in a new tab instead of returning to the handbook.",
-    "v23: third chapter 回声剧场 opens as Loopie · 吃出一片海, a single-player eat-and-grow Canvas 2D game with a fixed power table, a 300-power success dialog and its own original looping music; it runs in a third host layer so the map and the first two chapters keep their state, the map marks three chapters playable with a third-chapter guide, and its sixteen bitmaps load as hash-named static assets (the official Loopie image is reused unchanged)."
+    "v23: third chapter 回声剧场 opens as Loopie · 吃出一片海, a single-player eat-and-grow Canvas 2D game with a fixed power table, a 300-power success dialog and its own original looping music; it runs in a third host layer so the map and the first two chapters keep their state, the map marks three chapters playable with a third-chapter guide, and its sixteen bitmaps load as hash-named static assets (the official Loopie image is reused unchanged).",
+    "v24: second chapter replaces WebGL with the pinned Abyssal Garden native WebGPU world, full water/caustics/volume/shadow pipeline and the approved castle, mist lighthouse and reef wreck in separate seas; preserves 20 pearls + 12 shells, visible locked gate, full-hull passage success, original music, exterior/cockpit views and touch controls; all chapters are lazy independent host layers, unsupported WebGPU can return to the map, and large runtime/images are external hash-named assets."
   ],
   "defaultView": "external",
   "targets": {
@@ -172,6 +180,11 @@
       "bytes": 119018,
       "kind": "image"
     },
+    "assets/542079654c03e67c9cc68598.js": {
+      "publishedSHA256": "542079654c03e67c9cc685985740d273b28fdd226d1acf5323b7e6ce3ea7da99",
+      "bytes": 877843,
+      "kind": "runtime"
+    },
     "assets/55fb1f1ba32c195a7a83d228.webp": {
       "publishedSHA256": "55fb1f1ba32c195a7a83d228485e72f875761075085289dad4940c47ce43850f",
       "bytes": 41950,
@@ -247,6 +260,11 @@
       "bytes": 53916,
       "kind": "image"
     },
+    "assets/99e4d3b9eb67d3bba1b7b333.txt": {
+      "publishedSHA256": "99e4d3b9eb67d3bba1b7b333ec95651683e8ce9babc870fa7a19bd117a5abaf9",
+      "bytes": 2305,
+      "kind": "license"
+    },
     "assets/9a4abd59b32d42fe67c7bf2c.webp": {
       "publishedSHA256": "9a4abd59b32d42fe67c7bf2c32732ea7e2e7ba927673bc603cdd6c3b8742685c",
       "bytes": 20206,
@@ -261,6 +279,11 @@
       "publishedSHA256": "b20492f44c6141df9aefbd832d8f6c7130dbe89184ce5cf353e0c346d3c3f3b3",
       "bytes": 143422,
       "kind": "image"
+    },
+    "assets/b3416a44f04274fec3cde4a0.js": {
+      "publishedSHA256": "b3416a44f04274fec3cde4a057cbc7f38c331c9496fd54fda413d2b125d38f38",
+      "bytes": 3132,
+      "kind": "runtime"
     },
     "assets/bb9e68f41672486a78d65b7f.webp": {
       "publishedSHA256": "bb9e68f41672486a78d65b7fd0940ee2879c48f716d2436ab5ee1777ed150147",
@@ -307,11 +330,6 @@
       "bytes": 86556,
       "kind": "image"
     },
-    "assets/e50d3dc2e8bde400238e58be.js": {
-      "publishedSHA256": "e50d3dc2e8bde400238e58be7ae27230ac696afb0641c16a56e6f3d856f71195",
-      "bytes": 670585,
-      "kind": "runtime"
-    },
     "assets/e538b877c67776fea9ef9bca.webp": {
       "publishedSHA256": "e538b877c67776fea9ef9bcab98eb2e4a5551229e383c37e9a91b2a5d3ad7fdf",
       "bytes": 23940,
@@ -345,5 +363,35 @@
     "successPower": 300,
     "music": "original synthesized loop generated in the browser; no external audio file",
     "loopie": "assets/4757b05faeef6963ef422b48.webp"
+  },
+  "secondChapter": {
+    "entry": "abyssal-sea.html",
+    "host": "audit-sea.html",
+    "renderer": "native WebGPU",
+    "upstream": "https://github.com/Noniv/abyssal-garden",
+    "commit": "a596354eff400d458bc2aeb9bdf5e0a9734b2bcf",
+    "landmarks": [
+      "castle",
+      "lighthouse",
+      "wreck"
+    ],
+    "targets": {
+      "pearl": 20,
+      "shell": 12
+    },
+    "completion": "full hull leaves the castle arch after both collection targets",
+    "lighting": {
+      "purpleScatter": [
+        0.22,
+        0.5,
+        0.66
+      ],
+      "exposure": 0.54,
+      "rays": 0.32,
+      "bloom": [
+        0.035,
+        0.015
+      ]
+    }
   }
 }

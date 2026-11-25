@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<title>Abyssal Garden</title>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=theme-color content=#03131c>
+<style>
+/* The class on <body> is the state of the page:
+   l = loading, m = menu, g = in the scene (g p while the mouse is captured), l e = failed to start */
+html { background: #03131c; }
+body {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; margin: 0; overflow: hidden;
+  background: radial-gradient(#0b3a4d, #03131c 70%);
+  font: 700 clamp(13px, .7vw + .9vh, 36px)/1.4 system-ui, sans-serif; color: #e8fbff;
+  -webkit-user-select: none; user-select: none;
+}
+/* a phone held upright gets the whole page turned on its side, so the scene is always landscape */
+@media (orientation: portrait) and (pointer: coarse) {
+  body { width: 100dvh; height: 100dvw; transform-origin: 0 0; transform: rotate(90deg) translateY(-100%); }
+}
+
+/* the scene: blurred and dimmed behind the menu, comes into focus when you dive */
+canvas {
+  position: absolute; width: 100%; height: 100%; touch-action: none; cursor: crosshair;
+  transition: filter 1s, transform 1s, opacity 2s;
+}
+body:not(.g) canvas { filter: blur(1vmax) brightness(.5); transform: scale(1.06); }
+.l canvas { opacity: 0; }
+
+/* menu: the loading bar and the buttons share one grid cell, so nothing jumps when they swap */
+#m {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: min(2.2em, 6vmin);
+  padding: 1em 1em 4.5em; text-align: center; background: radial-gradient(#03131c00 30%, #03131ccc);
+  transition: opacity .5s, visibility .5s;
+}
+.g #m, .m #l, .l #g { opacity: 0; visibility: hidden; }
+h1 {
+  margin: 0; font: 900 4.4em/1 system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase;
+  color: #0000; background: linear-gradient(#fff 25%, #7ff3ff 60%, #14a9c4);
+  -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 .06em .2em #000c);
+}
+p { margin: 0; }
+#a { display: grid; width: 27em; max-width: 100%; }
+#a > * { grid-area: 1/1; transition: opacity .8s, visibility .8s; }
+#s, #w, #q, #k, #h { font-size: .8em; letter-spacing: .12em; text-transform: uppercase; }
+#w { margin-top: 1.2em; color: #7ff3ff; text-wrap: balance; }
+
+/* loading bar */
+#p {
+  height: .5em; margin: .4em 0 1em; overflow: hidden; border-radius: 1em; background: #03131c;
+  box-shadow: 0 0 0 2px #7ff3ff80, 0 0 1.5em #14a9c4;
+}
+#b {
+  display: block; height: 100%; background: linear-gradient(90deg, #14a9c4, #9ff6ff);
+  transform: scaleX(0); transform-origin: 0; will-change: transform;
+}
+.e #p { visibility: hidden; }
+.e #s { font-size: 1.1em; letter-spacing: 0; text-transform: none; }
+
+/* buttons */
+button, a {
+  display: flex; align-items: center; justify-content: center; gap: .6em; padding: .8em 1.4em; border: 0;
+  border-radius: .5em; background: #fff; box-shadow: inset 0 -.2em #0003, 0 .3em 1em #0009;
+  font: 800 1em/1.2 system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
+  color: #03222d; cursor: pointer; transition: transform .12s, filter .12s;
+}
+button:hover, a:hover { transform: translateY(-.12em); filter: brightness(1.15); }
+button:active, a:active { transform: translateY(.1em); filter: brightness(.9); }
+:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+#g { display: grid; gap: min(1.2em, 3.5vmin); }
+#d {
+  padding: .9em; background: linear-gradient(#9ff6ff, #19c3d6); font-size: 1.3em;
+  box-shadow: inset 0 -.2em #0003, 0 0 2em #19c3d6b3;
+}
+
+/* GitHub and Ko-fi: always at the bottom of the menu, in their own colours */
+#f { position: absolute; left: 0; right: 0; bottom: 1.5em; display: flex; justify-content: center; gap: 1em; font-size: .8em; }
+a + a { background: #ff5e5b; color: #fff; }
+svg { width: 1.5em; height: 1.5em; fill: currentColor; }
+
+/* dark plates under the dive button: detail level, list of controls, touch hint */
+#q, #k, #h { padding: 1em 1.6em; border-radius: .7em; background: #03131cb3; }
+
+/* detail level: three buttons in a row, the current one lit */
+#q { display: flex; align-items: center; gap: .4em; padding: .4em; }
+#q span { flex: 1; color: #7ff3ff; }
+#q button { flex: 1.2; padding: .7em 0; background: none; box-shadow: none; color: #e8fbff; }
+#q button:hover { background: #7ff3ff33; }
+#q .on { background: linear-gradient(#9ff6ff, #19c3d6); box-shadow: inset 0 -.2em #0003; color: #03222d; pointer-events: none; }
+
+/* list of controls: two groups, key caps right-aligned against their labels */
+#k { display: flex; justify-content: center; gap: 2em; text-align: left; }
+#k p { display: grid; grid-template-columns: auto auto; align-content: start; align-items: center; gap: .55em .9em; }
+#k p + p { padding-left: 2em; border-left: 2px solid #7ff3ff40; }
+#k i { display: flex; justify-self: end; align-items: center; gap: .25em; font-style: normal; }
+#k b {
+  min-width: 1.1em; padding: .2em .5em; border-radius: .35em; background: #e8fbff;
+  box-shadow: inset 0 -.15em #0004; color: #03222d; text-align: center;
+}
+#h { display: none; }
+@media (pointer: coarse), (max-height: 30em) {
+  #k { display: none; }
+}
+@media (pointer: coarse) {
+  #h { display: block; }
+}
+
+/* in the scene: a small menu button (hidden while the mouse is captured, Esc does the same) and the stats line */
+#o {
+  position: absolute; top: .6em; right: .6em; display: none; padding: .3em .6em; background: #03222dd9;
+  box-shadow: inset 0 0 0 2px #7ff3ff, 0 .3em 1em #0009; font-size: 1.3em; color: #e8fbff; opacity: .8;
+}
+.g #o { display: flex; }
+.p #o { display: none; }
+#i {
+  position: absolute; top: 1em; left: 1.2em; margin: 0; font: .8em/1.6 ui-monospace, Consolas, monospace;
+  white-space: pre-wrap; text-shadow: 0 1px 4px #000; pointer-events: none;
+}
+</style>
+</head>
+<body class=l>
+<canvas id=c></canvas>
+<div id=m>
+  <h1>Abyssal Garden</h1>
+  <div id=a>
+    <div id=l><div id=p><i id=b></i></div><p id=s>Diving…</p><p id=w hidden>Use Google Chrome for optimal experience</p></div>
+    <div id=g>
+      <button id=d>Dive in</button>
+      <p id=q><span>Detail</span><button>Low</button><button>Medium</button><button>High</button></p>
+      <div id=k>
+        <p>
+          <i><b>W</b><b>A</b><b>S</b><b>D</b></i>Swim
+          <i><b>Q</b><b>E</b></i>Down / up
+          <i><b>Shift</b></i>Faster
+          <i><b>1</b>–<b>6</b></i>Viewpoints
+        </p>
+        <p>
+          <i><b>Esc</b></i>Menu
+          <i><b>M</b></i>Mute
+          <i><b>H</b></i>Stats
+        </p>
+      </div>
+      <p id=h>Hold to swim forward · slide to steer · second finger to go faster</p>
+    </div>
+  </div>
+  <p id=f>
+    <a href=https://github.com/Noniv/abyssal-garden target=_blank><svg viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>GitHub</a>
+    <a href=https://ko-fi.com/noniv target=_blank><svg viewBox="0 0 24 24"><path fill-rule=evenodd d="M2 5h16.5a4.5 4.5 0 0 1 0 9H17a6 6 0 0 1-6 5H8a6 6 0 0 1-6-6zM17 8v3h1.5a1.5 1.5 0 0 0 0-3zM9.5 15.5 5.9 12a2.2 2.2 0 0 1 3.6-2.5 2.2 2.2 0 0 1 3.6 2.5z"/></svg>Support</a>
+  </p>
+</div>
+<button id=o aria-label=Menu>≡</button>
+<pre id=i></pre>
+<script>
+/*SCRIPT*/
+</script>
+</body>
+</html>

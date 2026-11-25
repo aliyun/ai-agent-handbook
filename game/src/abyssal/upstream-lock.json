@@ -1,0 +1,16 @@
+{
+  "repository": "https://github.com/Noniv/abyssal-garden",
+  "commit": "a596354eff400d458bc2aeb9bdf5e0a9734b2bcf",
+  "license": "MIT",
+  "files": {
+    "quality.js": "3d0f5e35ad6c90f3168c0d58a8ba220a807d90e04c74a58c0853242034d7d6e5",
+    "math.js": "a792e5547d7f8011e39231e979b8abb592e1ad306fad67ed583af5aa0e549cae",
+    "shaders.js": "a4744f7b16a2c3930e5097175937e6556fd3d82b668fbcb457154981eec87b29",
+    "world.js": "7fc2821ecc95c4284a29fab3a6d6db77998be1872a65c2831de76ccb83719e73",
+    "main.js": "aac0fa8d0f90b1ba0f5240e62dacfcc77e713a990616072f220f95b273c03632",
+    "audio.js": "efd4feba3e36b2b5b7d3faf33a04f3c87df1f3999679e25185e297fd427076e7",
+    "template.html": "da94727198178595e2bb6f6f15e13aad48c4e7f05cf1f1594375aa94c354eedd",
+    "build.mjs": "00b0d1c5e4f9bf4e814f4cbea777bb6a61598cc5458d40bc08b2f30f8a990469",
+    "LICENSE": "b108a76735ab7cc0eab686fc3e85ca668bdb8866977093846d01bac5b6440453"
+  }
+}

@@ -16,6 +16,7 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         channel: process.env.PLAYWRIGHT_CHANNEL,
+        launchOptions: process.env.PLAYWRIGHT_WEBGPU ? { args: ['--use-angle=metal','--enable-gpu','--ignore-gpu-blocklist'] } : {},
       },
     },
   ],

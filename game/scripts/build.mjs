@@ -1,4 +1,5 @@
 import { build } from "esbuild";
+import { compileNative } from './native.mjs';
 import {
   cpSync,
   mkdirSync,
@@ -36,6 +37,7 @@ const pages = {
   "lighthouse.html": readFileSync(path.join(distDir, "lighthouse.html"), "utf8"),
   "audit-sea.html": readFileSync(path.join(distDir, "audit-sea.html"), "utf8"),
   "echo-theater.html": readFileSync(path.join(distDir, "echo-theater.html"), "utf8"),
+  "abyssal-sea.html": readFileSync(path.join(distDir, "abyssal-sea.html"), "utf8"),
 };
 const oldRuntimes = new Set(Object.values(pages).map(runtimeRef));
 
@@ -43,7 +45,7 @@ cpSync(path.join(sourceDir, "map.js"), path.join(distAssets, "map.js"));
 cpSync(path.join(sourceDir, "lighthouse.js"), path.join(distAssets, "lighthouse.js"));
 const seaRuntimePath = path.join(distAssets, "sea.js");
 await build({
-  entryPoints: [path.join(sourceDir, "sea", "space-v22.js")],
+  entryPoints: [path.join(sourceDir, "sea", "host.js")],
   bundle: true,
   minify: true,
   format: "iife",
@@ -65,11 +67,14 @@ await build({
   logLevel: "silent",
 });
 
+const native=await compileNative();
+writeFileSync(path.join(distAssets,'native.js'),native.code);
 const nextRuntimes = {
   "index.html": "assets/map.js",
   "lighthouse.html": "assets/lighthouse.js",
   "audit-sea.html": "assets/sea.js",
   "echo-theater.html": "assets/ocean.js",
+  "abyssal-sea.html": "assets/native.js",
 };
 for (const [name, nextRuntime] of Object.entries(nextRuntimes)) {
   pages[name] = pages[name].replace(runtimeRef(pages[name]), nextRuntime);

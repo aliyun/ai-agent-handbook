@@ -20,7 +20,9 @@ npm run game:check
 npm test
 ```
 
-`game:check` rebuilds the game and verifies that the readable source reproduces all four runtimes from the published v23 release. `game/dist/` is generated for local preview and must not be committed.
+`game:check` rebuilds the game and verifies that the readable source reproduces all five runtimes from the v24 release. `game/dist/` is generated for local preview and must not be committed. Chapter 2 requires WebGPU; desktop Chrome or Edge is recommended. Unsupported browsers can still return to the map and play the other chapters.
+
+After editing Chapter 2 sources, run `node game/scripts/publish.mjs` to rebuild the local release files under `public/games/` before running these checks. This does not push or deploy anything. On macOS, run `PLAYWRIGHT_WEBGPU=1 PLAYWRIGHT_CHANNEL=chrome npx playwright test tests/games.spec.ts --workers=1` for hardware-GPU navigation, completion, and simulated-touch tests. CI without a GPU verifies unsupported-device recovery and the other chapters, not real WebGPU rendering.
 
 ## Source layout
 
@@ -30,20 +32,27 @@ game/
 │   ├── map.js              # Five-island map and chapter guide
 │   ├── lighthouse.js       # Chapter 1: Canvas 2D platformer
 │   ├── sea/
-│   │   ├── space-v22.js    # Chapter 2 entry: Three.js ocean; also hosts the map and chapter switching
-│   │   └── *.js            # Ocean, cockpit, wildlife, and terrain modules
+│   │   ├── host.js         # Renderer-free host; lazy chapters with preserved progress
+│   │   └── space-v22.js    # Historical WebGL source; excluded from release builds
+│   ├── abyssal/
+│   │   ├── upstream/      # Pinned Abyssal Garden original source (MIT)
+│   │   ├── src/           # Native Chapter 2, submarine, landmarks, and collision
+│   │   ├── integrate.cjs  # Source integration; upstream files remain unchanged
+│   │   └── template.html  # Lightweight Chapter 2 shell
 │   └── ocean/
 │       ├── game.js         # Chapter 3 entry: Canvas 2D eat-and-grow game
 │       └── *.mjs           # Ecology rules and original looping music
 ├── scripts/
 │   ├── build.mjs           # Build a runnable local preview
+│   ├── native.mjs          # Verify pinned upstream and compile the WebGPU scene
+│   ├── publish.mjs         # Rebuild local Chapter 2 release and hash manifest
 │   └── check.mjs           # Verify source/runtime equivalence
 └── dist/                   # Generated locally; not committed
 
 public/games/               # Current GitHub Pages release and static assets
 ```
 
-The HTML/CSS shells for the map, Chapter 1, and Chapter 3 live in `public/games/*.html`; readable interaction logic lives in `game/src/`. Chapters 2 and 3 are maintained as ES Modules and bundled with esbuild. Do not edit hash-named runtime files in `public/games/assets/` directly unless you are maintaining the release pipeline.
+The HTML/CSS shells for the map, Chapter 1, and Chapter 3 live in `public/games/*.html`; readable interaction logic lives in `game/src/`. Chapter 2 uses the pinned Abyssal Garden native WebGPU pipeline, source-level integration, and esbuild; Three.js constructs added geometry but does not render. Chapter 3 is maintained as ES Modules and bundled with esbuild. Do not edit hash-named runtime files in `public/games/assets/` directly unless you are maintaining the release pipeline.
 
 ## Ways to contribute
 
@@ -68,8 +77,9 @@ Use [Issues](https://github.com/aliyun/ai-agent-handbook/issues) to discuss new 
 ## License and asset boundaries
 
 - Project code under `game/` follows the repository's [Apache License 2.0](https://github.com/aliyun/ai-agent-handbook/blob/main/LICENSE).
+- Chapter 2's upstream [Abyssal Garden](https://github.com/Noniv/abyssal-garden) uses the MIT License, Copyright (c) 2026 Maksymilian Dendura. The pinned commit and file hashes are in `src/abyssal/upstream-lock.json`; attribution is retained in original sources and the release runtime.
 - Three.js 0.180.0 uses the MIT License; the bundled notice is in [`public/games/three.LICENSE.txt`](../public/games/three.LICENSE.txt).
 - Apache License 2.0 does not grant trademark rights. Alibaba Cloud, AgentLoop, and Loopie names, marks, and character artwork remain the property of their respective rights holders. Confirm separate permission before reusing them for promotion or derivative branding.
 - Contributors may submit only code and media they have the right to license. Third-party material must include its source, license, and required attribution.
 
-To study the implementation, start with `map.js`, `lighthouse.js`, `sea/space-v22.js`, and `ocean/game.js`. They show the map, a Canvas 2D platformer, a Three.js 3D chapter that also hosts chapter switching, and a Canvas 2D eat-and-grow chapter respectively.
+To study the implementation, start with `map.js`, `lighthouse.js`, `sea/host.js`, `abyssal/src/game.js`, and `ocean/game.js`. They show the map, platformer, shared navigation, native WebGPU exploration, and Canvas 2D eat-and-grow game respectively.

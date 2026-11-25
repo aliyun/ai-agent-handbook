@@ -18,7 +18,7 @@ const runtimeRef = html => {
 };
 
 const publishedPages = Object.fromEntries(
-  ["index.html", "lighthouse.html", "audit-sea.html", "echo-theater.html"].map(name => [name, readFileSync(path.join(publicDir, name), "utf8")]),
+  ["index.html", "lighthouse.html", "audit-sea.html", "echo-theater.html", "abyssal-sea.html"].map(name => [name, readFileSync(path.join(publicDir, name), "utf8")]),
 );
 const publishedRuntimes = Object.fromEntries(
   Object.entries(publishedPages).map(([name, html]) => [name, runtimeRef(html)]),
@@ -26,22 +26,22 @@ const publishedRuntimes = Object.fromEntries(
 assert.deepEqual(
   readFileSync(path.join(sourceDir, "map.js")),
   readFileSync(path.join(publicDir, publishedRuntimes["index.html"])),
-  "地图源码应与当前线上 v23 运行时一致",
+  "地图源码应与当前线上 v24 运行时一致",
 );
 assert.deepEqual(
   readFileSync(path.join(sourceDir, "lighthouse.js")),
   readFileSync(path.join(publicDir, publishedRuntimes["lighthouse.html"])),
-  "第一关源码应与当前线上 v23 运行时一致",
+  "第一关源码应与当前线上 v24 运行时一致",
 );
 assert.deepEqual(
   readFileSync(path.join(distDir, "assets", "sea.js")),
   readFileSync(path.join(publicDir, publishedRuntimes["audit-sea.html"])),
-  "第二关源码重新打包后应与当前线上 v23 运行时一致",
+  "第二关源码重新打包后应与当前线上 v24 运行时一致",
 );
 assert.deepEqual(
   readFileSync(path.join(distDir, "assets", "ocean.js")),
   readFileSync(path.join(publicDir, publishedRuntimes["echo-theater.html"])),
-  "第三关源码重新打包后应与当前线上 v23 运行时一致",
+  "第三关源码重新打包后应与当前线上 v24 运行时一致",
 );
 
 new Function(readFileSync(path.join(sourceDir, "map.js"), "utf8"));
@@ -49,14 +49,14 @@ new Function(readFileSync(path.join(sourceDir, "lighthouse.js"), "utf8"));
 
 const manifest = JSON.parse(readFileSync(path.join(distDir, "release.json"), "utf8"));
 assert.equal(manifest.developmentBuild, true);
-assert.match(manifest.version, /^v23-source-preview$/);
+assert.match(manifest.version, /^v24-source-preview$/);
 for (const [name, metadata] of Object.entries({ ...manifest.files, ...manifest.assets })) {
   const file = path.join(distDir, name);
   assert.ok(existsSync(file), `构建产物缺少 ${name}`);
   const data = readFileSync(file);
   assert.equal(sha256(data), metadata.publishedSHA256, `${name} 哈希不一致`);
 }
-for (const name of ["index.html", "lighthouse.html", "audit-sea.html", "echo-theater.html"]) {
+for (const name of ["index.html", "lighthouse.html", "audit-sea.html", "echo-theater.html", "abyssal-sea.html"]) {
   const html = readFileSync(path.join(distDir, name), "utf8");
   const runtime = runtimeRef(html);
   assert.ok(existsSync(path.join(distDir, runtime)), `${name} 引用的运行时不存在`);
@@ -66,5 +66,7 @@ for (const name of readdirSync(sourceDir, { recursive: true }).filter(file => /\
   const text = readFileSync(path.join(sourceDir, name), "utf8");
   assert.doesNotMatch(text, /file:\/\/|\/Users\//, `${name} 不得包含本机路径`);
 }
-assert.match(readFileSync(path.join(distDir, "audit-sea.html"), "utf8"), /three\.js 0\.180\.0/);
-console.log("Game source checked: readable sources rebuild the published v23 runtimes exactly.");
+assert.deepEqual(readFileSync(path.join(distDir,'assets/native.js')),readFileSync(path.join(publicDir,publishedRuntimes['abyssal-sea.html'])),'原生 WebGPU 源码应重建相同发布运行时');
+assert.match(readFileSync(path.join(distDir,'assets/native.js'),'utf8'),/SPDX-License-Identifier: MIT/);
+assert.match(readFileSync(path.join(distDir,'abyssal-sea.html'),'utf8'),/WebGPU/);
+console.log("Game source checked: readable sources rebuild the published v24 runtimes exactly.");
