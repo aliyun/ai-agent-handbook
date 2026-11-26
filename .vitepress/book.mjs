@@ -127,6 +127,7 @@ const caseGroups = [
       ["kitta", "智能体：增强 Code Review"],
       ["patchpilot", "智能体：提升内核补丁"],
       ["aiops-agent-evaluation", "智能体：运维领域"],
+      ["customer-support", "智能体：解放日常答疑琐事"],
       ["agentic-soc-organization", "组织协作：Agentic SOC"],
       ["polardb-x", "组织协作：数据库领域"],
       ["cloud-communications", "组织协作：云通信领域"],
