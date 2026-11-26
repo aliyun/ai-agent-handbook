@@ -1,7 +1,5 @@
 # 智能体：解放日常答疑琐事，客服 Agent 的构建和调优之路
 
-本文已收录至开源项目 Alibaba AI Agent Handbook，更多实践可访问：https://github.com/aliyun/ai-agent-handbook
-
 拿到工单、翻 SOP、查日志、找代码，再把散落在几个系统里的信息串起来，写成一份能解释问题的答复。这是我们研发团队每天值班时要做的事，不仅耗时耗力，且较难产生复利，另外，工作重心是在产品的研发上。
 
 因此，我们基于 <strong>AgentCore 托管的 QwenPaw Agent</strong>，把这些排查经验和工具接到一起，构建一个客服 Agent，从而实现 CloudLens、CMS 1.0、CMS 2.0、告警、APM、云拨测、RUM 和探针8个诊断领域的技术支持工作。
