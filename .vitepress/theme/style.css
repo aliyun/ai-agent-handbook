@@ -96,6 +96,21 @@ html[data-reading-size="large"] {
 .VPDoc .vp-doc table {
   font-size: 0.9em;
 }
+.VPDoc .chapter-01-shapes-table {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.VPDoc .chapter-01-shapes-table table {
+  display: table;
+  width: 100%;
+  min-width: 1000px;
+  table-layout: fixed;
+  margin: 0;
+}
+.VPDoc .chapter-01-shapes-table:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
 .VPDoc .vp-doc blockquote {
   border-left: 3px solid var(--vp-c-brand-1);
   padding: 10px 20px;

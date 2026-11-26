@@ -17,6 +17,10 @@ for (const width of [1440, 390]) {
       await expect(doc.locator("h2,h3")).toHaveCount(17);
       await expect(doc.locator("table")).toHaveCount(5);
       const shapes = doc.locator("table").nth(1);
+      const shapeRegion = doc.locator(".chapter-01-shapes-table");
+      await expect(shapeRegion).toHaveAttribute("tabindex", "0");
+      expect(await shapeRegion.evaluate(el => el.scrollWidth > el.clientWidth)).toBe(true);
+      expect(await shapes.evaluate(el => el.getBoundingClientRect().width)).toBeGreaterThanOrEqual(1000);
       await expect(shapes.locator("tbody tr")).toHaveCount(6);
       await expect(shapes.locator("tbody tr").nth(4).locator("td").first()).toHaveText("Long-Horizon Agent");
       await expect(shapes.locator("tbody tr").nth(5).locator("td").first()).toHaveText("Multi-Agent");
@@ -26,6 +30,7 @@ for (const width of [1440, 390]) {
       await expect(doc).not.toContainText("概率性认知核心");
       const image = doc.locator("img");
       await expect(image).toHaveCount(1);
+      await image.scrollIntoViewIfNeeded();
       await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
       const aliases = Object.entries(legacyHeadingIds["/architecture/chapter-01.html"]);
       expect(aliases).toHaveLength(14);
