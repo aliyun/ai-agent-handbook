@@ -96,5 +96,5 @@ Thanks to everyone who has helped with architecture, writing, case studies, and 
 | Runtime | Qingjie Zhao, Shibo Li, Qingshan Lin, Xiaomeng Huang, Tianyi Zhang, Yuanxiao Zhao, Xiao Sun, Zhen Song, Qingda Hu, Zunfei Liu, Tong Zhu, Huafeng Yu, Xin Luo, Keqing Kong |
 | Governance | Changjun Xiao, Yang Zhou, Lei Zhang, Fang Wang, Haibin Zhang, Shuyi Cheng, Ziming Liu, Zihao Rao, Yi Ren, Yong Yang, Shuo Wang, Xin Ma, Yuxuan Liu, Yi Yang |
 | Optimization | Hanmeng Zhang, Shengrong Li, Yaning Wang, Jianyun Sun, Yunlei Ma, Zhen Wang, Qianyi Zheng, Hang Liu, Xin Chen, Kaisheng Gao |
-| Practice | Tao Yang, Yan Zhu, Ailin Yu, Jun Hu, Jian Jiang, Tianyi Zhang, Bin Zhao, Yuanhang Zhou, Tian Zheng, Yi Ren, Chungang Zhou |
+| Practice | Tao Yang, Yan Zhu, Ailin Yu, Jun Hu, Jian Jiang, Tianyi Zhang, Bin Zhao, Yuanhang Zhou, Tian Zheng, Yi Ren, Chungang Zhou, Honglei Liu |
 | Conclusion and Outlook | Yan Lin |
