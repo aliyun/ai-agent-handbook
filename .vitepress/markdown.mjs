@@ -1,10 +1,23 @@
 import { getPage, resolveBookLink } from "./book.mjs";
 
-// Keep previously published section links valid when editorial numbering changes.
+// Keep previously published section links valid when editorial wording or numbering changes.
 // Keys are stable public page URLs and the current generated heading IDs.
 export const legacyHeadingIds = {
   "/architecture/chapter-01.html": {
     "第-01-章-ai-原生应用的新阶段": "第-1-章-ai-原生应用的新阶段",
+    "_1-1-从生成内容到完成任务": "_1-1-从生成内容到完成任务-ai-原生应用的生产拐点",
+    "_1-1-2-coding-agent-为什么能说明这一变化": "_1-1-2-coding-agent-为什么构成拐点",
+    "_1-1-3-编程之外-其他任务也需要这些能力": "_1-1-3-从专用场景走向通用架构",
+    "_1-2-从-chat-rag-到-agentic-application-怎样选择应用形态": "_1-2-从-chat-rag-到-agentic-application-应用形态的演进",
+    "_1-2-1-新的形态不一定要替代旧的形态": "_1-2-1-应用形态不是一条简单的替代链",
+    "_1-2-3-什么时候需要长程智能体或多智能体": "_1-2-3-从单智能体到长程智能体与多智能体",
+    "_1-3-agentic-application-是什么-不是什么": "_1-3-agentic-application-的定义、边界与核心特征",
+    "_1-3-2-判断一个应用的六个方面": "_1-3-2-六个判定特征",
+    "_1-3-3-几个容易混淆的概念": "_1-3-3-概念边界",
+    "_1-4-从能演示到能稳定运行-怎样判断成熟度": "_1-4-从可演示到可运营-企业成熟度与升级判断",
+    "_1-4-1-不要只看产品名称": "_1-4-1-成熟度不由产品名称决定",
+    "_1-4-2-构建之前-先把几个问题想清楚": "_1-4-2-从成熟度走向架构决策",
+    "_1-4-3-多个-agent-一起运行-谁来统一管理": "_1-4-3-从管理软件到管理-agent-引入操作系统视角",
   },
   "/architecture/chapter-02.html": {
     "第-02-章-agentic-application-参考架构": "第-2-章-agentic-application-参考架构",

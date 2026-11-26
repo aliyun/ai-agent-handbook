@@ -2,6 +2,56 @@ import { test, expect } from "@playwright/test";
 import { readdirSync } from "node:fs";
 import path from "node:path";
 import { pages, parts, root, readSource, resolveBookLink } from "../.vitepress/book.mjs";
+import { legacyHeadingIds } from "../.vitepress/markdown.mjs";
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`chapter 01 plain-language text and old links at ${width}px in ${theme} theme`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.addInitScript(value => localStorage.setItem("vitepress-theme-appearance", value), theme);
+      await page.goto("architecture/chapter-01.html");
+      const doc = page.locator(".vp-doc");
+      await expect(doc.locator("h1")).toContainText("第 01 章");
+      await expect(doc.locator("h2,h3")).toHaveCount(17);
+      await expect(doc.locator("table")).toHaveCount(5);
+      const shapes = doc.locator("table").nth(1);
+      await expect(shapes.locator("tbody tr")).toHaveCount(6);
+      await expect(shapes.locator("tbody tr").nth(4).locator("td").first()).toHaveText("Long-Horizon Agent");
+      await expect(shapes.locator("tbody tr").nth(5).locator("td").first()).toHaveText("Multi-Agent");
+      await expect(doc).toContainText("Agent = Model + Harness");
+      await expect(doc).toContainText("共享平台不决定业务任务具体怎么做，也不定义业务成功标准");
+      await expect(doc).not.toContainText("持有任务循环");
+      await expect(doc).not.toContainText("概率性认知核心");
+      const image = doc.locator("img");
+      await expect(image).toHaveCount(1);
+      await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+      const aliases = Object.entries(legacyHeadingIds["/architecture/chapter-01.html"]);
+      expect(aliases).toHaveLength(14);
+      for (const [currentId, oldId] of aliases) {
+        const heading = doc.locator(`[id="${currentId}"]`);
+        await expect(heading.locator(`span[id="${oldId}"]`)).toHaveCount(1);
+        await page.evaluate(id => { location.hash = id; }, oldId);
+        await expect.poll(() => heading.evaluate(el => Math.abs(el.getBoundingClientRect().top) < 160)).toBe(true);
+      }
+      expect(await doc.evaluate(el => {
+        const ids = Array.from(el.querySelectorAll("[id]"), item => item.id);
+        return new Set(ids).size === ids.length;
+      })).toBe(true);
+      await page.evaluate(() => document.fonts.ready);
+      await doc.locator("h1").scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/chapter-01-top-${width}-${theme}.png` });
+      await shapes.scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/chapter-01-shapes-${width}-${theme}.png` });
+      await image.scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/chapter-01-figure-${width}-${theme}.png` });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      expect(await page.locator("html").evaluate(el => el.classList.contains("dark"))).toBe(theme === "dark");
+      expect(errors).toEqual([]);
+    });
+  }
+}
 
 test("chapter 10 keeps its landing route and orders the three articles", () => {
   const run = parts.find(part => part.id === "run")!;
