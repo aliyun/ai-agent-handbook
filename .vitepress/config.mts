@@ -1,6 +1,5 @@
 import { defineConfig } from "vitepress";
 import {
-  pages,
   readingOrder,
   getPage,
   sidebar,
@@ -31,7 +30,11 @@ export default defineConfig({
     "WEBSITE.md",
     "共读微信群.md",
   ],
-  rewrites: Object.fromEntries(pages.map((p) => [p.source, p.route + ".md"])),
+  // Match literal source paths; titles may contain route-pattern characters like +.
+  rewrites: (source) => {
+    const page = getPage(source);
+    return page ? page.route + ".md" : source;
+  },
   head: [
     [
       "link",

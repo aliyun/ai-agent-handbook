@@ -46,6 +46,10 @@ for (const dir of ["00-preface", ...parts.map((p) => p.dir)])
 let images = 0,
   diagrams = 0;
 for (const page of pages) {
+  if (page.source.startsWith("06-case-study/决策模型专题/")) {
+    const h1 = readSource(page.source).match(/^#\s+(.+)$/m)?.[1].trim();
+    assert.equal(path.basename(page.source, ".md"), h1, `Decision-model filename must match H1: ${page.source}`);
+  }
   function visit(tokens) {
     for (const token of tokens) {
       if (token.type === "fence" && token.info.trim() === "mermaid") diagrams++;

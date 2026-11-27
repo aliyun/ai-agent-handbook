@@ -4,6 +4,39 @@ import path from "node:path";
 import { pages, parts, root, readSource, resolveBookLink } from "../.vitepress/book.mjs";
 import { legacyHeadingIds } from "../.vitepress/markdown.mjs";
 
+test("decision-model filenames, navigation and stable routes match H1", async ({ page }) => {
+  const topic = pages.filter(p => p.source.startsWith("06-case-study/决策模型专题/"));
+  expect(topic.map(p => p.route)).toEqual([
+    "cases/jev/deep-dive",
+    "cases/jev/harness-decisions",
+    "cases/jev/agentcore-ticket-triage",
+    "cases/jev/hiroute",
+    "cases/jev/hiroute-local-d3",
+    "cases/jev/decision-model-evals",
+    "cases/jev/agenticops-decision-models",
+  ]);
+  expect(readdirSync(path.join(root, "06-case-study/决策模型专题")).filter(name => name.endsWith(".md"))).toHaveLength(topic.length);
+  await page.goto("cases/jev/");
+  for (const article of topic) {
+    expect(path.basename(article.source, ".md")).toBe(article.title);
+    await expect(page.locator(`.case-index a[href$="${article.route}.html"]`)).toContainText(article.title);
+  }
+  await page.goto("cases/index.html");
+  for (const article of topic) {
+    await expect(page.locator(`.vp-doc a[href$="${article.route}.html"]`)).toHaveText(article.title);
+  }
+  for (const article of topic) {
+    const response = await page.goto(article.route + ".html");
+    expect(response?.status()).toBe(200);
+    await expect(page.locator(".vp-doc h1")).toHaveText(article.title);
+    await expect(page.locator(`.VPSidebar a[href$="${article.route}.html"]`)).toContainText(article.title);
+    await expect(page.getByRole("link", { name: "在 GitHub 上完善本页" })).toHaveAttribute(
+      "href",
+      "https://github.com/aliyun/ai-agent-handbook/edit/main/" + article.source.split("/").map(encodeURIComponent).join("/"),
+    );
+  }
+});
+
 for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
     test(`chapter 01 plain-language text and old links at ${width}px in ${theme} theme`, async ({ page }) => {
@@ -483,7 +516,7 @@ for (const width of [1440, 390]) {
       }
       await expect(page.locator(".VPDocFooter a.prev")).toHaveAttribute("href", /cases\/jev\/hiroute\.html$/);
       await expect(page.locator(".VPDocFooter a.next")).toHaveAttribute("href", /cases\/jev\/decision-model-evals\.html$/);
-      await expect(page.getByRole("link", { name: "在 GitHub 上完善本页" })).toHaveAttribute("href", new RegExp(encodeURIComponent("日常留在本地，难了再上云.md") + "$"));
+      await expect(page.getByRole("link", { name: "在 GitHub 上完善本页" })).toHaveAttribute("href", new RegExp(encodeURIComponent(title + ".md") + "$"));
       await doc.locator("h1").scrollIntoViewIfNeeded();
       await page.screenshot({ path: `test-results/hiroute-local-d3-top-${width}-${theme}.png` });
       await doc.locator("table").first().scrollIntoViewIfNeeded();
