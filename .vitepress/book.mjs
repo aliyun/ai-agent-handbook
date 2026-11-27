@@ -323,6 +323,11 @@ for (const part of parts) {
         { chapter: "jev", part: part.title },
       ),
       page(
+        "06-case-study/决策模型专题/日常留在本地，难了再上云.md",
+        "cases/jev/hiroute-local-d3",
+        { chapter: "jev", part: part.title },
+      ),
+      page(
         "06-case-study/决策模型专题/用决策模型替代传统生成式 LLM-as-a-Judge 做自动化评测与决策.md",
         "cases/jev/decision-model-evals",
         { chapter: "jev", part: part.title },

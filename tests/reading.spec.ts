@@ -153,7 +153,7 @@ test("old chapter 10 section links open the relocated overview", async ({ page }
 for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
     test(`AgenticOps decision models at ${width}px in ${theme} theme`, async ({ page }) => {
-      const title = "从生成到决策：AgenticOps决策模型的能力实测";
+      const title = "AgenticOps 决策模型的能力实测";
       const errors: string[] = [];
       page.on("pageerror", error => errors.push(error.message));
       await page.setViewportSize({ width, height: 1000 });
@@ -359,7 +359,7 @@ for (const width of [1440, 390]) {
 for (const width of [1440, 390]) {
   for (const theme of ["light", "dark"] as const) {
     test(`Jev decision-model evals at ${width}px in ${theme} theme`, async ({ page }) => {
-      const title = "用决策模型替代传统生成式 LLM-as-a-Judge 做自动化评测/决策";
+      const title = "决策模型实践：自动化评测";
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       await page.setViewportSize({ width, height: 1000 });
@@ -442,6 +442,56 @@ for (const width of [1440, 390]) {
       await page.screenshot({ path: `test-results/hiroute-practice-top-${width}-${theme}.png` });
       await doc.locator("table").scrollIntoViewIfNeeded();
       await page.screenshot({ path: `test-results/hiroute-practice-table-${width}-${theme}.png` });
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`HiRoute local d3 article at ${width}px in ${theme} theme`, async ({ page }) => {
+      const title = "日常留在本地，难了再上云：本地 Qwen3.8-27B + d3 决策模型 + 云端 Qwen4-Max";
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto("cases/jev/");
+      const link = page.locator('.case-index a[href$="hiroute-local-d3.html"]');
+      await expect(link).toContainText(title);
+      await expect(link.locator("span")).toHaveText("05");
+      await link.click();
+      await expect(page).toHaveURL(/cases\/jev\/hiroute-local-d3\.html$/);
+      const doc = page.locator(".vp-doc");
+      await expect(doc.locator("h1")).toHaveCount(1);
+      await expect(doc.locator("h1")).toContainText(title);
+      await expect(doc).toContainText("周瑾瑜（zhoujinyu）");
+      await expect(doc.locator("h2")).toHaveCount(9);
+      await expect(doc.locator("h3")).toHaveCount(5);
+      await expect(doc.locator("table")).toHaveCount(3);
+      await expect(doc.locator("table tr")).toHaveCount(14);
+      await expect(doc.locator("table th, table td")).toHaveCount(57);
+      await expect(doc.locator("blockquote")).toHaveCount(3);
+      await expect(doc.locator("pre")).toHaveCount(1);
+      await expect(doc.locator("pre code")).toHaveText("vllm serve /path/to/d3 --max-model-len 32768 --tensor-parallel-size 2 --host 0.0.0.0 --port 8900\nhiroute decision connections test --service local-d3-full@5 --output json\n");
+      await expect(doc.locator('a[href="https://hiroute.ai/media/hiroute-vllm-sr-d3-en.mp4"]')).toHaveText("观看演示视频");
+      await expect(doc.locator("img")).toHaveCount(11);
+      for (const [index, image] of (await doc.locator("img").all()).entries()) {
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+        await expect(image).toHaveAttribute("src", new RegExp(`hiroute-d3-${String(index + 1).padStart(2, "0")}\\.[\\w-]+\\.png$`));
+        await expect(image).not.toHaveAttribute("src", /Expires=|Signature=/);
+      }
+      await expect(page.locator(".VPDocFooter a.prev")).toHaveAttribute("href", /cases\/jev\/hiroute\.html$/);
+      await expect(page.locator(".VPDocFooter a.next")).toHaveAttribute("href", /cases\/jev\/decision-model-evals\.html$/);
+      await expect(page.getByRole("link", { name: "在 GitHub 上完善本页" })).toHaveAttribute("href", new RegExp(encodeURIComponent("日常留在本地，难了再上云.md") + "$"));
+      await doc.locator("h1").scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/hiroute-local-d3-top-${width}-${theme}.png` });
+      await doc.locator("table").first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/hiroute-local-d3-table-${width}-${theme}.png` });
+      await doc.locator("img").last().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: `test-results/hiroute-local-d3-figure-${width}-${theme}.png` });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      expect(await page.locator("html").evaluate(el => el.classList.contains("dark"))).toBe(theme === "dark");
       expect(errors).toEqual([]);
     });
   }
