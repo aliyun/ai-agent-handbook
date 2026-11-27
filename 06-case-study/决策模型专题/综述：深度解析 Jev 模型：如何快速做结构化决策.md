@@ -2,8 +2,6 @@
 
 ## 背景
 
-![](../../assets/imgs/jev/jev-01.png)
-
 最近，AI 圈又双叒叕冒出了一个很火的新模型，叫做 **Jev 模型**。它的开发团队是 **TypeSafe**，这家公司的创始人叫 **Diogo Almeida**，之前也是 OpenAI 的研究员。
 
 ![](../../assets/imgs/jev/jev-02.png)
